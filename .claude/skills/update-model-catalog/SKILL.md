@@ -14,7 +14,9 @@ the same run:
 
 Helper scripts are in `.claude/skills/update-model-catalog/scripts/`. Run them from
 the repo root; they locate the catalog themselves. `catalog.py` shorthand below means
-`python .claude/skills/update-model-catalog/scripts/catalog.py`.
+`python .claude/skills/update-model-catalog/scripts/catalog.py`. `$TMP` means a
+scratch directory outside the repo: `$CLAUDE_JOB_DIR/tmp` if set, else a fresh
+`mktemp -d`.
 
 ## 1. Decide the scope
 
@@ -42,10 +44,24 @@ something whose v1 is listed) gets its own record; the same model is an update.
 If the user named papers or models, those are the candidates. Otherwise gather from
 several sources, since none is complete:
 
-- **arXiv** (main source):
-  `python .claude/skills/update-model-catalog/scripts/search_arxiv.py [--since YYYY-MM-DD] [--max 300]`
-  prints uncatalogued papers since 30 days before the newest `release_date` in the
-  catalog. Use the user's date range if they gave one.
+- **Literature search** (main source). Save the output, it takes a few minutes:
+  ```bash
+  python .claude/skills/update-model-catalog/scripts/search.py [--since YYYY-MM-DD] [--sources ...] > "$TMP/candidates.tsv"
+  ```
+  It queries arXiv, OpenAlex citations (new papers citing catalogued models),
+  OpenAlex keywords (journals and conferences), Semantic Scholar, and Google Scholar,
+  merges duplicates across sources, and drops papers already catalogued. Default
+  `--since` is 30 days before the newest `release_date` in the catalog; use the
+  user's date range if they gave one. Columns: status, sources, cites, ref, date,
+  venue, title. Screen high `cites` rows and rows found by several sources first.
+  The `#` lines on stderr report per-source counts and failures: if a source failed
+  (Scholar captcha, OpenAlex daily budget, Semantic Scholar 429), say so in the
+  report and rerun only that source later with `--sources`. An `OPENALEX_API_KEY` or
+  `S2_API_KEY` in the environment raises those limits; suggest one if a source keeps
+  failing.
+- **Web search** (your WebSearch tool), for what the APIs index late: very recent
+  model releases announced on blogs, Hugging Face or GitHub, and journal papers from
+  the last few weeks, e.g. `"foundation model" remote sensing <month year>`.
 - **Curated lists**, for models the keyword search misses or that predate it: GitHub
   "awesome" lists of remote sensing foundation models (e.g.
   `Jack-bo1220/Awesome-Remote-Sensing-Foundation-Models`) and benchmark leaderboards
@@ -53,7 +69,10 @@ several sources, since none is complete:
 - **Embedding products** published as datasets rather than papers (Google Earth
   Engine, Source Cooperative, Hugging Face) when the user asks for embeddings.
 
-Run every candidate through `catalog.py check`, then read its abstract. **Include**
+Run candidates from web search and curated lists through `catalog.py check`
+(`search.py` output is already checked; a journal version of a catalogued arXiv
+paper can still slip through, so check names that look familiar). Then read each
+abstract. **Include**
 papers that release or introduce a general-purpose pretrained model or embedding
 product for remote sensing / EO / geospatial data: self-supervised or supervised
 backbones, vision-language models, generative models, location encoders, and
@@ -97,7 +116,7 @@ order, field conventions, id rules, and the merge rules for updates.
 - **Add**: read the full paper (HTML or PDF, including the appendix), check the repo
   and weights page, write `model_metadata/<id>.json` with every schema field present.
 - **Update**: first copy the record to the temp dir
-  (`$CLAUDE_JOB_DIR/tmp` if set, else a fresh `mktemp -d`) as `<id>.orig.json`, then
+  as `$TMP/<id>.orig.json`, then
   re-read the sources and edit the record in place following the merge rules. Keep
   `id` and the filename unchanged; set `updated` to today.
 
@@ -113,7 +132,7 @@ every existing value it changed with the evidence (section/table of the paper).
 
 ```bash
 uv run --with jsonschema python .claude/skills/update-model-catalog/scripts/catalog.py validate model_metadata/<id>.json ...
-catalog.py diff <tmp>/<id>.orig.json model_metadata/<id>.json   # for each updated record
+catalog.py diff $TMP/<id>.orig.json model_metadata/<id>.json   # for each updated record
 ```
 
 Fix every validation failure. Read each diff: any `REMOVED` line or changed non-null
