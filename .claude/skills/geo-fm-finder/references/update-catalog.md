@@ -70,11 +70,14 @@ paper can still slip through, so check names that look familiar). Then read each
 abstract. **Include**
 papers that release or introduce a general-purpose pretrained model or embedding
 product for remote sensing / EO / geospatial data: self-supervised or supervised
-backbones, vision-language models, generative models, location encoders, and
-precomputed embedding fields (the catalog already holds all of these kinds).
+backbones, vision-language encoders that produce image embeddings (CLIP-style),
+location encoders, and precomputed embedding fields (the catalog already holds all of
+these kinds).
 **Exclude**: evaluations or benchmarks of existing models, datasets without a model,
 fine-tuning an existing model for one task, compression/distillation of task-specific
-networks, surveys. A paper that evaluates a catalogued model can still feed an
+networks, surveys, image generators (diffusion and other text/image-to-image models),
+and chat or instruction-tuned multimodal LLMs and LLM agents (GeoChat-style
+assistants that answer in text). A paper that evaluates a catalogued model can still feed an
 update (e.g. a new version or released weights), but not a new record.
 
 ## 3. Update: pick records and what to change
