@@ -1,0 +1,156 @@
+{
+  "id": "seco",
+  "mlm:name": "SeCo",
+  "version": "v1",
+  "release_date": null,
+  "updated": null,
+  "description": "Seasonal Contrast (SeCo) is a self-supervised pre-training pipeline for remote sensing imagery that leverages unlabeled, uncurated Sentinel-2 data and a multi-augmentation contrastive learning method to learn representations that are both variant and invariant to seasonal changes. SeCo achieves state-of-the-art results on land-cover classification and change detection tasks.",
+  "sci:doi": "10.48550/arXiv.2103.16607",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/ElementAI/seasonal-contrast",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ResNet-18, ResNet-50",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Multi-augmentation contrastive learning (based on MoCo-v2)",
+  "masking_strategy": "Multiple embedding sub-spaces for invariance/variance to seasonal and synthetic augmentations",
+  "pretraining": "Self-supervised contrastive learning using both artificial and seasonal (temporal) augmentations, with multiple embedding sub-spaces for different invariances.",
+  "domain_knowledge": [
+    "Temporal information from satellite revisit",
+    "Sampling around populated regions for diversity"
+  ],
+  "backbone_modifications": [
+    "Multi-head projection heads for multiple embedding sub-spaces"
+  ],
+  "supported_sensors": [
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "10m, 20m, 60m",
+  "temporal_resolution": "5 days (Sentinel-2 revisit)",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B8",
+        "B8A",
+        "B9",
+        "B11",
+        "B12"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Uncurated Sentinel-2 patches (about 1M images)",
+  "regions_coverage": [
+    "Global, sampled around 10k most populated cities"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1000000,
+  "sampling": "Gaussian sampling around 10k most populated cities (std=50km); Time range: Images from the past year, 5 images per location separated by ~3 months",
+  "processing:level": null,
+  "processing:lineage": "Cloud cover filtering (<10%); No additional data cleaning",
+  "cloud_cover": "<10% cloud coverage",
+  "missing_data": "No additional data cleaning; images with >10% cloud filtered",
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 200,
+    "batch_size": 256,
+    "learning_rate": "0.03 (divided by 10 at 60% and 80% of epochs)",
+    "augmentations": [
+      "Color jittering",
+      "Random grayscale",
+      "Gaussian blur",
+      "Horizontal flipping",
+      "Random resized cropping"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "2.65×2.65 km patches, 10m/20m/60m per pixel"
+  },
+  "benchmarks": [
+    {
+      "task": "Land-cover classification",
+      "application": "Land use/land cover mapping",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mean average precision"
+      ],
+      "metrics_value": [
+        87.81
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "10 European countries"
+      ],
+      "image_resolution": "1.2×1.2 km patches",
+      "spatial_resolution": "10m, 20m, 60m",
+      "split_ratio": "train/val as in [30]; samples used: 519487 of 590326 (88%)"
+    },
+    {
+      "task": "Land-cover classification",
+      "application": "Land use/land cover mapping",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "accuracy"
+      ],
+      "metrics_value": [
+        93.14
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "34 European countries"
+      ],
+      "image_resolution": "64×64 pixels",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/val as in [30]; samples used: 27000 of 27000 (100%)"
+    },
+    {
+      "task": "Change detection",
+      "application": "Urban change detection",
+      "dataset": "Onera Satellite Change Detection (OSCD)",
+      "metrics": [
+        "Precision",
+        "Recall",
+        "F1"
+      ],
+      "metrics_value": [
+        65.47,
+        38.06,
+        46.94
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global (24 locations)"
+      ],
+      "image_resolution": "600×600 pixels (10m)",
+      "spatial_resolution": "10m, 20m, 60m",
+      "split_ratio": "14 train / 10 val; samples used: 24 of 24 (100%)"
+    }
+  ]
+}

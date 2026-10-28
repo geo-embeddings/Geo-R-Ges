@@ -1,0 +1,262 @@
+{
+  "id": "ban",
+  "mlm:name": "BAN",
+  "version": "1.0",
+  "release_date": "2023-08-01T00:00:00Z",
+  "updated": "2024-02-11T00:00:00Z",
+  "description": "BAN (Bi-Temporal Adapter Network) is a universal foundation model-based adaptation framework for remote sensing change detection, leveraging frozen foundation models (e.g., CLIP, RemoteCLIP) and bridging modules to inject general knowledge into arbitrary change detection models (Bi-TAB).",
+  "sci:doi": "10.48550/arXiv.2312.01163",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/likyoo/BAN",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-L/14 (CLIP, RemoteCLIP), ResNet-18, MiT-b0/b1/b2",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Contrastive language-image pretraining (CLIP), supervised pretraining (ImageNet-21k), vision-language pretraining (RemoteCLIP)",
+  "masking_strategy": null,
+  "pretraining": "Foundation models are pretrained on large-scale datasets (e.g., ImageNet-21k, LAION-2B, RS5M) using contrastive or supervised objectives. BAN uses these frozen models and adapts them to CD via bridging modules and Bi-TAB.",
+  "domain_knowledge": [
+    "Remote sensing change detection",
+    "Bi-temporal image analysis"
+  ],
+  "backbone_modifications": [
+    "Bridging modules for feature alignment and injection",
+    "Asymmetric resolution input strategy (ARIS)"
+  ],
+  "supported_sensors": [
+    "Google Earth",
+    "Satellite (side-looking, off-nadir)",
+    "Landsat"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "RGB",
+    "Multispectral (potential extension)",
+    "Hyperspectral (potential extension)"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "full",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Google Earth, Satellite (side-looking, off-nadir), Landsat",
+      "bands": [
+        "R",
+        "G",
+        "B"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "ImageNet-21k",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "224x224, 336x336",
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "LAION-2B",
+        "image_resolution": "224x224, 336x336"
+      },
+      {
+        "mlm:pretrained_source": "RS5M"
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Change detection (binary)",
+      "application": "Land cover/building change detection",
+      "dataset": "LEVIR-CD",
+      "metrics": [
+        "Precisionc",
+        "Recallc",
+        "F1",
+        "IoUc"
+      ],
+      "metrics_value": [
+        93.47,
+        90.3,
+        91.86,
+        84.94
+      ],
+      "sensor": [
+        "Google Earth"
+      ],
+      "regions": null,
+      "image_resolution": "1024x1024",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "445/64/128 (train/val/test); samples used: 637 of 637 (100%)"
+    },
+    {
+      "task": "Change detection (binary)",
+      "application": "Building change detection",
+      "dataset": "S2Looking",
+      "metrics": [
+        "Precisionc",
+        "Recallc",
+        "F1",
+        "IoUc"
+      ],
+      "metrics_value": [
+        74.63,
+        60.3,
+        66.7,
+        50.04
+      ],
+      "sensor": [
+        "Satellite (side-looking)"
+      ],
+      "regions": [
+        "global rural areas"
+      ],
+      "image_resolution": "1024x1024",
+      "spatial_resolution": "0.5-0.8m",
+      "split_ratio": "samples used: 5000 of 5000 (100%)"
+    },
+    {
+      "task": "Change detection (binary)",
+      "application": "Urban scene change detection",
+      "dataset": "BANDON",
+      "metrics": [
+        "Precisionc",
+        "Recallc",
+        "F1",
+        "IoUc"
+      ],
+      "metrics_value": [
+        77.32,
+        64.18,
+        70.14,
+        54.02
+      ],
+      "sensor": [
+        "Google Earth",
+        "Microsoft Virtual Earth",
+        "ArcGIS"
+      ],
+      "regions": [
+        "urban (in-domain)"
+      ],
+      "image_resolution": "2048x2048",
+      "spatial_resolution": "0.6m",
+      "split_ratio": "1689/202/392 (train/val/test); samples used: 2283 of 2283 (100%)"
+    },
+    {
+      "task": "Change detection (binary)",
+      "application": "Urban scene change detection (cross-domain)",
+      "dataset": "BANDON (out-domain)",
+      "metrics": [
+        "Precisionc",
+        "Recallc",
+        "F1",
+        "IoUc"
+      ],
+      "metrics_value": [
+        75.65,
+        54.35,
+        63.25,
+        46.26
+      ],
+      "sensor": [
+        "Google Earth",
+        "Microsoft Virtual Earth",
+        "ArcGIS"
+      ],
+      "regions": [
+        "urban (out-domain)"
+      ],
+      "image_resolution": "2048x2048",
+      "spatial_resolution": "0.6m",
+      "split_ratio": "samples used: 185 of 185 (100%)"
+    },
+    {
+      "task": "Change detection (semantic)",
+      "application": "Land cover semantic change detection",
+      "dataset": "Landsat-SCD",
+      "metrics": [
+        "mIoU",
+        "Sek",
+        "Score"
+      ],
+      "metrics_value": [
+        84.76,
+        54.56,
+        63.62
+      ],
+      "sensor": [
+        "Landsat"
+      ],
+      "regions": null,
+      "image_resolution": "416x416",
+      "spatial_resolution": "30m",
+      "split_ratio": "3:1:1 (train/val/test); samples used: 8468 of 8468 (100%)"
+    },
+    {
+      "task": "Change detection (semantic)",
+      "application": "Urban semantic change detection",
+      "dataset": "BANDON-SCD",
+      "metrics": [
+        "mIoU",
+        "Sek",
+        "Score"
+      ],
+      "metrics_value": [
+        77.68,
+        31.48,
+        45.34
+      ],
+      "sensor": [
+        "Google Earth",
+        "Microsoft Virtual Earth",
+        "ArcGIS"
+      ],
+      "regions": [
+        "urban"
+      ],
+      "image_resolution": "2048x2048",
+      "spatial_resolution": "0.6m",
+      "split_ratio": "1689/202/392 (train/val/test); samples used: 2283 of 2283 (100%)"
+    },
+    {
+      "task": "Change detection (binary, semi-supervised)",
+      "application": "Building change detection (semi-supervised)",
+      "dataset": "WHU-CD",
+      "metrics": [
+        "IoUc",
+        "OA"
+      ],
+      "metrics_value": [
+        85.26,
+        99.39
+      ],
+      "sensor": [
+        "Satellite"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": "5947/743/744 (train/val/test); samples used: 7434 of 7434 (40%)"
+    }
+  ]
+}

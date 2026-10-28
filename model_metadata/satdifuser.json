@@ -1,0 +1,300 @@
+{
+  "id": "satdifuser",
+  "mlm:name": "SatDiFuser",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "SatDiFuser is a framework that adapts large-scale diffusion-based generative models for self-supervised representation learning in remote sensing, leveraging multi-stage diffusion features and novel fusion strategies to achieve state-of-the-art performance on discriminative remote sensing tasks.",
+  "sci:doi": "10.48550/arXiv.2503.07890",
+  "assets": null,
+  "mlm:architecture": "DiffusionSat (latent diffusion model based on Stable Diffusion v2-1)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Self-supervised learning via generative diffusion (denoising diffusion process)",
+  "masking_strategy": "Noise-dependent masking via diffusion process (multi-stage, multi-timestep denoising)",
+  "pretraining": "Pretrained on large-scale satellite imagery using a latent diffusion model (DiffusionSat), with self-supervised denoising objective.",
+  "domain_knowledge": [
+    "Multi-scale feature extraction",
+    "Remote sensing-specific fusion strategies",
+    "Handling of sensor noise and atmospheric interference"
+  ],
+  "backbone_modifications": [
+    "Adaptation of Stable Diffusion v2-1 to satellite imagery (DiffusionSat)",
+    "Extraction of multi-scale, multi-timestep features",
+    "Feature fusion modules (global weighted, localized weighted, mixture-of-experts)"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "Landsat-8"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral (RGB)"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": null,
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Sentinel-2, Landsat-8",
+      "bands": [
+        "R",
+        "G",
+        "B"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Large-scale global satellite imagery (DiffusionSat)",
+  "regions_coverage": [
+    "Global"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": "Global-scale sampling",
+  "processing:level": null,
+  "processing:lineage": "Autoencoder encoding to latent space; DDIM inversion for noisy latent generation",
+  "cloud_cover": null,
+  "missing_data": "Zero-filling for missing bands",
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "256px and 512px"
+  },
+  "benchmarks": [
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover and object segmentation in remote sensing",
+      "dataset": "m-pv4ger-seg",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        95.3
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Germany"
+      ],
+      "image_resolution": "256px or 512px",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Cattle segmentation",
+      "dataset": "m-nz-cattle",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        83.7
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "New Zealand"
+      ],
+      "image_resolution": "256px or 512px",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Tree segmentation",
+      "dataset": "m-NeonTree",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        63.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256px or 512px",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Cashew plantation segmentation",
+      "dataset": "m-cashew-plantation",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        66.5
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256px or 512px",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Crop type segmentation",
+      "dataset": "m-SA-crop-type",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        32.6
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "South Africa"
+      ],
+      "image_resolution": "256px or 512px",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "m-chesapeake-landcover",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        71.6
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Chesapeake Bay"
+      ],
+      "image_resolution": "256px or 512px",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Multi-label land cover classification",
+      "dataset": "m-bigearthnet",
+      "metrics": [
+        "F1 score"
+      ],
+      "metrics_value": [
+        66.2
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "256px or 512px",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Brick kiln classification",
+      "dataset": "m-brick-kiln",
+      "metrics": [
+        "Top-1 accuracy"
+      ],
+      "metrics_value": [
+        98.3
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256px or 512px",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Land use classification",
+      "dataset": "m-eurosat",
+      "metrics": [
+        "Top-1 accuracy"
+      ],
+      "metrics_value": [
+        97.7
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "256px or 512px",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Forest classification",
+      "dataset": "m-forestnet",
+      "metrics": [
+        "Top-1 accuracy"
+      ],
+      "metrics_value": [
+        58.4
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256px or 512px",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Photovoltaic classification",
+      "dataset": "m-pv4ger",
+      "metrics": [
+        "Top-1 accuracy"
+      ],
+      "metrics_value": [
+        97.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Germany"
+      ],
+      "image_resolution": "256px or 512px",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Urban classification",
+      "dataset": "m-so2sat",
+      "metrics": [
+        "Top-1 accuracy"
+      ],
+      "metrics_value": [
+        59.3
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256px or 512px",
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ]
+}

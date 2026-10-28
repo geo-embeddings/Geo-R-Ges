@@ -1,0 +1,101 @@
+{
+  "id": "lrs-vqa",
+  "mlm:name": "LRS-VQA",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "A text-guided token pruning method for efficient vision-language understanding of large remote sensing images, introducing a Region Focus Module (RFM) and Dynamic Image Pyramid (DIP), and a new benchmark LRS-VQA with 7,333 QA pairs across 8 categories and image lengths up to 27,328 pixels.",
+  "sci:doi": "10.48550/arXiv.2503.07588",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/VisionXLab/LRS-VQA",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "CLIP-L14",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Text-guided token pruning with attention distillation",
+  "masking_strategy": "Text-guided token pruning via Region Focus Module (RFM)",
+  "pretraining": "Pre-trained on 558K data from LLaVA-1.5; SFT with 484K samples including LLaVA-1.5-665K, RSVQA-HR, and template-based samples from FAIR1M-1.0, GLH-Bridge, and STAR datasets.",
+  "domain_knowledge": [
+    "Text-guided region localization",
+    "Dynamic image pyramid for multi-scale inference"
+  ],
+  "backbone_modifications": [
+    "Integration of Region Focus Module (RFM)",
+    "Dynamic Image Pyramid (DIP) for multi-scale inference"
+  ],
+  "supported_sensors": null,
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": null,
+  "mlm:pretrained_source": "558K data used in LLaVA-1.5",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 558000,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "484K SFT samples (300K from LLaVA-1.5-665K, 146K from RSVQA-HR, 38K template-based from FAIR1M-1.0, GLH-Bridge, STAR)",
+        "num_images": 484000
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Visual Question Answering",
+      "application": "Remote Sensing Image Understanding",
+      "dataset": "LRS-VQA",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        41.89
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "1024-27328 pixels",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 7333 of 7333 (100%)"
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "Remote Sensing Image Understanding",
+      "dataset": "MME-RealWorld-RS",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        39.04
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "689-11500 pixels",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 3738 of 3738 (100%)"
+    }
+  ]
+}

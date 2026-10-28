@@ -1,0 +1,415 @@
+{
+  "id": "hypersigma",
+  "mlm:name": "HyperSIGMA",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "HyperSIGMA is a vision transformer-based foundation model for hyperspectral image (HSI) interpretation, scalable to over 1 billion parameters. It introduces a sparse sampling attention (SSA) mechanism and a spectral enhancement module, and is pre-trained on the large-scale HyperGlobal-450K dataset (about 450,000 HSIs). HyperSIGMA provides a unified solution for both high-level and low-level HSI tasks, demonstrating superior performance, scalability, robustness, cross-modal transferability, and computational efficiency.",
+  "sci:doi": "10.48550/arXiv.2406.11519",
+  "assets": null,
+  "mlm:architecture": "Vision Transformer (ViT)",
+  "mlm:total_parameters": 1000000000,
+  "pretext_training_type": "Masked Image Modeling (MAE)",
+  "masking_strategy": "Random masking of spatial patches (spatial MAE) and random masking of spectral channels (spectral MAE), both with mask ratio 0.75",
+  "pretraining": "Unsupervised pre-training using MAE on HyperGlobal-450K, with separate spatial and spectral subnetworks, followed by fusion via a spectral enhancement module.",
+  "domain_knowledge": [
+    "Spatial-spectral feature fusion",
+    "Sparse sampling attention",
+    "Spectral enhancement module"
+  ],
+  "backbone_modifications": [
+    "SSA replaces full self-attention in most transformer blocks",
+    "Spectral enhancement module for spatial-spectral fusion",
+    "Separate spatial and spectral subnetworks"
+  ],
+  "supported_sensors": [
+    "EO-1",
+    "GF-5"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Hyperspectral"
+  ],
+  "spectral_alignment": "full",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (depends on EO-1 and GF-5 sensors)",
+  "temporal_resolution": "variable",
+  "mlm:input": null,
+  "mlm:pretrained_source": "HyperGlobal-450K",
+  "regions_coverage": [
+    "Global (EO-1 worldwide, GF-5 China)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 447072,
+  "sampling": "Random channel selection, consistent number of channels per HSI; Time range: 2011-2017 (EO-1), additional GF-5 images",
+  "processing:level": null,
+  "processing:lineage": "Randomly select continuous channels for dimensionality reduction",
+  "cloud_cover": "Images selected based on cloud content",
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "64x64 patches",
+    "epochs": 1600,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": 0.75,
+    "image_resolution": "64x64"
+  },
+  "benchmarks": [
+    {
+      "task": "classification",
+      "application": "Hyperspectral image classification",
+      "dataset": "Indian Pines",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        85.54
+      ],
+      "sensor": [
+        "AVIRIS"
+      ],
+      "regions": [
+        "Indian Pines"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "classification",
+      "application": "Hyperspectral image classification",
+      "dataset": "Pavia University",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        93.52
+      ],
+      "sensor": null,
+      "regions": [
+        "Pavia University"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "classification",
+      "application": "Hyperspectral image classification",
+      "dataset": "HanChuan",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        94.44
+      ],
+      "sensor": null,
+      "regions": [
+        "HanChuan"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "classification",
+      "application": "Hyperspectral image classification",
+      "dataset": "HongHu",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        94.87
+      ],
+      "sensor": null,
+      "regions": [
+        "HongHu"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "classification",
+      "application": "Hyperspectral image classification",
+      "dataset": "Houston",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        86.8
+      ],
+      "sensor": null,
+      "regions": [
+        "Houston"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "classification",
+      "application": "Hyperspectral image classification",
+      "dataset": "ZY1-02D (Yellow River Delta)",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        94.92
+      ],
+      "sensor": [
+        "ZY1-02D"
+      ],
+      "regions": [
+        "Yellow River Delta"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "target detection",
+      "application": "Hyperspectral target detection",
+      "dataset": "Mosaic",
+      "metrics": [
+        "AUC"
+      ],
+      "metrics_value": [
+        99.56
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "target detection",
+      "application": "Hyperspectral target detection",
+      "dataset": "AVIRIS",
+      "metrics": [
+        "AUC"
+      ],
+      "metrics_value": [
+        99.83
+      ],
+      "sensor": [
+        "AVIRIS"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "target detection",
+      "application": "Hyperspectral target detection",
+      "dataset": "Renourban",
+      "metrics": [
+        "AUC"
+      ],
+      "metrics_value": [
+        99.86
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "anomaly detection",
+      "application": "Hyperspectral anomaly detection",
+      "dataset": "Pavia",
+      "metrics": [
+        "AUC"
+      ],
+      "metrics_value": [
+        99.96
+      ],
+      "sensor": null,
+      "regions": [
+        "Pavia"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "anomaly detection",
+      "application": "Hyperspectral anomaly detection",
+      "dataset": "Cri",
+      "metrics": [
+        "AUC"
+      ],
+      "metrics_value": [
+        99.32
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "anomaly detection",
+      "application": "Hyperspectral anomaly detection",
+      "dataset": "Viareggio",
+      "metrics": [
+        "AUC"
+      ],
+      "metrics_value": [
+        98.32
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "change detection",
+      "application": "Hyperspectral change detection",
+      "dataset": "Hermiston",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        91.74
+      ],
+      "sensor": null,
+      "regions": [
+        "Hermiston"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "change detection",
+      "application": "Hyperspectral change detection",
+      "dataset": "Farmland",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        95.49
+      ],
+      "sensor": null,
+      "regions": [
+        "Farmland"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "change detection",
+      "application": "Hyperspectral change detection",
+      "dataset": "Bay Area",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        98.93
+      ],
+      "sensor": null,
+      "regions": [
+        "Bay Area"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "change detection",
+      "application": "Hyperspectral change detection",
+      "dataset": "Santa Barbara",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        99.04
+      ],
+      "sensor": null,
+      "regions": [
+        "Santa Barbara"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "unmixing",
+      "application": "Hyperspectral unmixing",
+      "dataset": "Urban",
+      "metrics": [
+        "Abundance MSE",
+        "Endmember mSAD"
+      ],
+      "metrics_value": [
+        0.0157,
+        0.0584
+      ],
+      "sensor": null,
+      "regions": [
+        "Urban"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "denoising",
+      "application": "Hyperspectral image denoising",
+      "dataset": "WDC Mall",
+      "metrics": [
+        "PSNR",
+        "SSIM",
+        "SAM"
+      ],
+      "metrics_value": [
+        28.503,
+        0.961,
+        0.106
+      ],
+      "sensor": null,
+      "regions": [
+        "Washington DC Mall"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "super-resolution",
+      "application": "Hyperspectral image super-resolution",
+      "dataset": "Houston",
+      "metrics": [
+        "PSNR",
+        "SSIM",
+        "SAM",
+        "CC",
+        "RMSE",
+        "ERGAS"
+      ],
+      "metrics_value": [
+        39.94,
+        0.927,
+        3.552,
+        0.944,
+        0.012,
+        4.101
+      ],
+      "sensor": null,
+      "regions": [
+        "Houston"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ]
+}

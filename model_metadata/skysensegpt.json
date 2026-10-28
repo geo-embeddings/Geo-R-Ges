@@ -1,0 +1,392 @@
+{
+  "id": "skysensegpt",
+  "mlm:name": "SkySenseGPT",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "SkySenseGPT is a Remote Sensing Large Multi-Modal Model (RSLMM) instruction-tuned on the large-scale FIT-RS dataset for fine-grained vision-language understanding, including complex relation reasoning and scene graph generation in remote sensing imagery.",
+  "sci:doi": "10.48550/arXiv.2406.10100",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/Luo-Z13/SkySenseGPT",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "CLIP-ViT-L14",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Instruction tuning",
+  "masking_strategy": null,
+  "pretraining": "Instruction tuning on FIT-RS (1.8M samples) and additional public datasets (scene classification, VQA, object detection, image caption, multi-turn conversation).",
+  "domain_knowledge": [
+    "Fine-grained scene graph annotation",
+    "Rotated bounding boxes",
+    "Commonsense distractor generation for evaluation"
+  ],
+  "backbone_modifications": [
+    "MLP multi-modal projector",
+    "LoRA finetuning for LLM"
+  ],
+  "supported_sensors": null,
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "Text"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": null,
+  "mlm:pretrained_source": "FIT-RS (extension of STAR dataset)",
+  "regions_coverage": [
+    "worldwide"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1273,
+  "sampling": "Random sampling for train/val/test split (6:2:2)",
+  "processing:level": null,
+  "processing:lineage": "cropping with sliding window 512x512, 100-pixel overlap; completeness threshold (iof) 0.3 for image caption, 0.55 for other tasks",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 1,
+    "batch_size": 128,
+    "learning_rate": "1e-6 (cosine schedule, warmup ratio 0.03)",
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "512x512 (cropped from 512x768 to 27860x31096)"
+  },
+  "benchmarks": [
+    {
+      "task": "Image Captioning",
+      "application": "Detailed Image Caption",
+      "dataset": "FIT-RS",
+      "metrics": [
+        "BLEU-1"
+      ],
+      "metrics_value": [
+        27.31
+      ],
+      "sensor": null,
+      "regions": [
+        "worldwide"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "variable",
+      "split_ratio": "6:2:2; samples used: 82532 of 82532 (100%)"
+    },
+    {
+      "task": "Region Captioning",
+      "application": "Detailed Region Caption",
+      "dataset": "FIT-RS",
+      "metrics": [
+        "BLEU-1"
+      ],
+      "metrics_value": [
+        75.82
+      ],
+      "sensor": null,
+      "regions": [
+        "worldwide"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "variable",
+      "split_ratio": "6:2:2; samples used: 90744 of 90744 (100%)"
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "VQA",
+      "dataset": "FIT-RS",
+      "metrics": [
+        "Ave Acc"
+      ],
+      "metrics_value": [
+        79.76
+      ],
+      "sensor": null,
+      "regions": [
+        "worldwide"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "variable",
+      "split_ratio": "6:2:2; samples used: 498565 of 498565 (100%)"
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Multi-Label Scene Classification",
+      "dataset": "FIT-RS",
+      "metrics": [
+        "Scene Acc",
+        "Obj F1-Score"
+      ],
+      "metrics_value": [
+        82.23,
+        71.43
+      ],
+      "sensor": null,
+      "regions": [
+        "worldwide"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "variable",
+      "split_ratio": "6:2:2; samples used: 165074 of 165074 (100%)"
+    },
+    {
+      "task": "Relation Detection",
+      "application": "Relation Detection",
+      "dataset": "FIT-RS",
+      "metrics": [
+        "F1-Score"
+      ],
+      "metrics_value": [
+        88.68
+      ],
+      "sensor": null,
+      "regions": [
+        "worldwide"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "variable",
+      "split_ratio": "6:2:2; samples used: 181799 of 181799 (100%)"
+    },
+    {
+      "task": "Relation Reasoning",
+      "application": "Relation Reasoning",
+      "dataset": "FIT-RS",
+      "metrics": [
+        "F1-Score"
+      ],
+      "metrics_value": [
+        74.33
+      ],
+      "sensor": null,
+      "regions": [
+        "worldwide"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "variable",
+      "split_ratio": "6:2:2; samples used: 124496 of 124496 (100%)"
+    },
+    {
+      "task": "Object Detection",
+      "application": "Object Detection",
+      "dataset": "FIT-RS",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        27.4
+      ],
+      "sensor": null,
+      "regions": [
+        "worldwide"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "variable",
+      "split_ratio": "6:2:2; samples used: 140626 of 140626 (100%)"
+    },
+    {
+      "task": "Object Reasoning",
+      "application": "Object Reasoning",
+      "dataset": "FIT-RS",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        5.71
+      ],
+      "sensor": null,
+      "regions": [
+        "worldwide"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "variable",
+      "split_ratio": "6:2:2; samples used: 295395 of 295395 (100%)"
+    },
+    {
+      "task": "Region-Level Scene Graph Generation",
+      "application": "Region-Level SGG",
+      "dataset": "FIT-RS",
+      "metrics": [
+        "Recall"
+      ],
+      "metrics_value": [
+        17.01
+      ],
+      "sensor": null,
+      "regions": [
+        "worldwide"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "variable",
+      "split_ratio": "6:2:2; samples used: 93199 of 93199 (100%)"
+    },
+    {
+      "task": "Image-Level Scene Graph Generation",
+      "application": "Image-Level SGG",
+      "dataset": "FIT-RS",
+      "metrics": [
+        "Recall"
+      ],
+      "metrics_value": [
+        9.6
+      ],
+      "sensor": null,
+      "regions": [
+        "worldwide"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "variable",
+      "split_ratio": "6:2:2; samples used: 62945 of 62945 (100%)"
+    },
+    {
+      "task": "Multi-Turn/Task Conversation",
+      "application": "Multi-Turn/Task Conversation",
+      "dataset": "FIT-RS",
+      "metrics": [
+        "GPT-eval"
+      ],
+      "metrics_value": [
+        6.6
+      ],
+      "sensor": null,
+      "regions": [
+        "worldwide"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "variable",
+      "split_ratio": "6:2:2; samples used: 65476 of 65476 (100%)"
+    },
+    {
+      "task": "Relation Comprehension",
+      "application": "FIT-RSRC Benchmark",
+      "dataset": "FIT-RSRC",
+      "metrics": [
+        "Ave. Acc"
+      ],
+      "metrics_value": [
+        55.5
+      ],
+      "sensor": null,
+      "regions": [
+        "worldwide"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Zero-shot generalization",
+      "dataset": "SIRI-WHU",
+      "metrics": [
+        "Acc"
+      ],
+      "metrics_value": [
+        74.75
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "200x200",
+      "spatial_resolution": "2m",
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Zero-shot generalization",
+      "dataset": "AID",
+      "metrics": [
+        "Acc"
+      ],
+      "metrics_value": [
+        92.25
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "600x600",
+      "spatial_resolution": "0.5-8m",
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Zero-shot generalization",
+      "dataset": "WHU-RS19",
+      "metrics": [
+        "Acc"
+      ],
+      "metrics_value": [
+        97.02
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "600x600",
+      "spatial_resolution": "0-0.5m",
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Zero-shot generalization",
+      "dataset": "AID-multi",
+      "metrics": [
+        "F1-Score"
+      ],
+      "metrics_value": [
+        47.97
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "600x600",
+      "spatial_resolution": "0.5-8m",
+      "split_ratio": null
+    },
+    {
+      "task": "VQA",
+      "application": "Zero-shot generalization",
+      "dataset": "RSVQA-HR",
+      "metrics": [
+        "Pre. Acc",
+        "Comp. Acc",
+        "Avg. Acc"
+      ],
+      "metrics_value": [
+        69.14,
+        84.14,
+        76.64
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "VQA",
+      "application": "Fine-tuning",
+      "dataset": "RSVQA-LR",
+      "metrics": [
+        "Rural. Acc",
+        "Pre. Acc",
+        "Comp. Acc",
+        "Avg. Acc"
+      ],
+      "metrics_value": [
+        95.0,
+        91.07,
+        92.0,
+        92.69
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.15m",
+      "split_ratio": null
+    }
+  ]
+}

@@ -1,0 +1,333 @@
+{
+  "id": "skyclip",
+  "mlm:name": "SkyCLIP",
+  "version": "SkyCLIP-50 (ViT-L-14)",
+  "release_date": "2023-12-20T00:00:00Z",
+  "updated": "2023-12-20T00:00:00Z",
+  "description": "SkyCLIP is a remote-sensing-specialized CLIP model developed via continual pre-training on the large-scale, semantically diverse SkyScript vision-language dataset for remote sensing. It outperforms baseline models in zero-shot scene classification, fine-grained attribute classification, and cross-modal retrieval.",
+  "sci:doi": "10.48550/arXiv.2312.12856",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/wangzhecheng/SkyScript",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-L-14",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Contrastive image-text learning",
+  "masking_strategy": null,
+  "pretraining": "Continual pre-training of CLIP initialized from OpenAI weights on the SkyScript dataset using image-text contrastive learning.",
+  "domain_knowledge": [
+    "Geo-coordinates for image-text pairing",
+    "OSM semantic tag filtering",
+    "Remote sensing imagery"
+  ],
+  "backbone_modifications": null,
+  "supported_sensors": [
+    "SWISSIMAGE",
+    "Spain RGB orthophotos",
+    "Brandenburg RGBN orthophotos",
+    "Finland RGB NLS orthophotos",
+    "National Agriculture Imagery Program",
+    "Planet SkySat Public Ortho Imagery",
+    "Harmonized Sentinel-2 MSI",
+    "Landsat 8",
+    "Landsat 9"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "0.1m to 30m",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "SWISSIMAGE, Spain RGB orthophotos, Brandenburg RGBN orthophotos, Finland RGB NLS orthophotos, National Agriculture Imagery Program, Planet SkySat Public Ortho Imagery, Harmonized Sentinel-2 MSI, Landsat 8, Landsat 9",
+      "bands": [
+        "R",
+        "G",
+        "B"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "SkyScript",
+  "regions_coverage": [
+    "Global (except Antarctica), with high-resolution concentration in US and Europe"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 2600000,
+  "sampling": "Top 50% of image-text pairs by CLIP similarity",
+  "processing:level": null,
+  "processing:lineage": "Filtering by CLIP similarity; Tag-based semantic filtering; Manual validation for subsets",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "14x14 (ViT-L-14)",
+    "epochs": 20,
+    "batch_size": 512,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "Variable, 0.1m to 30m GSD, images resized to 224x224 or variable",
+    "num_layers": 24
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Zero-shot scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        71.7
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "test; samples used: 2000 of 2000 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Zero-shot scene classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        51.33
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "test; samples used: 2700 of 2700 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Zero-shot scene classification",
+      "dataset": "fMoW",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        27.12
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "val; samples used: 106081 of 106081 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Zero-shot scene classification",
+      "dataset": "Million-AID",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        67.45
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "train; samples used: 10000 of 10000 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Zero-shot scene classification",
+      "dataset": "PatternNet",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        80.88
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "train; samples used: 30400 of 30400 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Zero-shot scene classification",
+      "dataset": "RESISC45",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        70.94
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "train; samples used: 31500 of 31500 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Zero-shot scene classification",
+      "dataset": "RSI-CB256",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        50.09
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "train; samples used: 24747 of 24747 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Zero-shot scene classification",
+      "dataset": "SkyScript-classification",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        59.93
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "test; samples used: 7000 of 7000 (100%)"
+    },
+    {
+      "task": "Fine-grained attribute classification",
+      "application": "Zero-shot fine-grained classification",
+      "dataset": "Roof shape",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        46.83
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Fine-grained attribute classification",
+      "application": "Zero-shot fine-grained classification",
+      "dataset": "Road smoothness",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        35.8
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Fine-grained attribute classification",
+      "application": "Zero-shot fine-grained classification",
+      "dataset": "Road surface",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        67.5
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Cross-modal retrieval",
+      "application": "Zero-shot cross-modal retrieval",
+      "dataset": "SkyScript-retrieval",
+      "metrics": [
+        "Mean Recall (img2txt)",
+        "Mean Recall (txt2img)"
+      ],
+      "metrics_value": [
+        8.53,
+        7.73
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "test; samples used: 30000 of 30000 (100%)"
+    },
+    {
+      "task": "Cross-modal retrieval",
+      "application": "Zero-shot cross-modal retrieval",
+      "dataset": "RSICD",
+      "metrics": [
+        "Mean Recall (img2txt)",
+        "Mean Recall (txt2img)"
+      ],
+      "metrics_value": [
+        23.7,
+        19.97
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Cross-modal retrieval",
+      "application": "Zero-shot cross-modal retrieval",
+      "dataset": "RSITMD",
+      "metrics": [
+        "Mean Recall (img2txt)",
+        "Mean Recall (txt2img)"
+      ],
+      "metrics_value": [
+        30.75,
+        30.58
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Cross-modal retrieval",
+      "application": "Zero-shot cross-modal retrieval",
+      "dataset": "UCM-Captions",
+      "metrics": [
+        "Mean Recall (img2txt)",
+        "Mean Recall (txt2img)"
+      ],
+      "metrics_value": [
+        72.22,
+        59.33
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ]
+}

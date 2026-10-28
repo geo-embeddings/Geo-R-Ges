@@ -1,0 +1,216 @@
+{
+  "id": "complex-valued-sar",
+  "mlm:name": "PhysSARFM",
+  "version": "1.0",
+  "release_date": "2025-04-16T00:00:00Z",
+  "updated": "2025-04-16T00:00:00Z",
+  "description": "A physically inspired remote sensing foundation model for complex-valued SAR data, simulating polarimetric decomposition to achieve interpretable and generalizable representations for SAR image understanding.",
+  "sci:doi": "10.48550/arXiv.2504.11999",
+  "assets": null,
+  "mlm:architecture": "Swin-B",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Self-supervised pretraining simulating polarimetric decomposition",
+  "masking_strategy": "Masked attention and self-attention in scattering query decoder",
+  "pretraining": "Simulates the physical process of SAR polarimetric decomposition using complex-valued SAR data. Uses scattering queries to represent physical scattering bases and predicts scattering coefficients, guided by polarimetric decomposition loss and power self-supervised loss.",
+  "domain_knowledge": [
+    "SAR polarimetric decomposition",
+    "Yamaguchi four-component decomposition",
+    "Physical scattering mechanisms"
+  ],
+  "backbone_modifications": [
+    "8-channel input for real and imaginary parts of HH, HV, VH, VV",
+    "Polarization Pixel Encoder-Decoder",
+    "Scattering Query Decoder with masked attention"
+  ],
+  "supported_sensors": [
+    "GF3"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "SAR",
+    "Complex-valued SAR",
+    "PolSAR"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "8m (azimuth), 6-9m (range)",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "GF3",
+      "bands": [
+        "HH",
+        "HV",
+        "VH",
+        "VV"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          4,
+          512,
+          512
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "GF3 complex-valued SAR images (QPSI imaging mode)",
+  "regions_coverage": [
+    "Asia",
+    "North America",
+    "South America"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 400000,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": 24,
+    "learning_rate": "0.008 (Poly learning strategy, parameter 0.9)",
+    "augmentations": null,
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover classification",
+      "dataset": "SARSegL1",
+      "metrics": [
+        "mIoU",
+        "mAcc",
+        "OA"
+      ],
+      "metrics_value": [
+        61.52,
+        70.69,
+        81.33
+      ],
+      "sensor": [
+        "GF3"
+      ],
+      "regions": [
+        "Guangzhou, China",
+        "Hangzhou, China"
+      ],
+      "image_resolution": "5456x4708, 6192x4888",
+      "spatial_resolution": "5m",
+      "split_ratio": null
+    },
+    {
+      "task": "Few-shot segmentation",
+      "application": "Land cover segmentation with limited labels",
+      "dataset": "SARSegL1",
+      "metrics": [
+        "mIoU",
+        "FB-IoU"
+      ],
+      "metrics_value": [
+        24.89,
+        40.97
+      ],
+      "sensor": [
+        "GF3"
+      ],
+      "regions": [
+        "Guangzhou, China",
+        "Hangzhou, China"
+      ],
+      "image_resolution": "500x500",
+      "spatial_resolution": "5m",
+      "split_ratio": null
+    },
+    {
+      "task": "Unsupervised classification",
+      "application": "Land cover clustering",
+      "dataset": "SARClsL1",
+      "metrics": [
+        "mAP (result 1 of 2)",
+        "mAP (result 2 of 2)"
+      ],
+      "metrics_value": [
+        66.8,
+        38.8
+      ],
+      "sensor": [
+        "GF3"
+      ],
+      "regions": [
+        "San Francisco, USA",
+        "Phra Nakhon Si Ayutthaya, Thailand"
+      ],
+      "image_resolution": "5829x7173, 7525x8356",
+      "spatial_resolution": "8m",
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection",
+      "application": "Ship detection",
+      "dataset": "HRSID",
+      "metrics": [
+        "AP",
+        "AP50",
+        "AP75",
+        "APs",
+        "APm",
+        "APl"
+      ],
+      "metrics_value": [
+        70.3,
+        93.9,
+        82.3,
+        72.5,
+        70.0,
+        56.2
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection",
+      "application": "Aircraft detection",
+      "dataset": "SAR-AIRcraft-1.0",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        93.8
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "800x800, 1000x1000, 1200x1200, 1500x1500",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "AIR-PolSAR-Seg",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        65.72
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "8m",
+      "split_ratio": null
+    }
+  ]
+}

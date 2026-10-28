@@ -1,0 +1,255 @@
+{
+  "id": "presto",
+  "mlm:name": "Presto",
+  "version": "v1",
+  "release_date": "2024-02-05T00:00:00Z",
+  "updated": "2024-02-05T00:00:00Z",
+  "description": "Presto is a lightweight, pre-trained transformer model for remote sensing pixel-timeseries data, designed for computational efficiency and robustness to missing data, supporting multi-sensor and temporal inputs.",
+  "sci:doi": "10.48550/arXiv.2304.14065",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/nasaharvest/presto",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "Transformer (custom, 2 layers, 8 heads, embedding size 128, MLP ratio 4)",
+  "mlm:total_parameters": 400000,
+  "pretext_training_type": "Self-supervised masked autoencoding",
+  "masking_strategy": "Structured masking: random, channel-groups, contiguous timesteps, timesteps; masking ratio 0.75",
+  "pretraining": "Masked autoencoding on pixel-timeseries from multiple sensors and derived products, reconstructing masked timepoints and modalities.",
+  "domain_knowledge": [
+    "Temporal encoding (month)",
+    "Channel group encoding",
+    "Location metadata",
+    "Handling missing data",
+    "Multi-sensor integration"
+  ],
+  "backbone_modifications": [
+    "Learned linear projections per channel group",
+    "Learned channel group encodings",
+    "Month encoding",
+    "Location encoding"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2",
+    "ERA5",
+    "SRTM DEM"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR",
+    "Climate Reanalysis",
+    "Topography",
+    "Location"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "full",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "monthly (pretraining), variable (downstream)",
+  "mlm:input": [
+    {
+      "name": "Sentinel-1, Sentinel-2, ERA5, SRTM DEM",
+      "bands": [
+        "Sentinel-1 VV",
+        "Sentinel-1 VH",
+        "Sentinel-2 B2",
+        "Sentinel-2 B3",
+        "Sentinel-2 B4",
+        "Sentinel-2 B5",
+        "Sentinel-2 B6",
+        "Sentinel-2 B7",
+        "Sentinel-2 B8",
+        "Sentinel-2 B8A",
+        "Sentinel-2 B11",
+        "Sentinel-2 B12",
+        "NDVI",
+        "ERA5 precipitation",
+        "ERA5 temperature",
+        "Dynamic World land cover",
+        "SRTM elevation",
+        "SRTM slope",
+        "Location coordinates"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Globally stratified pixel-timeseries from Sentinel-1, Sentinel-2, ERA5, NDVI, Dynamic World, SRTM DEM, Location",
+  "regions_coverage": [
+    "Global (Western Hemisphere, Eastern Hemisphere split into two regions, further divided into ecoregions)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 21535000,
+  "sampling": "Stratified global sampling by ecoregion and land cover; Time range: 2020-01 to 2021-12",
+  "processing:level": "Sentinel-2: 10m/20m bands only (60m bands removed); SRTM DEM",
+  "processing:lineage": "Stratified sampling by land cover; Grid-sampling 2,500 pixels per 510x510 tile; Preprocessing and export via Google Earth Engine",
+  "cloud_cover": "Dynamic World: only non-cloudy Sentinel-2 images; NDVI: mode of classes per month",
+  "missing_data": "Robust to missing timesteps/channels via masking; static variables never masked",
+  "mlm:hyperparameters": {
+    "patch_size": "per channel group per timestep (embedding size 128)",
+    "epochs": 20,
+    "batch_size": 4096,
+    "learning_rate": "cosine annealing, max 0.001",
+    "augmentations": null,
+    "mask_ratio": 0.75,
+    "image_resolution": "10m per pixel",
+    "num_layers": 2
+  },
+  "benchmarks": [
+    {
+      "task": "Segmentation",
+      "application": "Crop type segmentation",
+      "dataset": "CropHarvest",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        0.835
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "ERA5",
+        "NDVI",
+        "Dynamic World",
+        "Topography",
+        "Location"
+      ],
+      "regions": [
+        "Kenya",
+        "Brazil",
+        "Togo"
+      ],
+      "image_resolution": "[1, 1, 12, 18]",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 2867"
+    },
+    {
+      "task": "Classification",
+      "application": "Crop type classification",
+      "dataset": "S2-Agri 100",
+      "metrics": [
+        "Overall Accuracy",
+        "Kappa",
+        "Macro F1"
+      ],
+      "metrics_value": [
+        0.6889,
+        0.58,
+        0.4041
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "France"
+      ],
+      "image_resolution": "[5, 5, 24, 10]",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 1500"
+    },
+    {
+      "task": "Classification",
+      "application": "Tree species multi-label classification",
+      "dataset": "TreeSatML",
+      "metrics": [
+        "Weighted F1",
+        "Micro F1",
+        "mAP"
+      ],
+      "metrics_value": [
+        0.5529,
+        0.5829,
+        0.6331
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Germany"
+      ],
+      "image_resolution": "[6, 6, 1, 2] (S1), [6, 6, 1, 11] (S2)",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 45337"
+    },
+    {
+      "task": "Classification",
+      "application": "Land cover classification",
+      "dataset": "EuroSat",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        0.953
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "[64, 64, 1, 3] (RGB), [64, 64, 1, 11] (MS)",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 21600"
+    },
+    {
+      "task": "Regression",
+      "application": "Live fuel moisture estimation",
+      "dataset": "Fuel Moisture",
+      "metrics": [
+        "RMSE"
+      ],
+      "metrics_value": [
+        25.28
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "ERA5",
+        "NDVI",
+        "Dynamic World",
+        "Topography",
+        "Location"
+      ],
+      "regions": [
+        "USA"
+      ],
+      "image_resolution": "[1, 1, 3, 19]",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 1578"
+    },
+    {
+      "task": "Regression",
+      "application": "Algae bloom severity estimation",
+      "dataset": "Algae Blooms",
+      "metrics": [
+        "RMSE"
+      ],
+      "metrics_value": [
+        0.815
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "ERA5",
+        "NDVI",
+        "Dynamic World",
+        "Topography",
+        "Location"
+      ],
+      "regions": [
+        "USA"
+      ],
+      "image_resolution": "[1, 1, 12, 19]",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 777"
+    }
+  ]
+}
