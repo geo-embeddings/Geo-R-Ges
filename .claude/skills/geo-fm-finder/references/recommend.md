@@ -1,17 +1,13 @@
----
-name: suggest-models
-description: Recommend geospatial / remote sensing foundation models or precomputed Earth embeddings from the catalog in model_metadata/ for a user's use case. Use when someone describes an application (crop monitoring, flood mapping, land cover, forest, urban, biomass, change detection...), a region, a time period, their data, labels or compute budget and asks which model, backbone or embedding to use, what would suit them, or how catalogued models compare for their task, e.g. "I'm doing crop monitoring in South Africa for 2025 and have no compute, what would you suggest?". Read-only; to add or fix records use update-model-catalog.
----
-
-# Suggest models from the catalog
+# Recommend mode: suggest models from the catalog
 
 The catalog is `model_metadata/<id>.json`, one record per model or embedding product.
 Recommend from these records, not from memory: every suggestion must be a catalogued
 `id`, and every claim about it (size, sensors, benchmark numbers, weights) must come
-from its record or from a source you checked in this run. Do not edit records here.
+from its record or from a source you checked in this run. Do not edit records in this
+mode; catalog changes go through the handoff in `SKILL.md`.
 
 `recommend.py` below means
-`python3 .claude/skills/suggest-models/scripts/recommend.py`, run from the repo root.
+`python3 .claude/skills/geo-fm-finder/scripts/recommend.py`, run from the repo root.
 
 ## 1. Turn the request into constraints
 
@@ -34,7 +30,12 @@ state the assumption and continue.
 
 ## 2. Shortlist
 
-Run a broad query first, then tighten. Pass synonyms and region names at several
+Read `model_metadata/INDEX.md` first: one row per record with kind, size, inputs,
+resolution, time coverage, region and whether code / weights are linked. It is the
+quickest overview of the whole catalog and catches candidates the keyword scoring
+below misses because their records word things differently. Note the plausible ids.
+
+Then run a broad query, and tighten. Pass synonyms and region names at several
 scales, since records use free text (`"crop"`, `"agricultur"`, `"field"`; `"south
 africa"`, `"SA-crop"`, `"africa"`):
 
@@ -48,7 +49,8 @@ Scores are a ranking aid, not a verdict: `+` lines are the evidence, `!` lines a
 gaps and risks. `size unknown` and `no weights listed` often mean the record is
 incomplete, not that the model is unsuitable.
 
-Then read the top 5-8 in detail, filtered to the relevant benchmarks:
+Merge the top `candidates` with the ids you noted from the index, then read the top
+5-8 in detail, filtered to the relevant benchmarks:
 
 ```bash
 recommend.py show alphaearth tessera presto --task crop --region africa
@@ -96,5 +98,6 @@ Lead with the recommendation, then for each suggested model:
 
 Close with what the catalog could not answer (null fields, unverified currency, no
 regional benchmark) so the user knows what to check. If the catalog has nothing
-suitable, say so plainly rather than stretching a weak match; suggest running
-`update-model-catalog` if a known model seems to be missing.
+suitable, say so plainly rather than stretching a weak match. If a known model seems to
+be missing or the shortlist is held back by empty fields, offer the catalog update
+described under "Handoff" in `SKILL.md`.

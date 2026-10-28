@@ -1,9 +1,4 @@
----
-name: update-model-catalog
-description: Maintain the geospatial foundation model catalog in model_metadata/. Adds records for remote sensing / Earth observation foundation models and embedding products that are missing, and updates existing records (fill null fields, new code or weights, published DOI, new versions, new benchmarks, corrections) by reading the papers and repos. Use when the user wants to update, extend, refresh, complete or fix the catalog, scan arXiv for new geo foundation models or Earth embeddings, add a specific paper or model (by name, arXiv id, DOI or URL), or improve or correct one or more existing records.
----
-
-# Update the geo foundation model catalog
+# Update mode: maintain the catalog
 
 The catalog is `model_metadata/<id>.json`, one record per model, validated against
 `model_schema_mlm.json` (both at the repo root). This skill does two things, often in
@@ -12,9 +7,9 @@ the same run:
 - **Add**: find models that are missing, read their papers, write new records.
 - **Update**: re-read the sources of existing records and improve them.
 
-Helper scripts are in `.claude/skills/update-model-catalog/scripts/`. Run them from
+Helper scripts are in `.claude/skills/geo-fm-finder/scripts/`. Run them from
 the repo root; they locate the catalog themselves. `catalog.py` shorthand below means
-`python .claude/skills/update-model-catalog/scripts/catalog.py`. `$TMP` means a
+`python .claude/skills/geo-fm-finder/scripts/catalog.py`. `$TMP` means a
 scratch directory outside the repo: `$CLAUDE_JOB_DIR/tmp` if set, else a fresh
 `mktemp -d`.
 
@@ -46,7 +41,7 @@ several sources, since none is complete:
 
 - **Literature search** (main source). Save the output, it takes a few minutes:
   ```bash
-  python .claude/skills/update-model-catalog/scripts/search.py [--since YYYY-MM-DD] [--sources ...] > "$TMP/candidates.tsv"
+  python .claude/skills/geo-fm-finder/scripts/search.py [--since YYYY-MM-DD] [--sources ...] > "$TMP/candidates.tsv"
   ```
   It queries arXiv, OpenAlex citations (new papers citing catalogued models),
   OpenAlex keywords (journals and conferences), Semantic Scholar, and Google Scholar,
@@ -123,7 +118,7 @@ order, field conventions, id rules, and the merge rules for updates.
 With more than two records, delegate: one subagent per record, in parallel. Tell each
 the mode (add/update), the paper link, the target path, what to look for (for
 updates), and to read `model_schema_mlm.json`,
-`.claude/skills/update-model-catalog/references/extraction.md` and, for adds, one
+`.claude/skills/geo-fm-finder/references/extraction.md` and, for adds, one
 existing record (e.g. `model_metadata/anysat.json`) as a style example. Ask each to
 return the fields still null because the sources do not state them, and, for updates,
 every existing value it changed with the evidence (section/table of the paper).
@@ -131,11 +126,18 @@ every existing value it changed with the evidence (section/table of the paper).
 ## 6. Validate and review
 
 ```bash
-uv run --with jsonschema python .claude/skills/update-model-catalog/scripts/catalog.py validate model_metadata/<id>.json ...
+uv run --with jsonschema python .claude/skills/geo-fm-finder/scripts/catalog.py validate model_metadata/<id>.json ...
 catalog.py diff $TMP/<id>.orig.json model_metadata/<id>.json   # for each updated record
 ```
 
-Fix every validation failure. Read each diff: any `REMOVED` line or changed non-null
+Fix every validation failure, then regenerate the overview table (never edit it by
+hand):
+
+```bash
+catalog.py write-index      # rewrites model_metadata/INDEX.md
+```
+
+Read each diff: any `REMOVED` line or changed non-null
 value must be backed by the source; otherwise restore the original value. Spot-check
 new records against their papers: name, DOI, parameter count, and two or three
 benchmark numbers.
