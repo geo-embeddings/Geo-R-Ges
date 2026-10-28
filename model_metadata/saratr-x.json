@@ -1,0 +1,216 @@
+{
+  "id": "saratr-x",
+  "mlm:name": "SARATR-X",
+  "version": "1.0",
+  "release_date": "2025-01-28T00:00:00Z",
+  "updated": "2025-02-04T00:00:00Z",
+  "description": "SARATR-X is the first foundation model for SAR automatic target recognition (ATR), trained via self-supervised learning on the largest publicly available SAR dataset (SARDet-180K) with a HiViT backbone and a two-step masked image modeling strategy, achieving state-of-the-art performance on classification and detection tasks.",
+  "sci:doi": "10.1109/TIP.2025.3531988",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/waterdisappear/SARATR-X",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://github.com/waterdisappear/SARATR-X",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "HiViT",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Self-supervised learning (Masked Image Modeling, two-step: ImageNet then SAR)",
+  "masking_strategy": "Masked image modeling (MIM) with patch dropping and multi-scale gradient features as guide signals",
+  "pretraining": "Two-step pre-training: first on ImageNet with MIM for initialization, then on SARDet-180K SAR dataset with MIM using multi-scale gradient features to suppress speckle noise",
+  "domain_knowledge": [
+    "Multi-scale gradient features for speckle noise suppression",
+    "SAR-specific backbone design"
+  ],
+  "backbone_modifications": [
+    "Hierarchical structure for high spatial resolution",
+    "Small (4x4) input patches for small target recognition"
+  ],
+  "supported_sensors": [
+    "Satellite SAR",
+    "Airborne SAR",
+    "Simulation SAR"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "SAR"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Satellite SAR, Airborne SAR, Simulation SAR",
+      "bands": [
+        "microwave"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "ImageNet-1K",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1400000,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "SARDet-180K",
+        "regions_coverage": [
+          "global (inland, marine, harbors, cities, airports)"
+        ],
+        "num_images": 186600,
+        "sampling": "Resampling and hard-sample mining to alleviate class imbalance",
+        "processing:lineage": "cropping large images to extract small targets"
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Classification",
+      "application": "SAR vehicle, ship, and aircraft recognition (few-shot and robust settings)",
+      "dataset": "SAR-VSA (constructed from MSTAR, FUSAR-Ship, SAR-ACD)",
+      "metrics": [
+        "Average Accuracy"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Satellite SAR",
+        "Airborne SAR"
+      ],
+      "regions": [
+        "global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "SAR vehicle recognition (standard and extended operating conditions)",
+      "dataset": "MSTAR",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Airborne SAR"
+      ],
+      "regions": [
+        "grass scenario"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Detection",
+      "application": "SAR multi-category object detection",
+      "dataset": "SARDet-100K",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Satellite SAR",
+        "Airborne SAR"
+      ],
+      "regions": [
+        "global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Detection",
+      "application": "SAR ship detection",
+      "dataset": "SSDD",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Satellite SAR"
+      ],
+      "regions": [
+        "marine"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Detection",
+      "application": "SAR aircraft detection",
+      "dataset": "SAR-Aircraft",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Satellite SAR"
+      ],
+      "regions": [
+        "airports"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Detection",
+      "application": "SAR multi-category object detection",
+      "dataset": "OGSOD",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Satellite SAR",
+        "Airborne SAR"
+      ],
+      "regions": [
+        "global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    }
+  ]
+}

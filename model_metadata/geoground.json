@@ -1,0 +1,275 @@
+{
+  "id": "geoground",
+  "mlm:name": "GeoGround",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "GeoGround is a unified large vision-language model for remote sensing visual grounding, supporting horizontal bounding box (HBB), oriented bounding box (OBB), and segmentation mask outputs via a text-based approach. It introduces the Text-Mask paradigm and hybrid supervision, and is trained on the large-scale refGeo dataset.",
+  "sci:doi": "10.48550/arXiv.2411.11904",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/zytx121/GeoGround",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "CLIP-ViT",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Text regression loss with hybrid supervision (Text-HBB, Text-OBB, Text-Mask)",
+  "masking_strategy": "Textualization of mask via downsampling and R-RLE compression",
+  "pretraining": "Unified training pipeline using textualized signals (Text-HBB, Text-OBB, Text-Mask) and hybrid supervision (prompt-assisted and geometry-guided learning)",
+  "domain_knowledge": [
+    "Prompt-assisted learning",
+    "Geometry-guided learning",
+    "Hybrid supervision",
+    "Text-Mask paradigm"
+  ],
+  "backbone_modifications": [
+    "Connector (two-layer MLPs) between visual encoder and LLM"
+  ],
+  "supported_sensors": null,
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (0.007m to 30m GSD)",
+  "temporal_resolution": null,
+  "mlm:input": null,
+  "mlm:pretrained_source": "refGeo (integrates RSVG, DIOR-RSVG, GeoChat, VRSBench, and new aerial vehicle dataset)",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 80000,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 5,
+    "batch_size": 128,
+    "learning_rate": "2e-4 (linear decay after warm-up, warm-up ratio 0.03)",
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "512-4000 (varies by dataset)"
+  },
+  "benchmarks": [
+    {
+      "task": "Referring Expression Comprehension (REC)",
+      "application": "Remote sensing visual grounding (HBB)",
+      "dataset": "DIOR-RSVG-Test",
+      "metrics": [
+        "Acc@0.5"
+      ],
+      "metrics_value": [
+        77.73
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "800",
+      "spatial_resolution": "0.5-30m",
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Expression Comprehension (REC)",
+      "application": "Remote sensing visual grounding (HBB)",
+      "dataset": "DIOR-RSVG-Val",
+      "metrics": [
+        "Acc@0.5"
+      ],
+      "metrics_value": [
+        77.18
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "800",
+      "spatial_resolution": "0.5-30m",
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Expression Comprehension (REC)",
+      "application": "Remote sensing visual grounding (HBB)",
+      "dataset": "RSVG-Test",
+      "metrics": [
+        "Acc@0.5"
+      ],
+      "metrics_value": [
+        26.65
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "1024",
+      "spatial_resolution": "0.24-4.88m",
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Expression Comprehension (REC)",
+      "application": "Remote sensing visual grounding (HBB)",
+      "dataset": "RSVG-Val",
+      "metrics": [
+        "Acc@0.5"
+      ],
+      "metrics_value": [
+        27.64
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "1024",
+      "spatial_resolution": "0.24-4.88m",
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Expression Comprehension (REC)",
+      "application": "Remote sensing visual grounding (HBB)",
+      "dataset": "GeoChat*",
+      "metrics": [
+        "Acc@0.5"
+      ],
+      "metrics_value": [
+        70.24
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "600-1024",
+      "spatial_resolution": "0.3-0.8m",
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Expression Comprehension (REC)",
+      "application": "Remote sensing visual grounding (HBB)",
+      "dataset": "VRSBench*",
+      "metrics": [
+        "Acc@0.5"
+      ],
+      "metrics_value": [
+        66.04
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "512",
+      "spatial_resolution": "0.1-30m",
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Expression Comprehension (REC)",
+      "application": "Remote sensing visual grounding (HBB)",
+      "dataset": "A VVG",
+      "metrics": [
+        "Acc@0.5"
+      ],
+      "metrics_value": [
+        21.58
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "4000",
+      "spatial_resolution": "0.007-0.04m",
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Expression Comprehension (REC)",
+      "application": "Remote sensing visual grounding (HBB)",
+      "dataset": "A VG",
+      "metrics": [
+        "Acc@0.5"
+      ],
+      "metrics_value": [
+        52.44
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "4000",
+      "spatial_resolution": "0.007-0.04m",
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Expression Comprehension (REC) with OBB",
+      "application": "Remote sensing visual grounding (OBB)",
+      "dataset": "GeoChat*",
+      "metrics": [
+        "Acc@0.5 (rotated IoU)"
+      ],
+      "metrics_value": [
+        59.72
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "600-1024",
+      "spatial_resolution": "0.3-0.8m",
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Expression Comprehension (REC) with OBB",
+      "application": "Remote sensing visual grounding (OBB)",
+      "dataset": "VRSBench*",
+      "metrics": [
+        "Acc@0.5 (rotated IoU)"
+      ],
+      "metrics_value": [
+        53.22
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "512",
+      "spatial_resolution": "0.1-30m",
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Expression Comprehension (REC) with OBB",
+      "application": "Remote sensing visual grounding (OBB)",
+      "dataset": "A VVG",
+      "metrics": [
+        "Acc@0.5 (rotated IoU)"
+      ],
+      "metrics_value": [
+        13.93
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "4000",
+      "spatial_resolution": "0.007-0.04m",
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Expression Comprehension (REC) with OBB",
+      "application": "Remote sensing visual grounding (OBB)",
+      "dataset": "A VG",
+      "metrics": [
+        "Acc@0.5 (rotated IoU)"
+      ],
+      "metrics_value": [
+        42.29
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "4000",
+      "spatial_resolution": "0.007-0.04m",
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Expression Segmentation (RES)",
+      "application": "Remote sensing referring segmentation",
+      "dataset": "RRSIS-D",
+      "metrics": [
+        "Acc@0.5",
+        "mIoU"
+      ],
+      "metrics_value": [
+        60.97,
+        54.92
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ]
+}

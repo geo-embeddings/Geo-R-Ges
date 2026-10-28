@@ -1,0 +1,184 @@
+{
+  "id": "earthmarker",
+  "mlm:name": "EarthMarker",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "EarthMarker is the first visual prompting-based multi-modal large language model (MLLM) for remote sensing (RS), capable of interpreting RS imagery at image, region, and point levels using visual prompts (boxes and points). It employs a shared visual encoding method and a cross-domain learning strategy, and is trained on the large-scale RSVP dataset (3.65M image-point-text and image-region-text pairs).",
+  "sci:doi": "10.48550/arXiv.2407.13596",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/wivizhang/EarthMarker",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "Mixture of Visual Experts (MoV): DINOv2-ViT L/14 and CLIP-ConvNeXt",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Cross-domain learning with multi-domain image-text alignment, spatial perception tuning, and RS visual prompting tuning",
+  "masking_strategy": null,
+  "pretraining": "Three-phase progressive learning: (1) multi-domain image-text alignment (COCO Caption, RSVP image-level), (2) spatial perception tuning (RefCOCO, RefCOCO+), (3) RS visual prompting tuning (RSVP region-text and point-text pairs) with LoRA.",
+  "domain_knowledge": [
+    "Remote sensing imagery",
+    "Visual prompting",
+    "Multi-granularity interpretation"
+  ],
+  "backbone_modifications": [
+    "Mixture of Visual Experts (MoV): combines DINOv2-ViT-L/14 and CLIP-ConvNeXt-L",
+    "Shared visual encoding for images and prompts"
+  ],
+  "supported_sensors": [
+    "Google Earth (various satellites/aerial)",
+    "VHR optical",
+    "Medium/low-res imagery"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "Optical imagery",
+    "Text"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (0.05m to 30m, depending on dataset)",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Google Earth (various satellites/aerial), VHR optical, Medium/low-res imagery",
+      "bands": [
+        "RGB"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "COCO Caption, RSVP (image-level), RefCOCO, RefCOCO+, RSVP (region/point-level)",
+  "regions_coverage": [
+    "Global (various public RS datasets, Google Earth, aerial and satellite imagery)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 3650000,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": "2e-5",
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "variable (0.05m to 30m)"
+  },
+  "benchmarks": [
+    {
+      "task": "Scene Classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "AID, UCMerced",
+      "metrics": [
+        "Accuracy (result 1 of 2)",
+        "Accuracy (result 2 of 2)"
+      ],
+      "metrics_value": [
+        77.97,
+        86.52
+      ],
+      "sensor": null,
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "NWPU-Captions",
+      "metrics": [
+        "BLEU1",
+        "BLEU2",
+        "BLEU3",
+        "BLEU4",
+        "METEOR",
+        "ROUGE-L",
+        "CIDEr",
+        "SPICE"
+      ],
+      "metrics_value": [
+        84.4,
+        73.1,
+        62.9,
+        54.3,
+        37.5,
+        70.0,
+        162.9,
+        26.8
+      ],
+      "sensor": null,
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Referring Object Classification",
+      "application": "Object classification in RS imagery with visual prompts",
+      "dataset": "DIOR-RSVG",
+      "metrics": [
+        "Semantic Similarity (SS)",
+        "Semantic Intersection over Union (S-IOU)"
+      ],
+      "metrics_value": [
+        98.37,
+        97.24
+      ],
+      "sensor": null,
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Region Captioning",
+      "application": "Region-level captioning in RS imagery",
+      "dataset": "DIOR-RSVG",
+      "metrics": [
+        "BLEU1",
+        "BLEU2",
+        "BLEU3",
+        "BLEU4",
+        "METEOR",
+        "ROUGE-L",
+        "CIDEr",
+        "SPICE"
+      ],
+      "metrics_value": [
+        57.14,
+        48.6,
+        43.06,
+        38.59,
+        31.97,
+        60.46,
+        379.25,
+        59.87
+      ],
+      "sensor": null,
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ]
+}

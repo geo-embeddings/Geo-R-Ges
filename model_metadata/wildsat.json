@@ -1,0 +1,254 @@
+{
+  "id": "wildsat",
+  "mlm:name": "WildSAT",
+  "version": "1.0",
+  "release_date": "2024-12-19T00:00:00Z",
+  "updated": "2024-12-19T00:00:00Z",
+  "description": "WildSAT is a remote sensing foundation model that learns satellite image representations by leveraging millions of geo-tagged wildlife observations, environmental covariates, and text descriptions of species habitats. It uses a contrastive learning framework to align satellite images, text, and location embeddings, enabling improved downstream performance and zero-shot retrieval.",
+  "sci:doi": "10.48550/arXiv.2412.14428",
+  "assets": null,
+  "mlm:architecture": null,
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Contrastive learning with multi-modal alignment (image, text, location)",
+  "masking_strategy": null,
+  "pretraining": "Contrastive learning aligning satellite images, text descriptions, and location/environmental covariates using wildlife observation data.",
+  "domain_knowledge": [
+    "Species distribution",
+    "Habitat and climate preferences",
+    "Environmental covariates"
+  ],
+  "backbone_modifications": null,
+  "supported_sensors": [
+    "Sentinel-2A",
+    "Sentinel-2B"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "Text",
+    "Location"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "5 days (Sentinel-2 revisit)",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2A, Sentinel-2B",
+      "bands": [
+        "R",
+        "G",
+        "B"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          3,
+          512,
+          512
+        ],
+        "dim_order": [
+          "batch",
+          "time",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "iNaturalist observations (from SINR), Wikipedia text, Sentinel-2 satellite images, WorldClim2 environmental covariates",
+  "regions_coverage": [
+    "Global (overrepresented in US and Europe)"
+  ],
+  "start_datetime": "2017-01-01T00:00:00Z",
+  "end_datetime": "2021-12-31T23:59:59Z",
+  "num_images": 305689,
+  "sampling": "Random sampling of text section per image-species-location match; satellite images at same location but different time for augmentation",
+  "processing:level": null,
+  "processing:lineage": "Cloud cover filtering; Bilinear interpolation of environmental covariates",
+  "cloud_cover": "Significantly less cloud cover (filtered)",
+  "missing_data": "Images with significant cloud cover removed; only images within 2017-2021 used",
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 25,
+    "batch_size": 64,
+    "learning_rate": "1e-4",
+    "augmentations": [
+      "Random cropping",
+      "Resizing",
+      "Jitter",
+      "Channel mixing",
+      "Geometric transformations (flipping, cropping)"
+    ],
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "UCM",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        97.5
+      ],
+      "sensor": [
+        "Unknown (UCM)"
+      ],
+      "regions": [
+        "USA"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "1ft",
+      "split_ratio": "samples used: 2100 of 2100 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        88.9
+      ],
+      "sensor": [
+        "Google Earth"
+      ],
+      "regions": null,
+      "image_resolution": "600x600",
+      "spatial_resolution": "0.5-8m",
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "RESISC45",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        93.0
+      ],
+      "sensor": [
+        "Google Earth"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.2-30m",
+      "split_ratio": "samples used: 31500 of 31500 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "FMoW",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        52.8
+      ],
+      "sensor": [
+        "QuickBird",
+        "GeoEye",
+        "WorldView"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "Variable",
+      "spatial_resolution": "Variable",
+      "split_ratio": "samples used: 400000 of 400000 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Land use/land cover classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        97.1
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 27000 of 27000 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Climate zone classification",
+      "dataset": "So2Sat20k",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        49.7
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 20000 of 20000 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Multi-label land cover classification",
+      "dataset": "BigEarthNet20k (BEN20k)",
+      "metrics": [
+        "Micro F1"
+      ],
+      "metrics_value": [
+        59.1
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 20000 of 20000 (100%)"
+    },
+    {
+      "task": "Species encounter rate prediction",
+      "application": "Bird species encounter rate prediction",
+      "dataset": "SatBird",
+      "metrics": [
+        "Top-k accuracy (result 1 of 3)",
+        "Top-k accuracy (result 2 of 3)",
+        "Top-k accuracy (result 3 of 3)"
+      ],
+      "metrics_value": [
+        24.4,
+        50.03,
+        55.01
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Kenya",
+        "USA Summer",
+        "USA Winter"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ]
+}

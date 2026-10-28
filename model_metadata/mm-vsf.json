@@ -1,0 +1,101 @@
+{
+  "id": "mm-vsf",
+  "mlm:name": "MM-VSF",
+  "version": "1.0",
+  "release_date": "2024-07-29T00:00:00Z",
+  "updated": "2024-07-29T00:00:00Z",
+  "description": "MM-VSF is a knowledge-guided multimodal spatiotemporal foundation model for remote sensing, using both satellite spectral imagery and weather data with a variable step forecasting pretraining objective. It produces temporally flexible, robust embeddings for downstream tasks such as crop mapping.",
+  "sci:doi": "10.48550/arXiv.2407.19660",
+  "assets": null,
+  "mlm:architecture": "Vision Transformer (ViT) encoder, BERT-style temporal transformer, BiLSTM for weather",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Variable Step Forecasting (VSF)",
+  "masking_strategy": "Spatiotemporally uniform masking (equal number of masked patches per timestamp and per spatial patch location)",
+  "pretraining": "Multimodal forecasting: predict a future spectral image using a series of past spectral images and weather data up to the forecast date. Masking is applied to spectral imagery.",
+  "domain_knowledge": [
+    "Knowledge-guided: leverages physical drivers (weather) and their impact on environmental systems"
+  ],
+  "backbone_modifications": [
+    "Shared ViT encoder for all timestamps",
+    "Patch positional embedding",
+    "Day-of-year and delta-day embeddings",
+    "Forward-only attention in temporal transformer"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "ERA5 Land"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "Weather"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "full",
+  "spatial_resolution": "10m (Sentinel-2), 11km (ERA5 Land)",
+  "temporal_resolution": "variable (Sentinel-2: up to 70/year in US, 40/year in India; ERA5 Land: daily)",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2, ERA5 Land",
+      "bands": [
+        "B2",
+        "B3",
+        "B4",
+        "B8",
+        "B9",
+        "B12",
+        "temperature 2m min",
+        "temperature 2m max",
+        "total precipitation sum",
+        "u-component of wind 10m",
+        "v-component of wind 10m"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Sentinel-2 (spectral imagery) and ERA5 Land (weather)",
+  "regions_coverage": [
+    "Global land areas (10000 random locations)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": "Random sampling of 10000 locations globally; Time range: 1 year per location",
+  "processing:level": null,
+  "processing:lineage": "Random sampling of locations; Collect all Sentinel-2 images for each region in the year; Collect ERA5 Land daily aggregates",
+  "cloud_cover": null,
+  "missing_data": "Regions with missing data or improper coverage have fewer samples",
+  "mlm:hyperparameters": {
+    "patch_size": "patch size 8",
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": 0.5,
+    "image_resolution": "128x128 (Sentinel-2)"
+  },
+  "benchmarks": [
+    {
+      "task": "Semantic segmentation (pixel-wise classification)",
+      "application": "Crop mapping",
+      "dataset": "Sentinel-2 + ERA5 Land (T11SKA tile, California Central Valley), Cropland Data Layer (CDL) labels",
+      "metrics": [
+        "Per-class F1 score",
+        "Average F1 score"
+      ],
+      "metrics_value": [
+        0.8102,
+        0.6233
+      ],
+      "sensor": [
+        "Sentinel-2",
+        "ERA5 Land"
+      ],
+      "regions": [
+        "T11SKA tile, California Central Valley, USA"
+      ],
+      "image_resolution": "128x128",
+      "spatial_resolution": "10m",
+      "split_ratio": "Grid-based split (train/val/test) as in WSTATT [23]"
+    }
+  ]
+}

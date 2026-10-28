@@ -1,0 +1,144 @@
+{
+  "id": "metaearth",
+  "mlm:name": "MetaEarth",
+  "version": "v1",
+  "release_date": null,
+  "updated": null,
+  "description": "MetaEarth is a generative foundation model for global-scale remote sensing image generation. It enables the production of worldwide, multi-resolution, unbounded, and virtually limitless remote sensing images using a resolution-guided self-cascading generative framework and innovative noise sampling strategy.",
+  "sci:doi": "10.48550/arXiv.2405.13570",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://jiupinjia.github.io/metaearth/",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "U-Net-like architecture with RRDBNet encoder",
+  "mlm:total_parameters": 600000000,
+  "pretext_training_type": "Denoising diffusion probabilistic modeling",
+  "masking_strategy": "Noise sampling strategy for denoising diffusion models; no explicit masking",
+  "pretraining": "Trained from scratch on a large-scale, multi-resolution global remote sensing dataset collected from Google Earth, using a self-cascading conditional diffusion framework with high-order degradation for low-res simulation.",
+  "domain_knowledge": [
+    "Resolution-guided generation",
+    "Self-cascading framework",
+    "Noise sampling strategy",
+    "High-order degradation for low-res simulation"
+  ],
+  "backbone_modifications": [
+    "Resolution embedding via frequency encoding and MLP",
+    "Conditional concatenation of upsampled low-res features",
+    "Integration of RRDBNet encoder for conditional images"
+  ],
+  "supported_sensors": [
+    "Google Earth imagery"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Optical RGB"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "4m/pixel, 16m/pixel, 64m/pixel",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Google Earth imagery",
+      "bands": [
+        "RGB"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          1,
+          256,
+          256
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "Google Earth multi-resolution global dataset",
+  "regions_coverage": [
+    "Global (all continents, various land cover types)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 3100000,
+  "sampling": "Random sampling of non-overlapping images at each resolution",
+  "processing:level": null,
+  "processing:lineage": "Cloud and noise removal; Deduplication of repetitive ocean images",
+  "cloud_cover": "Images with significant cloud cover removed",
+  "missing_data": "Images with noise or significant missing data removed",
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 30,
+    "batch_size": 8,
+    "learning_rate": "2e-6",
+    "augmentations": [
+      "High-order degradation (blur, scaling, noise, JPEG compression)"
+    ],
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Image Generation",
+      "application": "Remote sensing image synthesis",
+      "dataset": "Google Earth multi-resolution dataset (test set)",
+      "metrics": [
+        "FID"
+      ],
+      "metrics_value": [
+        23.97
+      ],
+      "sensor": [
+        "Google Earth"
+      ],
+      "regions": [
+        "Global",
+        "Americas",
+        "Europe",
+        "Asia",
+        "Northern Hemisphere",
+        "Southern Hemisphere"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "4m/pixel, 16m/pixel, 64m/pixel",
+      "split_ratio": "train:val:test = (approx) 90:5:5; samples used: 140000 of 3100000 (4.52%)"
+    },
+    {
+      "task": "Image Classification",
+      "application": "Remote sensing scene classification (downstream task)",
+      "dataset": "MetaEarth-generated 4m/pixel images (7-class dataset)",
+      "metrics": [
+        "Accuracy (result 1 of 4)",
+        "Accuracy (result 2 of 4)",
+        "Accuracy (result 3 of 4)",
+        "Accuracy (result 4 of 4)"
+      ],
+      "metrics_value": [
+        97.28,
+        99.22,
+        94.55,
+        95.33
+      ],
+      "sensor": [
+        "Google Earth"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "4m/pixel",
+      "split_ratio": "train:test = 3:1; samples used: 5250 of 1050 (500%)"
+    }
+  ]
+}

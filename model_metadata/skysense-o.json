@@ -1,0 +1,290 @@
+{
+  "id": "skysense-o",
+  "mlm:name": "SkySense-O",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "SkySense-O is an open-world remote sensing interpretation model with vision-centric visual-language modeling, trained on the fine-grained Sky-SA dataset (183,375 image-text pairs, 1,763 category labels). It achieves state-of-the-art zero-shot performance across 14 downstream datasets and 4 tasks, including segmentation, classification, and VQA.",
+  "sci:doi": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/zqcrafts/SkySense-O",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "SwinV2-H-8",
+  "mlm:total_parameters": 654000000,
+  "pretext_training_type": "Vision-language self-supervised pretraining with visual contrastive loss, masked image modeling, and image-text alignment",
+  "masking_strategy": "Masked image modeling",
+  "pretraining": "Pretraining uses large-scale remote sensing image-text pairs from SkyScript, RS5M, and OSM, with visual contrastive and masked modeling losses to maintain visual representation capabilities during image-text alignment.",
+  "domain_knowledge": [
+    "Vision-centric knowledge graph",
+    "Remote sensing-specific visual regularization"
+  ],
+  "backbone_modifications": [
+    "Vision-centric regularization loss",
+    "Vision-centric knowledge graph integration"
+  ],
+  "supported_sensors": [
+    "Multisource remote sensing imagery (specific sensors not listed)"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Multisource remote sensing imagery (specific sensors not listed)",
+      "bands": [
+        "RGB",
+        "Multispectral (details not specified)"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "SkyScript, RS5M, OSM",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 10000000,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": null,
+  "benchmarks": [
+    {
+      "task": "Semantic Segmentation",
+      "application": "Object Segmentation",
+      "dataset": "iSAID",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        43.92
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Object Segmentation",
+      "dataset": "FAST",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        32.12
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Object Segmentation",
+      "dataset": "SIOR",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        8.33
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Object Segmentation",
+      "dataset": "SOTA",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        30.89
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Land-cover Segmentation",
+      "dataset": "Potsdam",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        54.1
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Land-cover Segmentation",
+      "dataset": "OEM",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        40.83
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Land-cover Segmentation",
+      "dataset": "LoveDA",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        38.3
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Land-cover Segmentation",
+      "dataset": "Vaihingen",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        51.64
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Land-cover Segmentation",
+      "dataset": "FloodNet",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        42.04
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Scene Classification",
+      "dataset": "AID",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        82.93
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Scene Classification",
+      "dataset": "RESISC-45",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        83.28
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "RS VQA",
+      "dataset": "SIRI-WHU",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        74.79
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "RS VQA",
+      "dataset": "AID-VQA",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        94.1
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "RS VQA",
+      "dataset": "RSVQA-HR",
+      "metrics": [
+        "Average Accuracy"
+      ],
+      "metrics_value": [
+        78.09
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ]
+}

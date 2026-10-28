@@ -1,0 +1,320 @@
+{
+  "id": "seamo",
+  "mlm:name": "SeaMo",
+  "version": null,
+  "release_date": "2025-04-22T00:00:00Z",
+  "updated": "2025-04-22T00:00:00Z",
+  "description": "SeaMo is a season-aware multimodal foundation model for remote sensing that integrates spatial, multimodal, and multi-seasonal information using a masked image modeling framework. It employs unaligned spatial region selection, multi-source inputs, and temporal-multimodal fusion blocks to explicitly model spatial, spectral, and seasonal dimensions, enhancing generalization and robustness across geoscientific tasks.",
+  "sci:doi": "10.48550/arXiv.2412.19237",
+  "assets": null,
+  "mlm:architecture": "ViT-Base",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Masked Image Modeling (MIM)",
+  "masking_strategy": "Selective masking with consistent masking for simultaneous multi-sensor images and random masking for different times; partial overlap cropping across seasons",
+  "pretraining": "Progressive pretraining: first on single-time multimodal data (25% of data, no TM block, 20 epochs), then on multi-seasonal multimodal data with temporal-multimodal (TM) fusion blocks (200 epochs).",
+  "domain_knowledge": [
+    "Seasonal awareness",
+    "Geospatial region selection",
+    "Temporal-multimodal fusion"
+  ],
+  "backbone_modifications": [
+    "Unified multimodal feature encoder",
+    "Temporal-multimodal fusion block (TM block)",
+    "Modality-specific patch embedding modules"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "Sentinel-1"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "full",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "4 seasonal snapshots per year",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "12 multispectral bands"
+      ]
+    },
+    {
+      "name": "Sentinel-1",
+      "bands": [
+        "2 SAR bands (VV, VH)"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "SSL4EO-S12",
+  "regions_coverage": [
+    "250,000 locations worldwide"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 3000000,
+  "sampling": "Progressive: first phase uses only first season (25% of data), second phase uses all seasons; Time range: 4 seasonal snapshots per location within a calendar year",
+  "processing:level": "Sentinel-2 Level-2A",
+  "processing:lineage": "Normalization as in SSL4EO-S12",
+  "cloud_cover": "Images with high cloud cover excluded",
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 220,
+    "batch_size": 2048,
+    "learning_rate": "1e-4 (half-cycle cosine decay)",
+    "augmentations": [
+      "Partial overlap crop",
+      "Random horizontal flipping"
+    ],
+    "mask_ratio": 0.75,
+    "image_resolution": "264x264 (pretraining), resized to 128x128 for efficiency"
+  },
+  "benchmarks": [
+    {
+      "task": "Single-label classification",
+      "application": "Scene classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        99.37
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe (34 countries)"
+      ],
+      "image_resolution": "64x64 (resized to 128x128 for training)",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 27000 of 27000 (100%)"
+    },
+    {
+      "task": "Single-label classification",
+      "application": "Scene classification",
+      "dataset": "fMoW-Sentinel",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        58.25
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "128x128",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: (10%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land cover classification",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        88.54
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "128x128",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 35419 of 590326 (10%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "DFC2020",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        49.79
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "96x96",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 46152 of 46152 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Urban segmentation",
+      "dataset": "SegMunich",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        51.3
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Munich"
+      ],
+      "image_resolution": "128x128",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Urban change detection",
+      "dataset": "OSCD",
+      "metrics": [
+        "F1 Score"
+      ],
+      "metrics_value": [
+        54.54
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "128x128",
+      "spatial_resolution": "10m, 20m, 60m",
+      "split_ratio": "samples used: 24 of 24 (100%)"
+    },
+    {
+      "task": "Single-label classification",
+      "application": "Scene classification",
+      "dataset": "EuroSAT-SAR",
+      "metrics": [
+        "Top1 Accuracy"
+      ],
+      "metrics_value": [
+        89.69
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land cover classification",
+      "dataset": "BigEarthNet-SAR",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        82.23
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: (10%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "DFC2020-SAR",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        49.54
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "96x96",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Water body segmentation",
+      "dataset": "GLH-Water",
+      "metrics": [
+        "IoU",
+        "F1"
+      ],
+      "metrics_value": [
+        86.2,
+        92.8
+      ],
+      "sensor": null,
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "12800x12800 (cropped to 256x256)",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "samples used: 156250 of 156250 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Water body segmentation",
+      "dataset": "S1S2-Water (S1)",
+      "metrics": [
+        "IoU",
+        "F1"
+      ],
+      "metrics_value": [
+        93.7,
+        96.7
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 50000 of 50000 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Water body segmentation",
+      "dataset": "S1S2-Water (S2)",
+      "metrics": [
+        "IoU",
+        "F1"
+      ],
+      "metrics_value": [
+        98.7,
+        99.5
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 50000 of 50000 (100%)"
+    }
+  ]
+}

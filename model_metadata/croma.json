@@ -1,0 +1,326 @@
+{
+  "id": "croma",
+  "mlm:name": "CROMA",
+  "version": "1.0",
+  "release_date": "2023-11-01T00:00:00Z",
+  "updated": "2023-11-01T00:00:00Z",
+  "description": "CROMA is a remote sensing foundation model that combines contrastive and reconstruction self-supervised objectives to learn rich unimodal and multimodal representations from spatially aligned multispectral optical and SAR data. It introduces 2D-ALiBi and X-ALiBi for spatial bias in attention, enabling extrapolation to larger images and outperforming prior state-of-the-art models on multiple benchmarks.",
+  "sci:doi": "10.48550/arXiv.2311.00566",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/antofuller/CROMA",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "Vision Transformer (ViT-B and ViT-L)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Joint contrastive and masked autoencoding (reconstruction) self-supervised learning",
+  "masking_strategy": "MAE-style random masking; independently mask 75% of radar and optical patches",
+  "pretraining": "Joint pretraining of three encoders (optical, radar, and joint radar-optical) end-to-end on SSL4EO Sentinel-1 & 2 data, using contrastive and reconstruction objectives with 2D-ALiBi and X-ALiBi positional encoding.",
+  "domain_knowledge": [
+    "Spatial alignment of multimodal remote sensing data",
+    "Sensor fusion (Sentinel-1 SAR and Sentinel-2 multispectral optical)",
+    "Relative position encoding for spatial extrapolation"
+  ],
+  "backbone_modifications": [
+    "No sinusoidal position embeddings; uses 2D-ALiBi and X-ALiBi for spatial bias in attention"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "12 multispectral bands (excluding cirrus)"
+      ]
+    },
+    {
+      "name": "Sentinel-1",
+      "bands": [
+        "VV",
+        "VH"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "SSL4EO",
+  "regions_coverage": [
+    "Global, 250,000 locations sampled around the world, focused on areas surrounding human settlements"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1000000,
+  "sampling": "Random spatial and temporal sampling; 250K locations x 4 times; Time range: Four times per year, spread out over a year (exact years not specified)",
+  "processing:level": "Sentinel-1: GRD, Sentinel-2: L2A",
+  "processing:lineage": "Normalization as in SatMAE; Identical augmentations applied to both modalities",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "8x8 pixel patches",
+    "epochs": 300,
+    "batch_size": 7200,
+    "learning_rate": "4e-6 (base), linear scaling rule applied",
+    "augmentations": [
+      "Random crop (60-180 pixels)",
+      "Resize to 120x120",
+      "Vertical and horizontal flipping",
+      "90-degree rotations",
+      "Mixup=0.3"
+    ],
+    "mask_ratio": 0.75,
+    "image_resolution": "120x120 pixels (cropped and resized from 264x264)",
+    "num_layers": 12
+  },
+  "benchmarks": [
+    {
+      "task": "Classification",
+      "application": "Land cover and land use classification",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        87.58
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "120x120",
+      "spatial_resolution": "10m",
+      "split_ratio": "10% train, rest validation; samples used: 35420 of 354200 (10%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Functional Map of the World (fMoW) classification",
+      "dataset": "fMoW-Sentinel",
+      "metrics": [
+        "Top 1 Accuracy"
+      ],
+      "metrics_value": [
+        54.47
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "10% train, rest validation; samples used: 71287 of 712874 (10%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Land use/cover classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Top 1 Accuracy"
+      ],
+      "metrics_value": [
+        99.22
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/val as in SatMAE; samples used: 16200 of 21600 (75%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Crop type classification",
+      "dataset": "Canadian Cropland",
+      "metrics": [
+        "Top 1 Accuracy"
+      ],
+      "metrics_value": [
+        76.17
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Canada"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/val as in dataset; samples used: 53884 of 76972 (70%)"
+    },
+    {
+      "task": "Classification",
+      "application": "kNN classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Top 1 Accuracy"
+      ],
+      "metrics_value": [
+        95.26
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 16200 of 21600 (75%)"
+    },
+    {
+      "task": "Classification",
+      "application": "K-means clustering",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Top 1 Accuracy"
+      ],
+      "metrics_value": [
+        76.06
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 16200 of 21600 (75%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "DFC2020",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        46.67
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "96x96",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/val as in SatMAE; samples used: 46152 of 6114"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "DW-Expert",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        58.55
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "96x96",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/val as in dataset; samples used: 20422 of 71444"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Marine debris segmentation",
+      "dataset": "MARIDA",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        65.56
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "96x96",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/val as in dataset; samples used: 1682 of 3297"
+    },
+    {
+      "task": "Classification",
+      "application": "Multimodal (Sentinel-1 & 2) classification",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        86.24
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "120x120",
+      "spatial_resolution": "10m",
+      "split_ratio": "10% train, rest validation; samples used: 35420 of 354200 (10%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Multimodal (Sentinel-1 & 2) segmentation",
+      "dataset": "DFC2020",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        51.58
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "96x96",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/val as in SatMAE; samples used: 46152 of 6114"
+    },
+    {
+      "task": "Classification",
+      "application": "Radar-only and radar-optical classification",
+      "dataset": "BigEarthNet (1%)",
+      "metrics": [
+        "mAP (result 1 of 2)",
+        "mAP (result 2 of 2)"
+      ],
+      "metrics_value": [
+        75.7,
+        81.8
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "120x120",
+      "spatial_resolution": "10m",
+      "split_ratio": "1% train, rest validation; samples used: 3542 of 354200 (1%)"
+    }
+  ]
+}

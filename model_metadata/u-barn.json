@@ -1,0 +1,142 @@
+{
+  "id": "u-barn",
+  "mlm:name": "U-BARN",
+  "version": "1.0",
+  "release_date": "2024-01-25T00:00:00Z",
+  "updated": "2024-02-12T00:00:00Z",
+  "description": "U-BARN (Unet-BERT spAtio-temporal Representation eNcoder) is a self-supervised deep learning model for learning spatio-temporal representations from irregularly sampled multispectral Sentinel-2 satellite image time series. It combines a Unet-based spatial-spectral encoder with a transformer-based temporal encoder, and is pretrained using a BERT-inspired masked reconstruction task.",
+  "sci:doi": "10.1109/JSTARS.2024.3358066",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://src.koda.cnrs.fr/iris.dumeur/ssl_ubarn",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "Unet + Transformer",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Self-supervised masked reconstruction (BERT-inspired)",
+  "masking_strategy": "Random permutation of spectro-spatial embedding values among selected encoded patches within a batch (temporal masking, 60% masking rate)",
+  "pretraining": "Self-supervised pretraining on large-scale unlabeled Sentinel-2 L2A time series from France, reconstructing masked patches from annual time series (up to 100 dates) using a shallow decoder and mean squared error loss.",
+  "domain_knowledge": [
+    "Cloud handling",
+    "Irregular time series",
+    "Spatio-temporal context"
+  ],
+  "backbone_modifications": [
+    "Unet for spatial-spectral encoding",
+    "Temporal attention at full spatial resolution",
+    "Removal of temporal attention from Unet bottleneck"
+  ],
+  "supported_sensors": [
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "full",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "5-day revisit (variable, up to 100 dates per year)",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "B2",
+        "B3",
+        "B4",
+        "B8",
+        "B5",
+        "B6",
+        "B7",
+        "B8A",
+        "B11",
+        "B12"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Large-scale unlabeled Sentinel-2 L2A dataset (13 tiles over France, 2016-2020)",
+  "regions_coverage": [
+    "France"
+  ],
+  "start_datetime": "2016-01-01T00:00:00Z",
+  "end_datetime": "2020-12-31T23:59:59Z",
+  "num_images": null,
+  "sampling": "Random selection of 10 regions of interest (1024x1024) per tile per year; temporal padding if <100 dates",
+  "processing:level": "L2A",
+  "processing:lineage": "Bicubic interpolation for resampling; Robust normalization (quantile clipping, median centering, scaling)",
+  "cloud_cover": "Cloudy images included; cloud mask used for loss masking only",
+  "missing_data": "Invalid pixels masked in loss; temporal padding for short series",
+  "mlm:hyperparameters": {
+    "patch_size": "Patch size 64x64",
+    "epochs": 100,
+    "batch_size": 2,
+    "learning_rate": "0.001 (with plateau reduction scheduler, patience 10)",
+    "augmentations": [
+      "Random crop (training)",
+      "Center crop (validation/testing)"
+    ],
+    "mask_ratio": 0.6,
+    "image_resolution": "10m (20m bands resampled to 10m)",
+    "num_layers": 3
+  },
+  "benchmarks": [
+    {
+      "task": "Semantic segmentation",
+      "application": "Crop type segmentation",
+      "dataset": "PASTIS",
+      "metrics": [
+        "Kappa",
+        "Overall Accuracy",
+        "F1-score",
+        "mIoU"
+      ],
+      "metrics_value": [
+        0.852,
+        0.889,
+        0.823,
+        0.765
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "France"
+      ],
+      "image_resolution": "64x64 patches at 10m",
+      "spatial_resolution": "10m",
+      "split_ratio": "5-fold cross-validation (3 train, 1 val, 1 test); samples used: 2433 of 2433 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Dense land cover segmentation",
+      "dataset": "MultiSenGE",
+      "metrics": [
+        "Kappa",
+        "Overall Accuracy",
+        "F1-score",
+        "mIoU"
+      ],
+      "metrics_value": [
+        0.857,
+        0.887,
+        0.823,
+        0.765
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Eastern France"
+      ],
+      "image_resolution": "256x256 patches at 10m",
+      "spatial_resolution": "10m",
+      "split_ratio": "60% train, 16% val, 24% test; samples used: 8115 of 8115 (100%)"
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "id": "aquila",
+  "mlm:name": "Aquila",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "Aquila is a hierarchically aligned visual-language model for remote sensing, featuring a high-resolution, multi-scale vision encoder (CLIP-ConvNeXt-XXL), a Hierarchical Spatial Feature Integration (SFI) module, and a Multi-layer Deep Alignment (MDA) strategy for robust visual-language feature fusion. It achieves state-of-the-art results on remote sensing image captioning and VQA benchmarks.",
+  "sci:doi": null,
+  "assets": null,
+  "mlm:architecture": "CLIP-ConvNeXt-XXL",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Image-Text Alignment Pre-training and Instruction Fine-tuning",
+  "masking_strategy": null,
+  "pretraining": "Two-stage: (1) Alignment pretraining with frozen vision encoder and LLM, only SFI trainable, on 1M image-text pairs; (2) Instruction fine-tuning with LoRA on LLM, SFI trainable, vision encoder frozen, on 1.8M instruction image-text pairs.",
+  "domain_knowledge": [
+    "Remote sensing-specific image-text pairs",
+    "Domain-specific instruction datasets"
+  ],
+  "backbone_modifications": [
+    "Removed final classification layer from vision encoder",
+    "Added four projectors (2-layer MLPs) for multi-scale feature mapping"
+  ],
+  "supported_sensors": null,
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "Text"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "up to 1024x1024 pixels",
+  "temporal_resolution": null,
+  "mlm:input": null,
+  "mlm:pretrained_source": "CapERA, UCM, Sydney, NWPU, RSICD, RSITMD, RSVQA-HR, RSVQA-LR, WHU_RS19 (integrated, ~1M image-text pairs)",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1000000,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "1024",
+    "epochs": 1,
+    "batch_size": 32,
+    "learning_rate": "1e-3",
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "1024×1024",
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "FIT-RS (1.8M instruction image-text pairs)",
+        "num_images": 1800000,
+        "image_resolution": "1024×1024",
+        "patch_size": "1024",
+        "epochs": 1,
+        "batch_size": 32,
+        "learning_rate": "4e-5"
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Image caption",
+      "application": "Remote sensing image captioning",
+      "dataset": "RSICD",
+      "metrics": [
+        "BLEU-1"
+      ],
+      "metrics_value": [
+        74.6
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "224×224",
+      "spatial_resolution": "various",
+      "split_ratio": null
+    },
+    {
+      "task": "Image caption",
+      "application": "Remote sensing image captioning",
+      "dataset": "Sydney",
+      "metrics": [
+        "BLEU-1"
+      ],
+      "metrics_value": [
+        83.42
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Image caption",
+      "application": "Remote sensing image captioning",
+      "dataset": "UCM",
+      "metrics": [
+        "BLEU-1"
+      ],
+      "metrics_value": [
+        88.25
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Image caption",
+      "application": "Fine-grained remote sensing image captioning",
+      "dataset": "FIT-RSFG-Captions",
+      "metrics": [
+        "BLEU-1"
+      ],
+      "metrics_value": [
+        35.08
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual question answering",
+      "application": "Remote sensing VQA",
+      "dataset": "RSVQA-LR",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        92.72
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual question answering",
+      "application": "Remote sensing VQA",
+      "dataset": "RSVQA-HR",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        92.64
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual question answering",
+      "application": "Fine-grained remote sensing VQA",
+      "dataset": "FIT-RSFG-VQA",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        83.87
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ]
+}

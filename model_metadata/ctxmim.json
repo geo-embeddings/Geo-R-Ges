@@ -1,0 +1,173 @@
+{
+  "id": "ctxmim",
+  "mlm:name": "CtxMIM",
+  "version": "v1",
+  "release_date": null,
+  "updated": null,
+  "description": "CtxMIM is a context-enhanced masked image modeling (MIM) method for remote sensing image understanding. It introduces a context-enhanced generative branch to provide contextual information during reconstruction, improving representation learning for high object density remote sensing images. Pretrained on 1.28 million WorldView-3 images from Asia, CtxMIM achieves state-of-the-art results on land cover classification, semantic segmentation, object detection, and instance segmentation.",
+  "sci:doi": "10.48550/arXiv.2310.00022",
+  "assets": null,
+  "mlm:architecture": "Swin-B",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Masked Image Modeling (MIM) with context-enhanced generative branch",
+  "masking_strategy": "Random patch-wise masking with context-enhanced generative branch",
+  "pretraining": "Self-supervised pretraining on a large-scale unlabeled remote sensing dataset (1.28 million images) using masked image modeling with a context consistency constraint.",
+  "domain_knowledge": null,
+  "backbone_modifications": null,
+  "supported_sensors": [
+    "WorldView-3"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": null,
+  "mlm:input": null,
+  "mlm:pretrained_source": "Large-scale unlabeled remote sensing dataset from WorldView-3 via Google Earth Engine",
+  "regions_coverage": [
+    "Asia (cities, villages, rivers, mountains, woodlands, and other terrain)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1280000,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 200,
+    "batch_size": 8,
+    "learning_rate": "1e-5",
+    "augmentations": null,
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Land cover classification",
+      "application": "Land cover classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Top-1 Acc."
+      ],
+      "metrics_value": [
+        98.87
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Land cover classification",
+      "application": "Land cover classification",
+      "dataset": "NWPU-RESISC45",
+      "metrics": [
+        "Top-1 Acc."
+      ],
+      "metrics_value": [
+        95.2
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "30 to 0.2m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Building segmentation",
+      "dataset": "SpaceNet (Rio)",
+      "metrics": [
+        "mIoU",
+        "mAcc"
+      ],
+      "metrics_value": [
+        79.22,
+        87.2
+      ],
+      "sensor": null,
+      "regions": [
+        "Rio"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection",
+      "application": "Object detection",
+      "dataset": "DOTA",
+      "metrics": [
+        "AP",
+        "AP50",
+        "AP75",
+        "APs",
+        "APm",
+        "APl",
+        "AR",
+        "AR50",
+        "AR75",
+        "ARs",
+        "ARm",
+        "ARl",
+        "F1",
+        "F175"
+      ],
+      "metrics_value": [
+        37.9,
+        62.8,
+        40.9,
+        22.9,
+        38.6,
+        48.8,
+        49.9,
+        78.6,
+        54.3,
+        31.9,
+        53.8,
+        62.8,
+        43.1,
+        46.7
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "800x800 to 4000x4000",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Instance segmentation",
+      "application": "Building instance segmentation",
+      "dataset": "SpaceNet (LasVegas)",
+      "metrics": [
+        "APm",
+        "APm50",
+        "APm75"
+      ],
+      "metrics_value": [
+        60.5,
+        87.8,
+        72.9
+      ],
+      "sensor": [
+        "WorldView-3"
+      ],
+      "regions": [
+        "Las Vegas"
+      ],
+      "image_resolution": "650x650",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "8:1:1"
+    }
+  ]
+}

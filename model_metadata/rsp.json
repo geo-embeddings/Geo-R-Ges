@@ -1,0 +1,316 @@
+{
+  "id": "rsp",
+  "mlm:name": "ViTAEv2-S",
+  "version": "E100",
+  "release_date": null,
+  "updated": null,
+  "description": "ViTAEv2-S is a vision transformer backbone pretrained from scratch on the MillionAID remote sensing dataset for aerial image understanding. It incorporates CNN inductive biases and a stage-wise design for improved locality and scale-invariance, and is evaluated on scene recognition, semantic segmentation, object detection, and change detection tasks.",
+  "sci:doi": "10.48550/arXiv.2204.02825",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/ViTAE-Transformer/RSP",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ViTAEv2-S",
+  "mlm:total_parameters": 18800000,
+  "pretext_training_type": "Supervised classification pretraining on MillionAID",
+  "masking_strategy": null,
+  "pretraining": "Supervised pretraining on MillionAID (RGB aerial images, 51 classes, 949,848 training images, 51,000 validation images), using standard classification objective.",
+  "domain_knowledge": [
+    "CNN inductive bias",
+    "Vision transformer",
+    "Stage-wise design",
+    "Windowed multi-head self-attention"
+  ],
+  "backbone_modifications": [
+    "Stage-wise design",
+    "Window-based multi-head self-attention (WMHSA) in early stages",
+    "Pyramid reduction module (PRM)",
+    "Parallel convolutional module (PCM)",
+    "Removal of SiLU in last PCM conv layer"
+  ],
+  "supported_sensors": [
+    "SPOT",
+    "IKONOS",
+    "WorldView",
+    "Landsat",
+    "Google Earth (various)"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral (RGB)"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (0.5m to 153m)",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "SPOT, IKONOS, WorldView, Landsat, Google Earth (various)",
+      "bands": [
+        "R",
+        "G",
+        "B"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "MillionAID",
+  "regions_coverage": [
+    "Global (images from various countries and regions)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 949848,
+  "sampling": "Random sampling, 51,000 images (1,000 per class) for validation, rest for training",
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 100,
+    "batch_size": 384,
+    "learning_rate": "5e-4",
+    "augmentations": [
+      "AutoAugment",
+      "Random Erasing",
+      "Mixup",
+      "CutMix",
+      "Color jitter",
+      "Random crop (training)",
+      "Center crop (testing)"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "variable (110x110 to 31672x31672), resized to 224x224 for training"
+  },
+  "benchmarks": [
+    {
+      "task": "Scene Recognition",
+      "application": "Aerial scene classification",
+      "dataset": "UCM",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        99.9
+      ],
+      "sensor": [
+        "USGS National Map Urban Area Imagery Database"
+      ],
+      "regions": [
+        "USA"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "8:2; samples used: 1680 of 2100 (80%)"
+    },
+    {
+      "task": "Scene Recognition",
+      "application": "Aerial scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        96.91
+      ],
+      "sensor": [
+        "Multi-source sensors on Google Earth"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "600x600",
+      "spatial_resolution": null,
+      "split_ratio": "2:8; samples used: 2000 of 10000 (20%)"
+    },
+    {
+      "task": "Scene Recognition",
+      "application": "Aerial scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        98.22
+      ],
+      "sensor": [
+        "Multi-source sensors on Google Earth"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "600x600",
+      "spatial_resolution": null,
+      "split_ratio": "5:5; samples used: 5000 of 10000 (50%)"
+    },
+    {
+      "task": "Scene Recognition",
+      "application": "Aerial scene classification",
+      "dataset": "NWPU-RESISC",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        94.41
+      ],
+      "sensor": [
+        "Multi-source"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.2m to 30m",
+      "split_ratio": "1:9; samples used: 3150 of 31500 (10%)"
+    },
+    {
+      "task": "Scene Recognition",
+      "application": "Aerial scene classification",
+      "dataset": "NWPU-RESISC",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        95.6
+      ],
+      "sensor": [
+        "Multi-source"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.2m to 30m",
+      "split_ratio": "2:8; samples used: 6300 of 31500 (20%)"
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Aerial scene parsing",
+      "dataset": "ISPRS Potsdam",
+      "metrics": [
+        "OA",
+        "mF1"
+      ],
+      "metrics_value": [
+        91.21,
+        90.64
+      ],
+      "sensor": [
+        "ISPRS Commission WG II/4"
+      ],
+      "regions": [
+        "Potsdam, Germany"
+      ],
+      "image_resolution": "6000x6000",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "samples used: 14 of 38"
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Aerial object segmentation",
+      "dataset": "iSAID",
+      "metrics": [
+        "mIOU"
+      ],
+      "metrics_value": [
+        64.3
+      ],
+      "sensor": [
+        "Multi-source"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "800x800 to 4000x13000",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 458 of 2806"
+    },
+    {
+      "task": "Object Detection",
+      "application": "Oriented bounding box detection",
+      "dataset": "DOTA",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        77.72
+      ],
+      "sensor": [
+        "Multi-source"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "800x800 to 4000x4000",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 937 of 2806"
+    },
+    {
+      "task": "Object Detection",
+      "application": "Ship detection",
+      "dataset": "HRSC2016",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        90.4
+      ],
+      "sensor": [
+        "Multi-source"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "300x300 to 1500x900",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 444 of 1061"
+    },
+    {
+      "task": "Change Detection",
+      "application": "Aerial change detection",
+      "dataset": "CDD",
+      "metrics": [
+        "F1 score"
+      ],
+      "metrics_value": [
+        96.81
+      ],
+      "sensor": [
+        "Multi-source"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.03m to 1m",
+      "split_ratio": "samples used: 3000 of 16000"
+    },
+    {
+      "task": "Change Detection",
+      "application": "Aerial change detection",
+      "dataset": "LEVIR",
+      "metrics": [
+        "F1 score"
+      ],
+      "metrics_value": [
+        90.93
+      ],
+      "sensor": [
+        "Multi-source"
+      ],
+      "regions": [
+        "Texas, USA"
+      ],
+      "image_resolution": "1024x1024",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "samples used: 128 of 637"
+    }
+  ]
+}

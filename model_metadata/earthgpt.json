@@ -1,0 +1,269 @@
+{
+  "id": "earthgpt",
+  "mlm:name": "EarthGPT",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "EarthGPT is a pioneering multi-modal large language model (MLLM) designed for universal remote sensing (RS) image comprehension. It unifies multi-sensor and diverse RS interpretation tasks, including scene classification, image captioning, region-level captioning, visual question answering (VQA), visual grounding, and object detection, across optical, SAR, and infrared modalities. It introduces a visual-enhanced perception mechanism, cross-modal mutual comprehension, and unified instruction tuning, and is trained on the large-scale MMRS-1M dataset (over 1M image-text pairs from 34 RS datasets).",
+  "sci:doi": "10.48550/arXiv.2401.16822",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/wivizhang/EarthGPT",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "LLaMA-2 (LLM), DINOv2 ViT-L/14 (ViT encoder), CLIP ConvNeXt-L (CNN encoder)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Instruction tuning, cross-modal mutual comprehension, visual-language alignment",
+  "masking_strategy": null,
+  "pretraining": "Stage 1: Visual-enhanced perception (ViT and CNN frozen, extract multi-layer and multi-scale features); Stage 2: Cross-modal mutual comprehension (unfrozen self-attention and RMSNorm in LLaMA-2, trained on LAION-400M and COCO Caption for vision-language alignment); Stage 3: Unified instruction tuning for RS (bias tuning of linear layers in LLaMA-2, trained on MMRS-1M for multi-task RS instruction following)",
+  "domain_knowledge": [
+    "Remote sensing domain-specific instruction tuning",
+    "Multi-sensor (optical, SAR, infrared) data integration"
+  ],
+  "backbone_modifications": [
+    "Visual-enhanced perception mechanism (mixing ViT and CNN backbones)",
+    "Unfreezing self-attention and RMSNorm layers for cross-modal alignment",
+    "Bias and shift tuning in LLaMA-2 linear layers"
+  ],
+  "supported_sensors": [
+    "Optical",
+    "SAR",
+    "Infrared"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR",
+    "Infrared",
+    "Text"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": null,
+  "temporal_resolution": null,
+  "mlm:input": null,
+  "mlm:pretrained_source": "LAION-400M, COCO Caption",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "MMRS-1M",
+        "num_images": 1000000
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Scene Classification",
+      "application": "Remote sensing image scene classification",
+      "dataset": "NWPU-RESISC45",
+      "metrics": [
+        "Top-1 Acc"
+      ],
+      "metrics_value": [
+        93.84
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": "80% test"
+    },
+    {
+      "task": "Scene Classification (Zero-shot)",
+      "application": "Remote sensing image scene classification",
+      "dataset": "CLRS",
+      "metrics": [
+        "Top-1 Acc"
+      ],
+      "metrics_value": [
+        77.37
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.26m-8.85m",
+      "split_ratio": "samples used: 15000 of 15000 (100%)"
+    },
+    {
+      "task": "Scene Classification (Zero-shot)",
+      "application": "Remote sensing image scene classification",
+      "dataset": "NaSC-TG2",
+      "metrics": [
+        "Top-1 Acc"
+      ],
+      "metrics_value": [
+        74.72
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "128x128",
+      "spatial_resolution": "100m",
+      "split_ratio": "samples used: 20000 of 20000 (100%)"
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "NWPU-Captions",
+      "metrics": [
+        "BLEU1",
+        "BLEU2",
+        "BLEU3",
+        "BLEU4",
+        "METEOR",
+        "ROUGE L",
+        "CIDEr",
+        "SPICE"
+      ],
+      "metrics_value": [
+        87.1,
+        78.7,
+        71.6,
+        65.5,
+        44.5,
+        78.2,
+        192.6,
+        32.2
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "Remote sensing VQA",
+      "dataset": "CRSVQA",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        82.0
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "10% test; samples used: 1000 of 1000 (100%)"
+    },
+    {
+      "task": "Visual Question Answering (Zero-shot)",
+      "application": "Remote sensing VQA",
+      "dataset": "RSVQA-HR",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        72.06
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Grounding",
+      "application": "Remote sensing visual grounding",
+      "dataset": "DIOR-RSVG",
+      "metrics": [
+        "Pr@0.5",
+        "Pr@0.6",
+        "Pr@0.7",
+        "Pr@0.8",
+        "Pr@0.9",
+        "mIoU",
+        "cIoU"
+      ],
+      "metrics_value": [
+        76.65,
+        71.93,
+        66.52,
+        56.53,
+        37.63,
+        69.34,
+        81.54
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 758 of 17402"
+    },
+    {
+      "task": "Object Detection (Zero-shot, HBB)",
+      "application": "Aircraft detection",
+      "dataset": "MAR20",
+      "metrics": [
+        "AP@40",
+        "AP@50"
+      ],
+      "metrics_value": [
+        90.47,
+        90.11
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object Detection (Zero-shot, OBB)",
+      "application": "Aircraft detection",
+      "dataset": "MAR20",
+      "metrics": [
+        "AP@40",
+        "AP@50"
+      ],
+      "metrics_value": [
+        90.53,
+        87.86
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ]
+}

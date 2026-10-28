@@ -1,0 +1,208 @@
+{
+  "id": "spectralgpt",
+  "mlm:name": "SpectralGPT",
+  "version": null,
+  "release_date": "2024-02-12T00:00:00Z",
+  "updated": null,
+  "description": "SpectralGPT is the first universal remote sensing foundation model purpose-built for spectral remote sensing images, using a novel 3D generative pretrained transformer (GPT) architecture. It is trained on over one million Sentinel-2 spectral images, supports progressive training on diverse datasets, and achieves state-of-the-art results on multiple downstream tasks including classification, segmentation, and change detection.",
+  "sci:doi": "10.48550/arXiv.2311.07113",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://doi.org/10.5281/zenodo.10533809",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://doi.org/10.5281/zenodo.10533809",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT (Vision Transformer)",
+  "mlm:total_parameters": 632000000,
+  "pretext_training_type": "Masked Autoencoding (MAE) with 3D generative pretraining",
+  "masking_strategy": "3D tensor-shaped spatial-spectral mask, 90% masking ratio",
+  "pretraining": "Progressive pretraining on large-scale Sentinel-2 spectral image datasets (fMoW-S2 and BigEarthNet-S2), using 3D masking and multi-target reconstruction to capture spatial-spectral coupling and spectral sequentiality.",
+  "domain_knowledge": [
+    "Spatial-spectral coupling",
+    "Spectral sequentiality",
+    "Spectral band-specific positional encoding"
+  ],
+  "backbone_modifications": [
+    "3D tokenization (spatial and spectral)",
+    "Dual positional embeddings (spatial and spectral)"
+  ],
+  "supported_sensors": [
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "full",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B8",
+        "B8A",
+        "B9",
+        "B11",
+        "B12"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "fMoW-S2",
+  "regions_coverage": [
+    "Global"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 712874,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": "Band-wise normalization (0–1)",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "8x8x3",
+    "epochs": 200,
+    "batch_size": null,
+    "learning_rate": "1e-4 (AdamW, half-cycle cosine decay)",
+    "augmentations": [
+      "Random cropping (0.2x–1.0x)",
+      "Resize to 96x96",
+      "Horizontal flip"
+    ],
+    "mask_ratio": 0.9,
+    "image_resolution": "96x96x12",
+    "num_layers": 32,
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "BigEarthNet-S2",
+        "regions_coverage": [
+          "Europe (10+ countries)"
+        ],
+        "num_images": 354196,
+        "processing:lineage": "Band-wise normalization (0–1)",
+        "image_resolution": "128x128x12",
+        "patch_size": "8x8x3",
+        "epochs": 100,
+        "learning_rate": "1e-4 (AdamW, half-cycle cosine decay)",
+        "augmentations": [
+          "Random cropping (0.2x–1.0x)",
+          "Resize to 128x128",
+          "Horizontal flip"
+        ],
+        "mask_ratio": 0.9
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Single-label scene classification",
+      "application": "Land use/land cover classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        99.15
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe (34 countries)"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 27000 of 27000 (100%)"
+    },
+    {
+      "task": "Multi-label scene classification",
+      "application": "Land use/land cover multi-label classification",
+      "dataset": "BigEarthNet-S2",
+      "metrics": [
+        "macro-mAP",
+        "micro-mAP"
+      ],
+      "metrics_value": [
+        86.03,
+        85.61
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe (10+ countries)"
+      ],
+      "image_resolution": "128x128",
+      "spatial_resolution": "10–60m",
+      "split_ratio": "samples used: 35419 of 590326 (10%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Urban land use/land cover segmentation",
+      "dataset": "SegMunich",
+      "metrics": [
+        "OA",
+        "mIoU"
+      ],
+      "metrics_value": [
+        82.5,
+        49.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Munich, Germany"
+      ],
+      "image_resolution": "3847x2958",
+      "spatial_resolution": "10m",
+      "split_ratio": "8:2 train:val"
+    },
+    {
+      "task": "Change detection",
+      "application": "Urban change detection",
+      "dataset": "OSCD",
+      "metrics": [
+        "Precision",
+        "Recall",
+        "F1"
+      ],
+      "metrics_value": [
+        51.65,
+        56.15,
+        53.51
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "24 cities (global)"
+      ],
+      "image_resolution": "128x128",
+      "spatial_resolution": "10–60m",
+      "split_ratio": null
+    }
+  ]
+}

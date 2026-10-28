@@ -1,0 +1,278 @@
+{
+  "id": "cgeartheye",
+  "mlm:name": "CGEarthEye",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "CGEarthEye is a high-resolution remote sensing vision foundation model designed for the Jilin-1 satellite constellation. It features five ViT-based backbones with a total of 2.1 billion parameters, pre-trained on the JLSSD dataset (15 million sub-meter images with global and multi-seasonal coverage), and achieves state-of-the-art performance across 10 benchmarks for scene classification, object detection, semantic segmentation, and change detection.",
+  "sci:doi": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/1921134176/CGEarthEye",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "Vision Transformer (ViT)",
+  "mlm:total_parameters": 2100000000,
+  "pretext_training_type": "Hybrid self-supervised learning (augmentation-aware contrastive, seasonal contrastive alignment, masked patch token contrastive)",
+  "masking_strategy": "Block-wise masking (10-50% of pixel regions)",
+  "pretraining": "Multi-granularity self-supervised learning integrating augmentation-aware contrastive, seasonal contrastive alignment, and masked patch token contrastive learning on JLSSD",
+  "domain_knowledge": [
+    "Land cover stratification",
+    "Elevation stratification",
+    "Administrative region stratification",
+    "Seasonal sampling",
+    "Cluster-based data filtering"
+  ],
+  "backbone_modifications": [
+    "Five ViT variants (ViT-S, ViT-B, ViT-L, ViT-H, ViT-G) with parameter scaling"
+  ],
+  "supported_sensors": [
+    "Jilin-1"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Optical",
+    "Multispectral"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "0.75m (sub-meter)",
+  "temporal_resolution": "quarterly (China), annual (global)",
+  "mlm:input": null,
+  "mlm:pretrained_source": "JLSSD (Jilin-1 Self-supervised Seasonal Dataset)",
+  "regions_coverage": [
+    "Global",
+    "China (quarterly, 2023)",
+    "Non-China (annual, 2023)"
+  ],
+  "start_datetime": "2023-01-01T00:00:00Z",
+  "end_datetime": "2023-12-31T23:59:59Z",
+  "num_images": 15000000,
+  "sampling": "Multi-dimensional representation clustering and adaptive sampling by land cover, elevation, and administrative region",
+  "processing:level": null,
+  "processing:lineage": "LMDB storage; Cluster-based filtering; Adaptive sampling; Mixed precision; FSDP sharding; FlashAttention",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "224x224 (global crops), 98x98 (local crops), up to 518x518",
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": [
+      "Multi-scale cropping",
+      "Random color jitter (brightness, contrast, saturation)",
+      "Random horizontal/vertical flip",
+      "Block-wise masking (10-50%)"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "0.75m"
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "RESISC-45",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        0.9675
+      ],
+      "sensor": [
+        "Jilin-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 31500 of 31500 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        0.9769
+      ],
+      "sensor": [
+        "Jilin-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "600x600",
+      "spatial_resolution": "0.5-8m",
+      "split_ratio": "samples used: 10000 of 10000 (100%)"
+    },
+    {
+      "task": "Object detection",
+      "application": "Object detection (horizontal bounding box)",
+      "dataset": "DIOR",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        0.8262
+      ],
+      "sensor": [
+        "Jilin-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "800x800",
+      "spatial_resolution": "0.5-30m",
+      "split_ratio": "samples used: 23463 of 23463 (100%)"
+    },
+    {
+      "task": "Object detection",
+      "application": "Object detection (rotated bounding box)",
+      "dataset": "DIOR-R",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        0.752
+      ],
+      "sensor": [
+        "Jilin-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "800x800",
+      "spatial_resolution": "0.5-30m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover classification",
+      "dataset": "LoveDA",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        0.5667
+      ],
+      "sensor": [
+        "Jilin-1"
+      ],
+      "regions": [
+        "China"
+      ],
+      "image_resolution": "1024x1024",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "samples used: 5982 of 5982 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Instance segmentation",
+      "dataset": "iSAID",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        0.6951
+      ],
+      "sensor": [
+        "Jilin-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "800x800 to 13000x11000",
+      "spatial_resolution": "0.3-1.5m",
+      "split_ratio": "samples used: 2806 of 2806 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Semantic segmentation",
+      "dataset": "Potsdam",
+      "metrics": [
+        "mF1"
+      ],
+      "metrics_value": [
+        0.9353
+      ],
+      "sensor": [
+        "Jilin-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "6000x6000",
+      "spatial_resolution": "0.05m",
+      "split_ratio": "samples used: 38 of 38 (100%)"
+    },
+    {
+      "task": "Change detection",
+      "application": "Building-scale land change detection",
+      "dataset": "LEVIR-CD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        0.9246
+      ],
+      "sensor": [
+        "Jilin-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "1024x1024",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "samples used: 637 of 637 (100%)"
+    },
+    {
+      "task": "Change detection",
+      "application": "Multi-category change detection",
+      "dataset": "SYSU-CD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        0.8347
+      ],
+      "sensor": [
+        "Jilin-1"
+      ],
+      "regions": [
+        "China"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.8m",
+      "split_ratio": "samples used: 12000 of 12000 (100%)"
+    },
+    {
+      "task": "Change detection",
+      "application": "Multi-scale land cover change detection",
+      "dataset": "CDD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        0.9804
+      ],
+      "sensor": [
+        "Jilin-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256-4096",
+      "spatial_resolution": "0.1-2m",
+      "split_ratio": "samples used: 16000 of 16000 (100%)"
+    }
+  ]
+}

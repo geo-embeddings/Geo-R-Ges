@@ -1,0 +1,218 @@
+{
+  "id": "rs-capret",
+  "mlm:name": "RS-CapRet",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "RS-CapRet is a Vision and Language foundational model for remote sensing, capable of image captioning and text-image retrieval. It combines a frozen large language model (LLamaV2-7B) with a CLIP-based vision encoder finetuned on remote sensing image captioning datasets, using trainable linear layers to bridge modalities. The model achieves state-of-the-art or competitive results on several remote sensing benchmarks.",
+  "sci:doi": "10.48550/arXiv.2402.06475",
+  "assets": null,
+  "mlm:architecture": "CLIP ViT-L/14 (vision encoder), LLamaV2-7B (language model)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Contrastive language-image pre-training; cross-entropy for captioning",
+  "masking_strategy": null,
+  "pretraining": "CLIP vision encoder is finetuned on an aggregation of remote sensing image captioning datasets (Cap-4). The language model (LLamaV2-7B) is kept frozen. Only linear projection layers and [RET] token embedding are trained.",
+  "domain_knowledge": null,
+  "backbone_modifications": [
+    "Trainable linear projection layers between vision encoder and language model",
+    "Special [RET] token for retrieval"
+  ],
+  "supported_sensors": null,
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "Text"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": null,
+  "mlm:pretrained_source": "Cap-4 (aggregation of NWPU-Captions, RSICD, Sydney-Captions, UCM-Captions)",
+  "regions_coverage": [
+    "various, as per datasets"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 45134,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": "resize to 224x224",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": 64,
+    "learning_rate": "0.0003",
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "224x224"
+  },
+  "benchmarks": [
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "NWPU-Captions",
+      "metrics": [
+        "BLEU-1",
+        "BLEU-2",
+        "BLEU-3",
+        "BLEU-4",
+        "METEOR",
+        "ROUGE L",
+        "CIDEr",
+        "SPICE"
+      ],
+      "metrics_value": [
+        0.871,
+        0.786,
+        0.713,
+        0.65,
+        0.439,
+        0.775,
+        1.919,
+        0.32
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.2-30m",
+      "split_ratio": "samples used: 31500 of 31500 (100%)"
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "RSICD",
+      "metrics": [
+        "BLEU-1",
+        "BLEU-2",
+        "BLEU-3",
+        "BLEU-4",
+        "METEOR",
+        "ROUGE L",
+        "CIDEr",
+        "SPICE"
+      ],
+      "metrics_value": [
+        0.741,
+        0.622,
+        0.529,
+        0.455,
+        0.376,
+        0.649,
+        2.605,
+        0.484
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "different resolutions",
+      "split_ratio": "samples used: 10921 of 10921 (100%)"
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "UCM-Captions",
+      "metrics": [
+        "BLEU-1",
+        "BLEU-2",
+        "BLEU-3",
+        "BLEU-4",
+        "METEOR",
+        "ROUGE L",
+        "CIDEr",
+        "SPICE"
+      ],
+      "metrics_value": [
+        0.833,
+        0.76,
+        0.699,
+        0.645,
+        0.447,
+        0.786,
+        3.429,
+        0.525
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "samples used: 2100 of 2100 (100%)"
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "Sydney-Captions",
+      "metrics": [
+        "BLEU-1",
+        "BLEU-2",
+        "BLEU-3",
+        "BLEU-4",
+        "METEOR",
+        "ROUGE L",
+        "CIDEr",
+        "SPICE"
+      ],
+      "metrics_value": [
+        0.782,
+        0.688,
+        0.611,
+        0.545,
+        0.383,
+        0.704,
+        2.39,
+        0.423
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "500x500",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "samples used: 613 of 613 (100%)"
+    },
+    {
+      "task": "Text-Image Retrieval",
+      "application": "Remote sensing cross-modal retrieval",
+      "dataset": "RSICD",
+      "metrics": [
+        "R@1",
+        "R@5",
+        "R@10",
+        "mR"
+      ],
+      "metrics_value": [
+        9.83,
+        30.17,
+        47.43,
+        29.14
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "different resolutions",
+      "split_ratio": "samples used: 10921 of 10921 (100%)"
+    },
+    {
+      "task": "Text-Image Retrieval",
+      "application": "Remote sensing cross-modal retrieval",
+      "dataset": "UCM-Captions",
+      "metrics": [
+        "R@1",
+        "R@5",
+        "R@10",
+        "mR"
+      ],
+      "metrics_value": [
+        15.52,
+        57.24,
+        88.76,
+        53.84
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "samples used: 2100 of 2100 (100%)"
+    }
+  ]
+}

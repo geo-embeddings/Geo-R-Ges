@@ -1,0 +1,385 @@
+{
+  "id": "dofa",
+  "mlm:name": "DOFA",
+  "version": "v1",
+  "release_date": "2024-06-07T00:00:00Z",
+  "updated": "2024-06-07T00:00:00Z",
+  "description": "Dynamic One-For-All (DOFA) is a neural plasticity-inspired multimodal foundation model for Earth Observation, capable of adaptively processing data from diverse sensors and modalities (optical, SAR, hyperspectral, etc.) within a single unified Transformer framework using a dynamic hypernetwork conditioned on spectral wavelength.",
+  "sci:doi": "10.48550/arXiv.2403.15356",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/zhu-xlab/DOFA",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://huggingface.co/XShadow/DOFA",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "Vision Transformer (ViT-Base and ViT-Large)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Masked image modeling with distillation loss",
+  "masking_strategy": "Random masking with 75% masking ratio",
+  "pretraining": "Self-supervised masked image modeling with a dynamic hypernetwork generating patch embedding weights conditioned on spectral wavelength; continual pretraining with distillation from ImageNet-pretrained teacher models.",
+  "domain_knowledge": [
+    "Wavelength-conditioned dynamic patch embedding",
+    "Neural plasticity-inspired dynamic weight generation",
+    "Distillation from ImageNet-pretrained models"
+  ],
+  "backbone_modifications": [
+    "Dynamic patch embedding layer",
+    "Dynamic decoder",
+    "Hypernetwork-based dynamic weight generator"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2",
+    "Gaofen-2",
+    "NAIP",
+    "EnMAP",
+    "Landsat-8 (downstream)"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "Hyperspectral",
+    "SAR",
+    "RGB Optical"
+  ],
+  "spectral_alignment": "full",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (1m–30m depending on sensor)",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Sentinel-1, Sentinel-2, Gaofen-2, NAIP, EnMAP, Landsat-8 (downstream)",
+      "bands": [
+        "VV",
+        "VH",
+        "RGB",
+        "NIR",
+        "9-band Sentinel-2",
+        "224-band EnMAP"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Curated multimodal dataset (Sentinel-1, Sentinel-2, Gaofen-2, NAIP, EnMAP)",
+  "regions_coverage": [
+    "Global (Sentinel-1, Sentinel-2, EnMAP)",
+    "China (Gaofen-2)",
+    "USA (NAIP)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 8061411,
+  "sampling": "Random sampling per modality (initially 10,000 per modality, then 100,000 per modality, then full dataset)",
+  "processing:level": null,
+  "processing:lineage": "Normalize per modality (mean/std); Random crop/resize",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "16x16",
+    "epochs": 100,
+    "batch_size": 128,
+    "learning_rate": "1.5e-4 (AdamW, cosine decay, warmup 20 epochs)",
+    "augmentations": [
+      "RandomResizedCrop (scale 0.8–1.0)",
+      "RandomHorizontalFlip"
+    ],
+    "mask_ratio": 0.75,
+    "image_resolution": "224x224 (cropped/resized from original)"
+  },
+  "benchmarks": [
+    {
+      "task": "Classification",
+      "application": "Land cover/use, climate zone, object detection",
+      "dataset": "m-bigearthnet",
+      "metrics": [
+        "Top-1 OA"
+      ],
+      "metrics_value": [
+        64.4
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "120x120",
+      "spatial_resolution": "variable (Sentinel-2, ~10m)",
+      "split_ratio": "samples used: 22000 of 22000 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Local climate zone classification",
+      "dataset": "m-so2sat",
+      "metrics": [
+        "Top-1 OA"
+      ],
+      "metrics_value": [
+        59.3
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global (42 cities)"
+      ],
+      "image_resolution": "32x32",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 21964 of 21964 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Brick kiln detection",
+      "dataset": "m-brick-kiln",
+      "metrics": [
+        "Top-1 OA"
+      ],
+      "metrics_value": [
+        95.1
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Bangladesh"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 17061 of 17061 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Primary forest loss driver classification",
+      "dataset": "m-forestnet",
+      "metrics": [
+        "Top-1 OA"
+      ],
+      "metrics_value": [
+        47.4
+      ],
+      "sensor": [
+        "Landsat-8"
+      ],
+      "regions": [
+        "Indonesia"
+      ],
+      "image_resolution": "332x332",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 8446 of 8446 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Land cover/use",
+      "dataset": "m-eurosat",
+      "metrics": [
+        "Top-1 OA"
+      ],
+      "metrics_value": [
+        93.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 4000 of 4000 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Solar panel detection",
+      "dataset": "m-pv4ger",
+      "metrics": [
+        "Top-1 OA"
+      ],
+      "metrics_value": [
+        97.3
+      ],
+      "sensor": [
+        "RGB aerial"
+      ],
+      "regions": [
+        "Germany"
+      ],
+      "image_resolution": "320x320",
+      "spatial_resolution": "0.1m",
+      "split_ratio": "samples used: 13812 of 13812 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Solar panel segmentation",
+      "dataset": "m-pv4ger-seg",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        95.0
+      ],
+      "sensor": [
+        "RGB aerial"
+      ],
+      "regions": [
+        "Germany"
+      ],
+      "image_resolution": "320x320",
+      "spatial_resolution": "0.1m",
+      "split_ratio": "samples used: 3806 of 3806 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Land cover mapping",
+      "dataset": "m-chesapeake-landcover",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        66.3
+      ],
+      "sensor": [
+        "RGB-NIR aerial"
+      ],
+      "regions": [
+        "USA"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "1m",
+      "split_ratio": "samples used: 5000 of 5000 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Cashew plantation mapping",
+      "dataset": "m-cashew-plantation",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        59.1
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Benin"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 1800 of 1800 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Crop type segmentation",
+      "dataset": "m-SA-crop-type",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        53.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Germany",
+        "South Africa"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 5000 of 5000 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Cow detection",
+      "dataset": "m-nz-cattle",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        32.1
+      ],
+      "sensor": [
+        "RGB aerial"
+      ],
+      "regions": [
+        "New Zealand"
+      ],
+      "image_resolution": "500x500",
+      "spatial_resolution": "0.1m",
+      "split_ratio": "samples used: 655 of 655 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Canopy crown detection",
+      "dataset": "m-NeonTree",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        81.7
+      ],
+      "sensor": [
+        "RGB",
+        "LiDAR",
+        "Hyperspectral"
+      ],
+      "regions": [
+        "USA"
+      ],
+      "image_resolution": "400x400",
+      "spatial_resolution": "0.1m",
+      "split_ratio": "samples used: 457 of 457 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Scene classification",
+      "dataset": "RESISC-45",
+      "metrics": [
+        "Top-1 OA"
+      ],
+      "metrics_value": [
+        97.8
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Segmentation",
+      "application": "Urban land use/land cover segmentation",
+      "dataset": "SegMunich",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        51.6
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Munich, Germany"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    }
+  ]
+}
