@@ -2,7 +2,8 @@
 
 The schema (`model_schema_mlm.json` at the repo root) is the source of truth: read
 its field descriptions before writing a record. This file adds the conventions the
-existing records in `model_metadata/` follow and the mistakes to avoid.
+existing records in `model_metadata/` follow, the rules for updating an existing
+record, and the mistakes to avoid.
 
 ## Sources, in order of preference
 
@@ -61,6 +62,32 @@ Do not fill in values from general knowledge of similar models.
   `Top-1 Acc (kNN, 1% train)`); `metrics_value` is parallel, numbers as reported
   (usually percent). Use the GEO-Bench / PANGAEA dataset naming the paper uses
   (`m-EuroSat (GEO-Bench)`).
+
+## Updating an existing record
+
+Existing records were partly written by other tools and people. Improve them without
+losing information:
+
+- **Fill** a null/empty field when the sources state the value.
+- **Keep** a non-null value unless the source contradicts it. Different wording of
+  the same fact is not a contradiction; leave free-text fields alone unless they are
+  wrong or much less informative than the paper.
+- **Correct** a value only with evidence (paper section/table, repo file, model card)
+  and note that evidence in your report. Never set a non-null value back to null just
+  because you could not find it.
+- **Lists** (`supported_sensors`, `modalities`, `domain_knowledge`, ...): add missing
+  items; remove an item only if it is clearly wrong for this model.
+- **`benchmarks`**: match entries on (dataset, task). Fix values that differ from the
+  paper, add missing ones, and keep entries you cannot find (they may come from
+  another version or table) unless they are clearly not this model's results.
+- **`assets`**: add new repos or weights; replace a dead link only when you found the
+  new location.
+- **`sci:doi`**: replace an arXiv DOI with the published venue DOI once you have
+  confirmed it on the publisher or DOI page.
+- **Unchanged identity**: never change `id` or rename the file. Set `updated` to
+  today (`YYYY-MM-DDT00:00:00Z`); leave `release_date` unless it is null or wrong.
+- Add any schema fields the record is missing as `null` (or the found value), so it
+  matches the full schema shape.
 
 ## Before saving
 

@@ -4,6 +4,8 @@ Usage:
   python catalog.py index                  # one line per record: id, name, arXiv/DOI, release date
   python catalog.py check QUERY [QUERY..]  # is a model (name, arXiv id, DOI or URL) already catalogued?
   python catalog.py validate [FILE ..]     # validate records against model_schema_mlm.json (default: all)
+  python catalog.py gaps [--field F ..] [--top N]  # records with the most null/missing fields
+  python catalog.py diff OLD.json NEW.json # field-by-field changes between two versions of a record
 
 Options: --root DIR  repo root holding model_metadata/ and model_schema_mlm.json
          (default: nearest parent of the cwd that has model_schema_mlm.json)
@@ -113,6 +115,60 @@ def cmd_validate(root, args):
     sys.exit(1 if bad else 0)
 
 
+def is_empty(v):
+    return v is None or v == [] or v == {}
+
+
+def cmd_gaps(root, args):
+    """Rank records by how many schema fields are null or missing."""
+    props = list(json.loads((root / "model_schema_mlm.json").read_text())["properties"])
+    fields = args.field or props
+    unknown = set(fields) - set(props)
+    if unknown:
+        sys.exit(f"unknown field(s): {', '.join(sorted(unknown))}")
+    rows = []
+    for f, r in load(root):
+        missing = [k for k in fields if is_empty(r.get(k))]
+        if missing:
+            rows.append((len(missing), r.get("id") or f.stem, missing))
+    rows.sort(key=lambda x: (-x[0], x[1]))
+    for n, rid, missing in rows[: args.top]:
+        print(f"{rid}\t{n}/{len(fields)} empty\t{', '.join(missing)}")
+    print(f"# {len(rows)} records with empty fields among: {', '.join(fields) if args.field else 'all fields'}",
+          file=sys.stderr)
+
+
+def short(v, n=100):
+    s = json.dumps(v, ensure_ascii=False)
+    return s if len(s) <= n else s[: n - 3] + "..."
+
+
+def cmd_diff(_, args):
+    old, new = (json.loads(Path(p).read_text()) for p in (args.old, args.new))
+    changed = 0
+    for k in list(dict.fromkeys([*old, *new])):
+        a, b = old.get(k), new.get(k)
+        if a == b:
+            continue
+        changed += 1
+        if is_empty(a):
+            print(f"+ {k}: {short(b)}")
+        elif is_empty(b):
+            print(f"- {k}: {short(a)}  (REMOVED)")
+        elif k == "benchmarks":
+            key = lambda x: (x.get("dataset"), x.get("task"))  # noqa: E731
+            ka, kb = {key(x) for x in a}, {key(x) for x in b}
+            print(f"~ benchmarks: +{len(kb - ka)} new, -{len(ka - kb)} removed, "
+                  f"{sum(1 for x in b if key(x) in ka and x not in a)} changed")
+            for d, t in sorted(kb - ka, key=str):
+                print(f"    + {d} / {t}")
+            for d, t in sorted(ka - kb, key=str):
+                print(f"    - {d} / {t}  (REMOVED)")
+        else:
+            print(f"~ {k}: {short(a, 60)} -> {short(b, 60)}")
+    print(f"# {changed} field(s) changed", file=sys.stderr)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--root", type=Path)
@@ -122,9 +178,18 @@ def main():
     c.add_argument("queries", nargs="+")
     v = sub.add_parser("validate")
     v.add_argument("files", nargs="*")
+    g = sub.add_parser("gaps")
+    g.add_argument("--field", action="append", help="only count these fields (repeatable)")
+    g.add_argument("--top", type=int, default=30)
+    d = sub.add_parser("diff")
+    d.add_argument("old")
+    d.add_argument("new")
     args = p.parse_args()
+    if args.cmd == "diff":
+        return cmd_diff(None, args)
     root = args.root or find_root(Path.cwd().resolve())
-    {"index": cmd_index, "check": cmd_check, "validate": cmd_validate}[args.cmd](root, args)
+    cmds = {"index": cmd_index, "check": cmd_check, "validate": cmd_validate, "gaps": cmd_gaps}
+    cmds[args.cmd](root, args)
 
 
 if __name__ == "__main__":
