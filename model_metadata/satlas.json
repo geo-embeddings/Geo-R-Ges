@@ -1,0 +1,209 @@
+{
+  "id": "satlas",
+  "mlm:name": "SatlasNet",
+  "version": "v1",
+  "release_date": "2023-08-21T00:00:00Z",
+  "updated": "2023-08-21T00:00:00Z",
+  "description": "SatlasNet is a unified model for remote sensing image understanding, pre-trained on the large-scale SatlasPretrain dataset with 137 categories and 7 label types, supporting both high- and low-resolution imagery and spatio-temporal context.",
+  "sci:doi": "10.48550/arXiv.2211.15660",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/allenai/satlas",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://satlas-pretrain.allen.ai/",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "Swin Transformer (Swin-Base)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Supervised multi-task pretraining",
+  "masking_strategy": null,
+  "pretraining": "Joint supervised pretraining on SatlasPretrain dataset with 137 categories and 7 label types, using both Sentinel-2 (low-res) and NAIP (high-res) imagery, leveraging spatial and temporal context.",
+  "domain_knowledge": [
+    "Spatio-temporal context",
+    "Multi-sensor fusion",
+    "Task-specific output heads"
+  ],
+  "backbone_modifications": [
+    "Task-specific output heads for 7 label types",
+    "Temporal max pooling"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "NAIP"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "full",
+  "spatial_resolution": "1m (NAIP), 10m (Sentinel-2)",
+  "temporal_resolution": "variable (multiple images per tile, 2011-2022)",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2, NAIP",
+      "bands": [
+        "RGB",
+        "Sentinel-2 multispectral bands (up to 9 bands)"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "SatlasPretrain",
+  "regions_coverage": [
+    "Global (Sentinel-2)",
+    "United States (NAIP)"
+  ],
+  "start_datetime": "2011-01-01T00:00:00Z",
+  "end_datetime": "2022-12-31T23:59:59Z",
+  "num_images": null,
+  "sampling": "Maximum inverse frequency of categories per example",
+  "processing:level": null,
+  "processing:lineage": "GDAL tiling; Web-Mercator projection",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": 32,
+    "learning_rate": "1e-4 (decayed to 1e-6)",
+    "augmentations": [
+      "random cropping",
+      "horizontal flipping",
+      "vertical flipping",
+      "random resizing"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "512x512 (Sentinel-2), 8192x8192 (NAIP)"
+  },
+  "benchmarks": [
+    {
+      "task": "Multi-task (segmentation, regression, detection, classification)",
+      "application": "Remote sensing image understanding",
+      "dataset": "SatlasPretrain (test split, high-res NAIP)",
+      "metrics": [
+        "F1 score (Segmentation)",
+        "Mean Absolute Error (Regression)",
+        "mAP (Points)",
+        "mAP (Polygons)",
+        "GEO accuracy (Polylines)",
+        "Accuracy (Properties)",
+        "Accuracy (Classification)"
+      ],
+      "metrics_value": [
+        81.0,
+        7.6,
+        33.2,
+        34.1,
+        61.1,
+        89.2,
+        99
+      ],
+      "sensor": [
+        "NAIP"
+      ],
+      "regions": [
+        "United States"
+      ],
+      "image_resolution": "8192x8192 (input 512x512 patches)",
+      "spatial_resolution": "1m",
+      "split_ratio": "train/test (45.5K/512 tiles)"
+    },
+    {
+      "task": "Multi-task (segmentation, regression, detection, classification)",
+      "application": "Remote sensing image understanding",
+      "dataset": "SatlasPretrain (test split, low-res Sentinel-2)",
+      "metrics": [
+        "F1 score (Segmentation)",
+        "Mean Absolute Error (Regression)",
+        "mAP (Points)",
+        "mAP (Polygons)",
+        "GEO accuracy (Polylines)",
+        "Accuracy (Properties)",
+        "Accuracy (Classification)"
+      ],
+      "metrics_value": [
+        69.7,
+        7.8,
+        32.0,
+        20.2,
+        50.4,
+        80.0,
+        99
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global (except Antarctica)"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/test (828K/28K tiles)"
+    },
+    {
+      "task": "Downstream classification/segmentation/instance segmentation",
+      "application": "Transfer learning for remote sensing",
+      "dataset": "UCM, RESISC45, AID, FMoW, Mass Roads, Mass Buildings, Airbus Ships",
+      "metrics": [
+        "Accuracy (UCM, RESISC45, AID)",
+        "F1 Score (FMoW, Mass Roads, Mass Buildings, Airbus Ships)",
+        "unnamed metric (result 3)",
+        "unnamed metric (result 4)",
+        "unnamed metric (result 5)",
+        "unnamed metric (result 6)",
+        "unnamed metric (result 7)",
+        "unnamed metric (result 8)",
+        "unnamed metric (result 9)",
+        "unnamed metric (result 10)",
+        "unnamed metric (result 11)",
+        "unnamed metric (result 12)",
+        "unnamed metric (result 13)",
+        "unnamed metric (result 14)",
+        "unnamed metric (result 15)",
+        "unnamed metric (result 16)"
+      ],
+      "metrics_value": [
+        0.83,
+        0.99,
+        0.36,
+        0.98,
+        0.42,
+        0.88,
+        0.06,
+        0.44,
+        0.82,
+        0.87,
+        0.87,
+        0.88,
+        0.56,
+        0.8,
+        0.56,
+        0.83
+      ],
+      "sensor": [
+        "NAIP",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global",
+        "United States"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 50"
+    }
+  ]
+}

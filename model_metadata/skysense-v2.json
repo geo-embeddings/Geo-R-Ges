@@ -1,0 +1,469 @@
+{
+  "id": "skysense-v2",
+  "mlm:name": "SkySense V2",
+  "version": "2",
+  "release_date": "2025-07-18T00:00:00Z",
+  "updated": "2025-07-18T00:00:00Z",
+  "description": "SkySense V2 is a unified multi-modal remote sensing foundation model (MM-RSFM) that employs a single transformer backbone for multiple modalities (HR optical, multispectral, SAR). It introduces adaptive patch merging, modality prompt tokens, and a mixture of experts module, and is pre-trained with a novel query-based semantic aggregation contrastive learning (QSACL) strategy. It achieves state-of-the-art results across 16 datasets and 7 tasks.",
+  "sci:doi": "10.48550/arXiv.2507.13812",
+  "assets": null,
+  "mlm:architecture": "Unified Transformer (SwinV2B + vanilla Transformer Blocks)",
+  "mlm:total_parameters": 665000000,
+  "pretext_training_type": "Self-supervised learning (SSL) with Multi-Granularity Contrastive Learning (MGCL), Query-based Semantic Aggregation Contrastive Learning (QSACL), Dense Image-Text Alignment (ITA), and Geo-Context Prototype Learning (GCPL)",
+  "masking_strategy": "Adaptive Patch Merging (APM) for spatial harmonization; no explicit masking ratio for MIM",
+  "pretraining": "Pre-trained on 21 million multi-modal remote sensing imagery sets (HR optical, Sentinel-2 MS, Sentinel-1 SAR) using a teacher-student architecture with multi-granularity contrastive learning, geo-context prototype learning, dense image-text alignment, and query-based semantic aggregation contrastive learning (QSACL).",
+  "domain_knowledge": [
+    "Geo-context prototype learning",
+    "Dense image-text alignment with OSM labels"
+  ],
+  "backbone_modifications": [
+    "Adaptive Patch Merging (APM)",
+    "Learnable modality prompt tokens",
+    "Mixture of Experts (MoE) in last 6 transformer blocks"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "Sentinel-1",
+    "PlanetFusion",
+    "Google Earth Pro",
+    "Gaofen-2",
+    "Landsat-8",
+    "Gaofen-3"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "High-resolution optical (RGB/NIR)",
+    "Multispectral",
+    "SAR"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "variable (PlanetFusion: HR, Sentinel-2: 10m, Sentinel-1: 10m)",
+  "temporal_resolution": "variable (S2: avg 65 images per sequence, S1: avg 10 images per sequence)",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2, Sentinel-1, PlanetFusion, Google Earth Pro, Gaofen-2, Landsat-8, Gaofen-3",
+      "bands": [
+        "RGB",
+        "NIR",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06",
+        "B07",
+        "B08",
+        "B8A",
+        "B11",
+        "B12",
+        "VV",
+        "VH"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "21 million multi-modal RS imagery sets (HR optical, Sentinel-2, Sentinel-1)",
+  "regions_coverage": [
+    "Global"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 21000000,
+  "sampling": "Random sampling of 10 S2 and 5 S1 images per set per iteration",
+  "processing:level": null,
+  "processing:lineage": "Cloud masking; Geo-alignment; Temporal sampling",
+  "cloud_cover": "Cloud masking applied",
+  "missing_data": "Random disturbances on acquisition date; missing handled by sampling",
+  "mlm:hyperparameters": {
+    "patch_size": "4x4 patches",
+    "epochs": null,
+    "batch_size": 1024,
+    "learning_rate": "2e-4 (cosine decay to 1e-6)",
+    "augmentations": [
+      "Gaussian blur",
+      "Solarization",
+      "Random color jitter",
+      "Random flips",
+      "Random rotations",
+      "Random sequence selection (MSI/SARI)",
+      "Multi-crop (2 global, 6 local views)"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "HR optical: 2048x2048; S2/S1: 64x64",
+    "num_layers": 24
+  },
+  "benchmarks": [
+    {
+      "task": "Scene Classification",
+      "application": "Aerial scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "OA (result 1 of 2)",
+        "OA (result 2 of 2)"
+      ],
+      "metrics_value": [
+        98.34,
+        99.05
+      ],
+      "sensor": [
+        "High-resolution optical"
+      ],
+      "regions": null,
+      "image_resolution": "320x320",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Aerial scene classification",
+      "dataset": "RESISC-45",
+      "metrics": [
+        "OA (result 1 of 2)",
+        "OA (result 2 of 2)"
+      ],
+      "metrics_value": [
+        96.42,
+        97.24
+      ],
+      "sensor": [
+        "High-resolution optical"
+      ],
+      "regions": null,
+      "image_resolution": "320x320",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Multi-label scene classification",
+      "dataset": "BEN-S2",
+      "metrics": [
+        "mAP (result 1 of 2)",
+        "mAP (result 2 of 2)"
+      ],
+      "metrics_value": [
+        89.13,
+        93.78
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "128x128",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Temporal multi-label scene classification",
+      "dataset": "fMoW-S2",
+      "metrics": [
+        "Top-1 Acc",
+        "Top-5 Acc"
+      ],
+      "metrics_value": [
+        66.65,
+        89.32
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "96x96",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Land cover/instance segmentation",
+      "dataset": "iSAID",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        71.87
+      ],
+      "sensor": [
+        "High-resolution optical"
+      ],
+      "regions": null,
+      "image_resolution": "896x896",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Land cover/instance segmentation",
+      "dataset": "Potsdam",
+      "metrics": [
+        "mF1"
+      ],
+      "metrics_value": [
+        95.86
+      ],
+      "sensor": [
+        "High-resolution optical"
+      ],
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Semantic segmentation",
+      "dataset": "Dyna.-Pla.",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        47.6
+      ],
+      "sensor": [
+        "PlanetFusion"
+      ],
+      "regions": null,
+      "image_resolution": "1024x1024",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Semantic segmentation",
+      "dataset": "Dyna.-S2",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        47.5
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Object Detection",
+      "application": "Horizontal object detection",
+      "dataset": "DIOR",
+      "metrics": [
+        "mAP50"
+      ],
+      "metrics_value": [
+        79.5
+      ],
+      "sensor": [
+        "High-resolution optical"
+      ],
+      "regions": null,
+      "image_resolution": "800x800",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object Detection",
+      "application": "Oriented object detection",
+      "dataset": "DIOR-R",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        75.29
+      ],
+      "sensor": [
+        "High-resolution optical"
+      ],
+      "regions": null,
+      "image_resolution": "800x800",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object Detection",
+      "application": "Oriented object detection",
+      "dataset": "FAIR1M",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        55.96
+      ],
+      "sensor": [
+        "High-resolution optical"
+      ],
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change Detection",
+      "application": "Binary/semantic change detection",
+      "dataset": "LEVIR-CD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        94.83
+      ],
+      "sensor": [
+        "High-resolution optical"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change Detection",
+      "application": "Binary change detection",
+      "dataset": "OSCD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        65.29
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "96x96",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Change Detection",
+      "application": "Semantic change detection",
+      "dataset": "Dyna.-S2",
+      "metrics": [
+        "SCS"
+      ],
+      "metrics_value": [
+        20.7
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Multi-modal Segmentation",
+      "application": "Time-insensitive land cover mapping",
+      "dataset": "Dyna.-MM",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        48.9
+      ],
+      "sensor": [
+        "PlanetFusion",
+        "Sentinel-2",
+        "Sentinel-1"
+      ],
+      "regions": null,
+      "image_resolution": "1024x1024",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Multi-modal Segmentation",
+      "application": "Time-sensitive crop mapping",
+      "dataset": "PASTIS-MM",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        86.7
+      ],
+      "sensor": [
+        "Google Earth Pro",
+        "Sentinel-2",
+        "Sentinel-1"
+      ],
+      "regions": null,
+      "image_resolution": "4096x4096 (GEP), 128x128 (S2/S1)",
+      "spatial_resolution": "10m (S2/S1)",
+      "split_ratio": null
+    },
+    {
+      "task": "Multi-modal Classification",
+      "application": "Multi-label scene classification",
+      "dataset": "BEN-MM",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        93.8
+      ],
+      "sensor": [
+        "Sentinel-2",
+        "Sentinel-1"
+      ],
+      "regions": null,
+      "image_resolution": "128x128",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "Five-Billion-Pixels",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        66.82
+      ],
+      "sensor": [
+        "Gaofen-2"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "SPARCS",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        74.32
+      ],
+      "sensor": [
+        "Landsat-8"
+      ],
+      "regions": null,
+      "image_resolution": "1000x1000",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Terrain segmentation",
+      "dataset": "AIR-PolSAR-Seg",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        55.32
+      ],
+      "sensor": [
+        "Gaofen-3"
+      ],
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ]
+}

@@ -1,0 +1,326 @@
+{
+  "id": "mtp",
+  "mlm:name": "MTP",
+  "version": "1.0",
+  "release_date": null,
+  "updated": null,
+  "description": "MTP (Multi-Task Pretraining) is a remote sensing foundation model paradigm that uses a shared encoder and task-specific decoders for multi-task supervised pretraining on the SAMRS dataset, covering semantic segmentation, instance segmentation, and rotated object detection. It supports both CNN and vision transformer backbones with over 300M parameters and demonstrates state-of-the-art performance across 14 remote sensing benchmarks.",
+  "sci:doi": "10.48550/arXiv.2403.13430",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/ViTAE-Transformer/MTP",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-B + RVSA, ViT-L + RVSA, InternImage-XL",
+  "mlm:total_parameters": 305000000,
+  "pretext_training_type": "Multi-task supervised pretraining",
+  "masking_strategy": null,
+  "pretraining": "Stage-wise multi-task supervised pretraining on SAMRS dataset with semantic segmentation, instance segmentation, and rotated object detection tasks using a shared encoder and task-specific decoders.",
+  "domain_knowledge": null,
+  "backbone_modifications": [
+    "RVSA: Rotated Varied-Size window Attention for ViT",
+    "Feature pyramid integration",
+    "Dynamic sparse kernels for InternImage"
+  ],
+  "supported_sensors": [
+    "WorldView-2",
+    "WorldView-3",
+    "Sentinel-2",
+    "Google Earth"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "WorldView-2, WorldView-3, Sentinel-2, Google Earth",
+      "bands": [
+        "RGB",
+        "Multispectral"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "SAMRS (Segment Anything Model annotated Remote Sensing Segmentation dataset)",
+  "regions_coverage": [
+    "Global (derived from DOTA-V2.0, DIOR, FAIR1M-2.0)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 105090,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "1024x1024, 800x800, 600x600"
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Land use and land cover classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        98.78
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64 (resized to 224x224)",
+      "spatial_resolution": null,
+      "split_ratio": "public train/val split; samples used: 16200 of 27000 (60%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Scene classification",
+      "dataset": "RESISC-45",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        95.88
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "256x256 (resized to 224x224)",
+      "spatial_resolution": null,
+      "split_ratio": "20% train, 80% test; samples used: 6300 of 31500 (20%)"
+    },
+    {
+      "task": "Horizontal object detection",
+      "application": "Object detection",
+      "dataset": "Xview",
+      "metrics": [
+        "AP50"
+      ],
+      "metrics_value": [
+        19.4
+      ],
+      "sensor": [
+        "WorldView-3"
+      ],
+      "regions": null,
+      "image_resolution": "2000x2000+ (clipped to 416x416)",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "samples used: 700 of 846 (82.74%)"
+    },
+    {
+      "task": "Horizontal object detection",
+      "application": "Object detection",
+      "dataset": "DIOR",
+      "metrics": [
+        "AP50"
+      ],
+      "metrics_value": [
+        81.1
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "800x800",
+      "spatial_resolution": "0.5-30m",
+      "split_ratio": "samples used: 11725 of 23463 (50%)"
+    },
+    {
+      "task": "Rotated object detection",
+      "application": "Rotated object detection",
+      "dataset": "DIOR-R",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        74.54
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "800x800",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 11725 of 23463 (50%)"
+    },
+    {
+      "task": "Rotated object detection",
+      "application": "Rotated object detection",
+      "dataset": "FAIR1M-2.0",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        53.0
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "1000x1000 to 10000x10000 (cropped to 800x800)",
+      "spatial_resolution": "0.3-0.8m",
+      "split_ratio": "samples used: 288428 of 40000"
+    },
+    {
+      "task": "Rotated object detection",
+      "application": "Rotated object detection",
+      "dataset": "DOTA-V1.0",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        81.66
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "800x800 to 4000x4000 (cropped to 1024x1024)",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 133883 of 2806"
+    },
+    {
+      "task": "Rotated object detection",
+      "application": "Rotated object detection",
+      "dataset": "DOTA-V2.0",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        58.41
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "800x800 to 4000x4000 (cropped to 1024x1024)",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 31273 of 11268"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Building extraction",
+      "dataset": "SpaceNetv1",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        79.54
+      ],
+      "sensor": [
+        "WorldView-2"
+      ],
+      "regions": [
+        "Rio de Janeiro"
+      ],
+      "image_resolution": "variable (cropped to 384x384)",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "samples used: 5000 of 6940 (72.03%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover classification",
+      "dataset": "LoveDA",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        54.17
+      ],
+      "sensor": [
+        "Google Earth"
+      ],
+      "regions": [
+        "Nanjing",
+        "Changzhou",
+        "Wuhan"
+      ],
+      "image_resolution": "1024x1024 (cropped to 512x512)",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "samples used: 4191 of 5987 (70%)"
+    },
+    {
+      "task": "Change detection",
+      "application": "Bi-temporal change detection",
+      "dataset": "OSCD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        55.92
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "600x600 (cropped to 224x224)",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 827 of 24"
+    },
+    {
+      "task": "Change detection",
+      "application": "Building change detection",
+      "dataset": "WHU",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        94.75
+      ],
+      "sensor": null,
+      "regions": [
+        "Wuhan"
+      ],
+      "image_resolution": "32507x15354 (cropped to 256x256)",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "samples used: 5334 of 2"
+    },
+    {
+      "task": "Change detection",
+      "application": "Change detection",
+      "dataset": "LEVIR",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        92.67
+      ],
+      "sensor": null,
+      "regions": [
+        "Texas, USA"
+      ],
+      "image_resolution": "1024x1024 (cropped to 256x256)",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "samples used: 7120 of 637"
+    },
+    {
+      "task": "Change detection",
+      "application": "Season-varying change detection",
+      "dataset": "SVCD/CDD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        97.98
+      ],
+      "sensor": [
+        "Google Earth"
+      ],
+      "regions": null,
+      "image_resolution": "variable (cropped to 256x256)",
+      "spatial_resolution": "0.03-1m",
+      "split_ratio": "samples used: 10000 of 11"
+    }
+  ]
+}

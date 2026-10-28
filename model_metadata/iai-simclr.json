@@ -1,0 +1,180 @@
+{
+  "id": "iai-simclr",
+  "mlm:name": "IaI-SimCLR",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "IaI-SimCLR is a multi-modal, multi-objective contrastive learning framework for Sentinel-1 and Sentinel-2 imagery, enforcing both intra- and inter-modality similarity and introducing a local batch sampling strategy for harder negatives.",
+  "sci:doi": null,
+  "assets": null,
+  "mlm:architecture": "ResNet18",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Contrastive self-supervised learning (SimCLR-based) with multi-objective (intra- and inter-modality) losses",
+  "masking_strategy": null,
+  "pretraining": "Self-supervised contrastive learning with intra- and inter-modality objectives, using Sentinel-1 and Sentinel-2 data, with both random and local batch sampling strategies.",
+  "domain_knowledge": [
+    "Geo-coding for local batch sampling",
+    "Multi-modal (SAR and optical) fusion",
+    "Augmentation strategies tailored for remote sensing"
+  ],
+  "backbone_modifications": [
+    "Separate encoders for each modality",
+    "Separate projection heads for intra- and inter-modality losses"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": "10m and 20m",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Sentinel-1",
+      "bands": [
+        "2 bands"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          256,
+          256
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    },
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "10m and 20m bands"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          256,
+          256
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "SEN12MS",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": "Random Batch Sampling (RBS) and Local Batch Sampling (LBS)",
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 100,
+    "batch_size": 128,
+    "learning_rate": "1e-4",
+    "augmentations": [
+      "Crop (100%)",
+      "Flip (50%)",
+      "Grey-scale (10%, S2 only)",
+      "Color Augmentation (80%, S2 or none)",
+      "Gaussian Blur (30%)"
+    ],
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Classification",
+      "application": "Land-cover classification",
+      "dataset": "SEN12MS-DFC",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        0.89
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m and 20m",
+      "split_ratio": "samples used: 2808"
+    },
+    {
+      "task": "Classification",
+      "application": "Land-cover classification",
+      "dataset": "SEN12MS-TP-EWC",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        0.71
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m and 20m",
+      "split_ratio": "samples used: 12000"
+    },
+    {
+      "task": "Classification",
+      "application": "Crop type mapping",
+      "dataset": "Canadian-Crop",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        0.66
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m and 20m",
+      "split_ratio": null
+    },
+    {
+      "task": "Regression",
+      "application": "Biomass estimation",
+      "dataset": "SEN12MS-TP with GEDI-L4A",
+      "metrics": [
+        "MAE"
+      ],
+      "metrics_value": [
+        11.4
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m and 20m",
+      "split_ratio": null
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "id": "mmearth",
+  "mlm:name": "MP-MAE",
+  "version": "v1",
+  "release_date": "2024-07-29T00:00:00Z",
+  "updated": "2024-07-29T00:00:00Z",
+  "description": "MP-MAE is a Multi-Pretext Masked Autoencoder for geospatial representation learning, pretrained on the global, multi-modal MMEarth dataset (1.2M locations, 12 modalities). It extends ConvNeXt V2 MAE with multi-modal pretext tasks for learning general-purpose representations for Sentinel-2 optical images.",
+  "sci:doi": "10.48550/arXiv.2405.02771",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/vishalned/MMEarth-train",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ConvNeXt V2-Atto",
+  "mlm:total_parameters": 3700000,
+  "pretext_training_type": "Multi-modal masked autoencoding with multi-pretext tasks (pixel-level and image-level modalities)",
+  "masking_strategy": "Random masking of input patches (16x16 or 8x8) with learnable mask token; same mask applied to all pixel-level modalities",
+  "pretraining": "Masked autoencoding with multi-modal reconstruction tasks (pixel-level and image-level) using MMEarth dataset. Task-uncertainty weighted multi-task loss.",
+  "domain_knowledge": [
+    "Biome-balanced sampling",
+    "Stratified sampling across ecoregions",
+    "Cyclic encoding of geolocation and date",
+    "Harmonization of Sentinel-2 L1C/L2A products"
+  ],
+  "backbone_modifications": [
+    "Reduced patch size (from 32 to 16 or 8) for medium-resolution satellite images",
+    "Modified first layer to avoid early downsampling (kernel size 3, stride 1)",
+    "Initial convolutional layer at input resolution followed by depth-wise downsampling"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "Sentinel-1",
+    "ASTER",
+    "GEDI (via ETH-GCHM)",
+    "ERA5"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR",
+    "DEM",
+    "Vegetation Height",
+    "Landcover (categorical)",
+    "Climate (temperature, precipitation)",
+    "Geolocation",
+    "Date"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "5 days (Sentinel-2); 2017-2020",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2, Sentinel-1, ASTER, GEDI (via ETH-GCHM), ERA5",
+      "bands": [
+        "Sentinel-2 B1-B12 (L1C/L2A)",
+        "Sentinel-1 VV, VH, HV, HH",
+        "ASTER elevation, slope",
+        "ETH-GCHM canopy height, uncertainty",
+        "Dynamic World landcover",
+        "ESA World Cover landcover"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "MMEarth",
+  "regions_coverage": [
+    "Global",
+    "14 biomes",
+    "846 ecoregions"
+  ],
+  "start_datetime": "2017-01-01T00:00:00Z",
+  "end_datetime": "2020-12-31T23:59:59Z",
+  "num_images": 1200000,
+  "sampling": "Biome-balanced, stratified by ecoregion, uniform across 14 biomes and 4 years",
+  "processing:level": "Sentinel-2 L1C and L2A",
+  "processing:lineage": "Standardization (zero mean, unit variance) per channel; Harmonization of L1C/L2A; Bilinear interpolation to 10m grid; Center cropping; Missing input pixels replaced by zero; Local patch normalization for optical bands",
+  "cloud_cover": "CLOUD_PIXEL_PERCENTAGE < 10% at tile level",
+  "missing_data": "Missing input pixels replaced by zero; Dynamic World NO_DATA handled as class 0; no sample-level cloud filtering",
+  "mlm:hyperparameters": {
+    "patch_size": "16x16 or 8x8 patches (7x7 grid)",
+    "epochs": 200,
+    "batch_size": 4096,
+    "learning_rate": "1.5e-4",
+    "augmentations": [
+      "Random cropping"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "128x128 (center cropped to 112x112 or 56x56 for training)"
+  },
+  "benchmarks": [
+    {
+      "task": "Multi-label classification",
+      "application": "Landcover classification in Europe",
+      "dataset": "BigEarth20k",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        43.3
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "120x120",
+      "spatial_resolution": "10m",
+      "split_ratio": "20k/1k/1k; samples used: 20000 of 590000 (3.39%)"
+    },
+    {
+      "task": "Multi-class classification",
+      "application": "Local climate zones classification (urban areas)",
+      "dataset": "So2Sat20k",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        43.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global (urban)"
+      ],
+      "image_resolution": "32x32",
+      "spatial_resolution": "10m",
+      "split_ratio": "20k/1k/1k; samples used: 20000 of 400000 (5.0%)"
+    },
+    {
+      "task": "Multi-class classification",
+      "application": "Landcover classification in Europe",
+      "dataset": "EuroSat2k",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "2k/1k/1k; samples used: 2000 of 27000 (7.41%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Cashew plantations mapping (Benin, Africa)",
+      "dataset": "Cashew1k",
+      "metrics": [
+        "IoU"
+      ],
+      "metrics_value": [
+        79.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Benin, Africa"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "1.3k/400/50; samples used: 1300"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Crop-type segmentation (South Africa)",
+      "dataset": "SAcrop3k",
+      "metrics": [
+        "IoU"
+      ],
+      "metrics_value": [
+        38.2
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "South Africa"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "3k/1k/1k; samples used: 3000"
+    }
+  ]
+}

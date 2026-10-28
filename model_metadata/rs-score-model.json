@@ -1,0 +1,229 @@
+{
+  "id": "rs-score-model",
+  "mlm:name": "ScoreRS",
+  "version": "v1",
+  "release_date": "2025-09-19T00:00:00Z",
+  "updated": "2025-09-19T00:00:00Z",
+  "description": "ScoreRS is a learned quality scoring model for automated assessment and curation of remote sensing vision-language data, trained on large-scale RS-specific preference datasets. It enables quality-driven data selection, RL reward modeling, and best-of-N test-time scaling for VLMs in remote sensing.",
+  "sci:doi": "10.48550/arXiv.2503.00743",
+  "assets": null,
+  "mlm:architecture": "Qwen2VL-7B",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Pairwise preference learning (reward modeling)",
+  "masking_strategy": null,
+  "pretraining": "Three-stage progressive training: (1) value head initialized on UltraFeedback text preference data, (2) ViT and value head trained on RS image-caption preference data, (3) full-parameter training on RS vision instruction preference data and RLHF-V.",
+  "domain_knowledge": [
+    "Remote sensing-specific quality dimensions",
+    "Domain-specific question categories"
+  ],
+  "backbone_modifications": [
+    "Language head replaced by linear value head for scalar scoring"
+  ],
+  "supported_sensors": [
+    "Multispectral (Sentinel-2, etc.)",
+    "Aerial imagery"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": null,
+  "mlm:pretrained_source": "UltraFeedback (text preference data)",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "LHRS-Align (image-caption preference data)",
+        "regions_coverage": [
+          "Major global urban areas"
+        ],
+        "num_images": 76000,
+        "processing:lineage": "Image deduplication (SSCD, cosine similarity, threshold 0.65)"
+      },
+      {
+        "mlm:pretrained_source": "GeoChat, LHRS-Instruct, SkysenseGPT (vision instruction preference data)",
+        "num_images": 112000,
+        "processing:lineage": "Two-stage similarity-based filtering (BGE text embedding, SSCD image embedding, threshold 0.65)"
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Image classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "NWPU-RESISC45",
+      "metrics": [
+        "Top-1 Accuracy",
+        "Top-5 Accuracy"
+      ],
+      "metrics_value": [
+        78.58,
+        97.54
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: (30.0%)"
+    },
+    {
+      "task": "Image classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Top-1 Accuracy",
+        "Top-5 Accuracy"
+      ],
+      "metrics_value": [
+        63.67,
+        99.01
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: (30.0%)"
+    },
+    {
+      "task": "Image classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "fMoW",
+      "metrics": [
+        "Top-1 Accuracy",
+        "Top-5 Accuracy"
+      ],
+      "metrics_value": [
+        29.29,
+        60.7
+      ],
+      "sensor": [
+        "Multispectral"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: (30.0%)"
+    },
+    {
+      "task": "Image classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "Top-1 Accuracy",
+        "Top-5 Accuracy"
+      ],
+      "metrics_value": [
+        85.9,
+        null
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Cross-modal retrieval",
+      "application": "Text-to-image and image-to-text retrieval",
+      "dataset": "UCM",
+      "metrics": [
+        "R@1",
+        "R@5"
+      ],
+      "metrics_value": [
+        44.56,
+        82.09
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: (30.0%)"
+    },
+    {
+      "task": "Cross-modal retrieval",
+      "application": "Text-to-image and image-to-text retrieval",
+      "dataset": "RSICD",
+      "metrics": [
+        "R@1",
+        "R@5"
+      ],
+      "metrics_value": [
+        13.9,
+        38.02
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: (30.0%)"
+    },
+    {
+      "task": "Visual question answering",
+      "application": "Remote sensing VQA",
+      "dataset": "LHRS-Bench",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        67.08
+      ],
+      "sensor": [
+        "Aerial imagery",
+        "Multispectral"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual grounding",
+      "application": "Remote sensing visual grounding",
+      "dataset": "VG-DIOR",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        58.34
+      ],
+      "sensor": [
+        "Aerial imagery",
+        "Multispectral"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ]
+}

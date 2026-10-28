@@ -1,0 +1,147 @@
+{
+  "id": "satvision-toa",
+  "mlm:name": "SatVision-TOA",
+  "version": "Giant",
+  "release_date": "2024-11-26T00:00:00Z",
+  "updated": "2024-11-26T00:00:00Z",
+  "description": "SatVision-TOA is a 3 billion parameter vision transformer-based geospatial foundation model pre-trained on 100 million MODIS L1B Top-Of-Atmosphere (TOA) radiance images across 14 spectral bands. It is designed for moderate- and coarse-resolution all-sky remote sensing imagery, excelling in tasks such as 3D cloud retrieval and image reconstruction, and demonstrates strong transferability to other sensors.",
+  "sci:doi": "10.48550/arXiv.2411.17000",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/nasa-nccs-hpda/pytorch-caney",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://huggingface.co/nasa-cisto-data-science-group/satvision-toa-giant-patch8-window8-128",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "SwinV2 Giant",
+  "mlm:total_parameters": 3000000000,
+  "pretext_training_type": "Masked-Image-Modeling (MIM)",
+  "masking_strategy": "Randomly mask 8x8 patches (60% masking ratio) of input image chips",
+  "pretraining": "Self-supervised learning using Masked-Image-Modeling on 100 million MODIS TOA image chips (128x128x14), with SwinV2 Giant architecture, trained for 50 epochs using AdamW optimizer and bfloat16 precision.",
+  "domain_knowledge": [
+    "Atmospheric science",
+    "Cloud and aerosol monitoring",
+    "Land surface monitoring"
+  ],
+  "backbone_modifications": [
+    "Hierarchical windowed attention",
+    "Adapted for 14-band multispectral input",
+    "Input patch size 8x8",
+    "Window size 12"
+  ],
+  "supported_sensors": [
+    "MODIS",
+    "GOES-ABI",
+    "VIIRS",
+    "SEVIRI",
+    "AHI"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "1 km",
+  "temporal_resolution": "daily",
+  "mlm:input": [
+    {
+      "name": "MODIS, GOES-ABI, VIIRS, SEVIRI, AHI",
+      "bands": [
+        "1",
+        "2",
+        "3",
+        "6",
+        "7",
+        "21",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "MODIS L1B Top-Of-Atmosphere (TOA) global daily composites",
+  "regions_coverage": [
+    "Global (all continents and oceans, NW, NE, SW, SE quadrants)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 100000000,
+  "sampling": "Stratified sampling across global quadrants and cover types using clustering on land- and cloud-cover structure; Time range: March 2000 to present (10 years, ~270 days/year)",
+  "processing:level": "L1B",
+  "processing:lineage": "Elliptical Weighted Averaging (EWA) for band aggregation; Min-max scaling for brightness temperature; Scaling reflectance by 0.01; Selection of lowest view zenith angle; Solar zenith angle < 72 deg",
+  "cloud_cover": "All-sky (no cloud filtering, includes cloudy and clear-sky)",
+  "missing_data": "Overlapping observations: select lowest view zenith angle; only daytime images used",
+  "mlm:hyperparameters": {
+    "patch_size": "8x8 patches",
+    "epochs": 50,
+    "batch_size": null,
+    "learning_rate": "max 0.00159727 (OneCycle cosine scheduler, linear warmup, AdamW optimizer)",
+    "augmentations": null,
+    "mask_ratio": 0.6,
+    "image_resolution": "128x128x14"
+  },
+  "benchmarks": [
+    {
+      "task": "Image reconstruction",
+      "application": "Masked image modeling (self-supervised pretraining objective)",
+      "dataset": "MODIS TOA (withheld test set)",
+      "metrics": [
+        "SSIM"
+      ],
+      "metrics_value": [
+        0.9289
+      ],
+      "sensor": [
+        "MODIS"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "128x128x14",
+      "spatial_resolution": "1 km",
+      "split_ratio": "samples used: 128"
+    },
+    {
+      "task": "3D cloud retrieval (semantic segmentation)",
+      "application": "Vertical cloud mask prediction (CloudSat+CALIPSO curtain)",
+      "dataset": "GOES-ABI chips (14 channels, 128x128), CloudSat/CALIPSO overpasses",
+      "metrics": [
+        "mIOU",
+        "Accuracy",
+        "AUC"
+      ],
+      "metrics_value": [
+        0.4638,
+        0.9574,
+        0.98
+      ],
+      "sensor": [
+        "GOES-ABI"
+      ],
+      "regions": [
+        "CloudSat/CALIPSO curtain (global, 1:30PM local time)"
+      ],
+      "image_resolution": "128x128x14",
+      "spatial_resolution": "variable (ABI native, matched to MODIS 1 km)",
+      "split_ratio": "samples used: 8300 of 8300 (100%)"
+    }
+  ]
+}

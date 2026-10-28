@@ -1,0 +1,369 @@
+{
+  "id": "smarties",
+  "mlm:name": "SMARTIES",
+  "version": "v1",
+  "release_date": "2025-06-24T00:00:00Z",
+  "updated": "2025-06-24T00:00:00Z",
+  "description": "SMARTIES is a spectrum-aware multi-sensor auto-encoder foundation model for remote sensing images. It projects data from heterogeneous sensors into a shared spectrum-aware space, enabling sensor-agnostic representations and generalization to unseen sensors. It uses a unified transformer backbone with spectrum-aware projection layers, cross-sensor token mixup, and masked image modeling for self-supervised pretraining.",
+  "sci:doi": "10.48550/arXiv.2506.19585",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://gsumbul.github.io/SMARTIES",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://gsumbul.github.io/SMARTIES",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-B, ViT-L",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Masked autoencoding with cross-sensor token mixup",
+  "masking_strategy": "Random masking of tokens with 75% masking ratio",
+  "pretraining": "Self-supervised masked image modeling with spectrum-aware projection and cross-sensor token mixup on paired multi-sensor data",
+  "domain_knowledge": [
+    "Spectrum-aware projection layers",
+    "Cross-sensor token mixup",
+    "Spectrum-aware reconstruction"
+  ],
+  "backbone_modifications": [
+    "Addition of spectrum-aware projection layers",
+    "Addition of spectrum-aware reprojection layers"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "Sentinel-1",
+    "Maxar",
+    "Planet",
+    "HLS",
+    "Landsat-8"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR",
+    "RGB",
+    "Thermal Infrared"
+  ],
+  "spectral_alignment": "full",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (10m, 20m, 60m, submeter)",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "B01-B12"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    },
+    {
+      "name": "Maxar",
+      "bands": [
+        "Blue",
+        "Green",
+        "Red"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    },
+    {
+      "name": "Sentinel-1",
+      "bands": [
+        "VV",
+        "VH"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          2,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "fMoW-RGB, fMoW-S2, BigEarthNet-MM",
+  "regions_coverage": [
+    "Worldwide"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 496000,
+  "sampling": "Random selection of 60K fMoW pairs and 188K BigEarthNet pairs",
+  "processing:level": null,
+  "processing:lineage": "Min-max normalization (1%-99%); Image standardization (mean/std)",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 300,
+    "batch_size": 2048,
+    "learning_rate": "1.5e-4",
+    "augmentations": [
+      "Random vertical flipping",
+      "Random horizontal flipping",
+      "Random rotation",
+      "Random scale crop (0.25-1.0)",
+      "Bicubic resize"
+    ],
+    "mask_ratio": 0.75
+  },
+  "benchmarks": [
+    {
+      "task": "Multi-label scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "BigEarthNet-S1",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        78.9
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "variable",
+      "spatial_resolution": "10m",
+      "split_ratio": "10% train, rest val"
+    },
+    {
+      "task": "Multi-label scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "BigEarthNet-S2",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        87.7
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "variable",
+      "spatial_resolution": "10m, 20m, 60m",
+      "split_ratio": "10% train, rest val"
+    },
+    {
+      "task": "Multi-label scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "BigEarthNet-MM",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        86.7
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "variable",
+      "spatial_resolution": "10m, 20m, 60m",
+      "split_ratio": "10% train, rest val"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Top-1 Accuracy (result 1 of 2)",
+        "Top-1 Accuracy (result 2 of 2)"
+      ],
+      "metrics_value": [
+        98.9,
+        99.6
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "variable",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "RESISC-45",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        95.8
+      ],
+      "sensor": [
+        "Maxar (RGB)"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "submeter",
+      "split_ratio": null
+    },
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "WHU-RS19",
+      "metrics": [
+        "kNN Accuracy"
+      ],
+      "metrics_value": [
+        80.4
+      ],
+      "sensor": [
+        "RGB"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "0.5m",
+      "split_ratio": null
+    },
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "UCMerced",
+      "metrics": [
+        "kNN Accuracy"
+      ],
+      "metrics_value": [
+        77.0
+      ],
+      "sensor": [
+        "RGB"
+      ],
+      "regions": [
+        "United States"
+      ],
+      "image_resolution": "variable",
+      "spatial_resolution": "very high resolution",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Burn scar detection",
+      "dataset": "BurnScars",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        82.8
+      ],
+      "sensor": [
+        "HLS (Harmonized Landsat Sentinel-2)"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land-use and land-cover mapping",
+      "dataset": "DynamicEarthNet (DEN)",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        38.5
+      ],
+      "sensor": [
+        "Planet"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Building detection",
+      "dataset": "SpaceNet7",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        62.2
+      ],
+      "sensor": [
+        "Planet"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Crop-type segmentation",
+      "dataset": "SICKLE",
+      "metrics": [
+        "mIoU",
+        "Accuracy",
+        "F1"
+      ],
+      "metrics_value": [
+        50.2,
+        75.5,
+        63.7
+      ],
+      "sensor": [
+        "Landsat-8 (OLI, TIRS)"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ]
+}

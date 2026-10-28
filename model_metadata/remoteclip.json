@@ -1,0 +1,248 @@
+{
+  "id": "remoteclip",
+  "mlm:name": "RemoteCLIP",
+  "version": "v1",
+  "release_date": "2024-04-16T00:00:00Z",
+  "updated": "2024-04-16T00:00:00Z",
+  "description": "RemoteCLIP is the first vision-language foundation model for remote sensing, trained on a large-scale, unified image-caption dataset derived from diverse remote sensing sources. It enables robust visual feature learning with rich semantics and aligned text embeddings, supporting zero-shot, few-shot, and retrieval tasks.",
+  "sci:doi": "10.48550/arXiv.2306.11029",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/ChenDelong1999/RemoteCLIP",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-Large-14",
+  "mlm:total_parameters": 304000000,
+  "pretext_training_type": "Contrastive Language-Image Pretraining (CLIP-style)",
+  "masking_strategy": "None (contrastive, not masked modeling)",
+  "pretraining": "Continual pretraining of CLIP on a unified, scaled-up remote sensing image-caption dataset using InfoNCE loss for vision-language alignment.",
+  "domain_knowledge": [
+    "Box-to-Caption (B2C) annotation",
+    "Mask-to-Box (M2B) conversion",
+    "Remote sensing data diversity",
+    "Rotation invariance"
+  ],
+  "backbone_modifications": [
+    "Anti-aliased rect-2 blur pooling layer added to ResNet-50",
+    "Average pooling replaced with multi-head self-attention-based pooling in ResNet-50"
+  ],
+  "supported_sensors": [
+    "Satellite",
+    "UAV"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral (RGB)",
+    "Text"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (from 224x224 to 1920x1080, see Table I)",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Satellite, UAV",
+      "bands": [
+        "RGB"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "RET-3 (RSICD, RSITMD, UCM), DET-10 (AUAIR, CARPK, DIOR, DOTA, HRRSD, HRSC, LEVIR, RSOD, Stanford, Visdrone), SEG-4 (iSAID, LoveDA, Potsdam, Vaihingen)",
+  "regions_coverage": [
+    "Global (various satellite and UAV datasets, including urban, rural, mountainous, and campus scenes)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 165745,
+  "sampling": "All available images after de-duplication",
+  "processing:level": null,
+  "processing:lineage": "Sample de-duplication (p-Hash); Annotation conversion (B2C, M2B)",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "77 (text tokens)",
+    "epochs": null,
+    "batch_size": 28,
+    "learning_rate": "1e-4 (ViT-L-14), 4e-5 (ViT-B-32), 7e-5 (ResNet-50)",
+    "augmentations": [
+      "Random crop",
+      "Random horizontal flip",
+      "Random rotation (0°, 90°, 180°, 270°)"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "variable (224x224 to 1920x1080)",
+    "num_layers": 24
+  },
+  "benchmarks": [
+    {
+      "task": "Cross-modal retrieval",
+      "application": "Remote sensing image-text retrieval",
+      "dataset": "RSITMD",
+      "metrics": [
+        "R@1",
+        "R@5",
+        "R@10",
+        "Mean Recall"
+      ],
+      "metrics_value": [
+        28.76,
+        52.43,
+        63.94,
+        50.52
+      ],
+      "sensor": [
+        "Satellite imagery"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 4743 of 4743 (100%)"
+    },
+    {
+      "task": "Cross-modal retrieval",
+      "application": "Remote sensing image-text retrieval",
+      "dataset": "RSICD",
+      "metrics": [
+        "R@1",
+        "R@5",
+        "R@10",
+        "Mean Recall"
+      ],
+      "metrics_value": [
+        18.39,
+        37.42,
+        51.05,
+        36.35
+      ],
+      "sensor": [
+        "Satellite imagery"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 10921 of 10921 (100%)"
+    },
+    {
+      "task": "Cross-modal retrieval",
+      "application": "Remote sensing image-text retrieval",
+      "dataset": "UCM",
+      "metrics": [
+        "R@1",
+        "R@5",
+        "R@10",
+        "Mean Recall"
+      ],
+      "metrics_value": [
+        19.05,
+        54.29,
+        80.95,
+        54.68
+      ],
+      "sensor": [
+        "Satellite imagery"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 2100 of 2100 (100%)"
+    },
+    {
+      "task": "Zero-shot classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "12 datasets (PatternNet, EuroSAT, OPTIMAL-31, RSC11, AID, MLRSNet, RSI-CB128, RSI-CB256, RESISC45, WHU-earth, WHU-RS19, RS2800)",
+      "metrics": [
+        "Average accuracy"
+      ],
+      "metrics_value": [
+        71.3
+      ],
+      "sensor": [
+        "Satellite imagery"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Object counting",
+      "application": "Zero-shot object counting",
+      "dataset": "RemoteCount",
+      "metrics": [
+        "Top-1 accuracy",
+        "Top-6 accuracy"
+      ],
+      "metrics_value": [
+        null,
+        null
+      ],
+      "sensor": [
+        "Satellite imagery"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 947 of 947 (100%)"
+    },
+    {
+      "task": "Few-shot classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "12 datasets (PatternNet, EuroSAT, OPTIMAL-31, RSC11, AID, MLRSNet, RSI-CB128, RSI-CB256, RESISC45, WHU-earth, WHU-RS19, RS2800)",
+      "metrics": [
+        "Accuracy (32-shot)"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Satellite imagery"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Linear probing",
+      "application": "Remote sensing scene classification",
+      "dataset": "12 datasets (PatternNet, EuroSAT, OPTIMAL-31, RSC11, AID, MLRSNet, RSI-CB128, RSI-CB256, RESISC45, WHU-earth, WHU-RS19, RS2800)",
+      "metrics": [
+        "Average accuracy"
+      ],
+      "metrics_value": [
+        93.93
+      ],
+      "sensor": [
+        "Satellite imagery"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "k-NN classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "12 datasets (PatternNet, EuroSAT, OPTIMAL-31, RSC11, AID, MLRSNet, RSI-CB128, RSI-CB256, RESISC45, WHU-earth, WHU-RS19, RS2800)",
+      "metrics": [
+        "Average accuracy"
+      ],
+      "metrics_value": [
+        93.77
+      ],
+      "sensor": [
+        "Satellite imagery"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    }
+  ]
+}

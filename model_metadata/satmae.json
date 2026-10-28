@@ -1,0 +1,288 @@
+{
+  "id": "satmae",
+  "mlm:name": "SatMAE",
+  "version": "v1",
+  "release_date": "2023-01-15T00:00:00Z",
+  "updated": "2023-01-15T00:00:00Z",
+  "description": "SatMAE is a self-supervised masked autoencoder framework for temporal and multi-spectral satellite imagery, leveraging temporal and spectral positional encodings and novel masking strategies to learn transferable representations for remote sensing tasks.",
+  "sci:doi": "10.48550/arXiv.2207.08051",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://sustainlab-group.github.io/SatMAE/",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-Large",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Masked Autoencoder (MAE) self-supervised learning",
+  "masking_strategy": "Independent masking and consistent masking across temporal and spectral dimensions; typically 75% masking ratio",
+  "pretraining": "Masked autoencoding with temporal and spectral positional encodings, grouping of spectral bands, and independent masking for both temporal and multi-spectral satellite imagery.",
+  "domain_knowledge": [
+    "Temporal encoding using year, month, hour",
+    "Spectral grouping based on wavelength and spatial resolution"
+  ],
+  "backbone_modifications": [
+    "Addition of temporal and spectral positional encodings",
+    "Multiple patch embeddings for spectral groups"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "NAIP"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "Temporal"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "10m, 20m, 60m (Sentinel-2); variable for other datasets",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2, NAIP",
+      "bands": [
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B8",
+        "B8A",
+        "B11",
+        "B12"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          10,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "time",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "fMoW RGB",
+  "regions_coverage": [
+    "global"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": "Resize shorter side to 224, maintain aspect ratio; Random crop 224x224; Normalize",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "16x16",
+    "epochs": 800,
+    "batch_size": 4096,
+    "learning_rate": "2.4e-3",
+    "augmentations": [
+      "Random crop",
+      "Resize",
+      "Normalization"
+    ],
+    "mask_ratio": 0.75,
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "fMoW RGB (temporal)",
+        "regions_coverage": [
+          "global"
+        ],
+        "processing:lineage": "Resize shorter side to 224, maintain aspect ratio; Random crop 224x224; Normalize",
+        "image_resolution": "224x224",
+        "patch_size": "16x16",
+        "epochs": 100,
+        "batch_size": 1024,
+        "learning_rate": "6e-4",
+        "augmentations": [
+          "Random crop",
+          "Resize",
+          "Normalization"
+        ],
+        "mask_ratio": 0.75
+      },
+      {
+        "mlm:pretrained_source": "fMoW Sentinel",
+        "regions_coverage": [
+          "global"
+        ],
+        "num_images": 712874,
+        "processing:lineage": "Resize to 96x96; Normalize",
+        "cloud_cover": "90-day composites to reduce cloud coverage",
+        "image_resolution": "96x96",
+        "patch_size": "8x8",
+        "epochs": 50,
+        "batch_size": 4096,
+        "learning_rate": "1e-4",
+        "augmentations": [
+          "Random crop (0.2-1.0x area)",
+          "Resize",
+          "Random horizontal flip",
+          "Normalization"
+        ],
+        "mask_ratio": 0.75
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Image classification",
+      "application": "Land use/land cover classification",
+      "dataset": "fMoW RGB",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        77.84
+      ],
+      "sensor": [
+        "Commercial high-res optical"
+      ],
+      "regions": [
+        "global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Image sequence classification",
+      "application": "Temporal land use/land cover classification",
+      "dataset": "fMoW RGB (temporal)",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        81.49
+      ],
+      "sensor": [
+        "Commercial high-res optical"
+      ],
+      "regions": [
+        "global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Image classification",
+      "application": "Land use/land cover classification",
+      "dataset": "fMoW Sentinel",
+      "metrics": [
+        "Top-1 Accuracy",
+        "Top-5 Accuracy"
+      ],
+      "metrics_value": [
+        61.48,
+        85.17
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "global"
+      ],
+      "image_resolution": "96x96",
+      "spatial_resolution": "10m, 20m",
+      "split_ratio": "samples used: 712874 of 712874 (100%)"
+    },
+    {
+      "task": "Image classification",
+      "application": "Land cover classification",
+      "dataset": "NAIP",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        71.77
+      ],
+      "sensor": [
+        "NAIP"
+      ],
+      "regions": [
+        "USA"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 244471 of 244471 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Building segmentation",
+      "dataset": "SpaceNet v1",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        78.07
+      ],
+      "sensor": [
+        "Commercial high-res optical"
+      ],
+      "regions": [
+        "global"
+      ],
+      "image_resolution": "400x400",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 6940 of 6940 (100%)"
+    },
+    {
+      "task": "Image classification",
+      "application": "Land cover classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        98.98
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 27000 of 27000 (100%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land cover multi-label classification",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        82.13
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 35419 of 354196 (10%)"
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "id": "csmae",
+  "mlm:name": "Cross-Sensor Masked Autoencoder",
+  "version": "v1",
+  "release_date": null,
+  "updated": null,
+  "description": "Cross-Sensor Masked Autoencoders (CSMAEs) are adaptations of vanilla Masked Autoencoders (MAEs) for sensor-agnostic and cross-modal content-based image retrieval (CBIR) in remote sensing. CSMAEs introduce architectural and training modifications to enable learning from multi-sensor (e.g., SAR and multispectral) image pairs, supporting both uni-modal and cross-modal retrieval.",
+  "sci:doi": "10.48550/arXiv.2401.07782",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/jakhac/CSMAE",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "Vision Transformer (ViT)",
+  "mlm:total_parameters": 114150000,
+  "pretext_training_type": "Masked image modeling (MIM) with uni-modal and cross-modal reconstruction and latent similarity preservation",
+  "masking_strategy": "Random, identical, or disjoint multi-modal masking correspondence with 50% masking ratio",
+  "pretraining": "Self-supervised masked image modeling on multi-sensor (SAR and multispectral) image pairs with both uni-modal and cross-modal reconstruction objectives and latent similarity preservation loss",
+  "domain_knowledge": [
+    "Multi-modal remote sensing",
+    "Sensor-agnostic representation learning",
+    "Content-based image retrieval"
+  ],
+  "backbone_modifications": [
+    "Sensor-specific or sensor-common encoders/decoders",
+    "Cross-sensor encoder",
+    "Multi-modal patch embedding"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "SAR",
+    "Multispectral"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": "10m and 20m (Sentinel-2 bands, 20m bands upsampled to 10m)",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Sentinel-1, Sentinel-2",
+      "bands": [
+        "VV",
+        "VH",
+        "B2",
+        "B3",
+        "B4",
+        "B8",
+        "B5",
+        "B6",
+        "B7",
+        "B8A",
+        "B11",
+        "B12"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "BigEarthNet",
+  "regions_coverage": [
+    "10 European countries",
+    "Serbia"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 270470,
+  "sampling": "Random selection of image pairs; Time range: summer and autumn (BEN-270K), summer (BEN-14K)",
+  "processing:level": null,
+  "processing:lineage": "Bicubic interpolation for 20m bands",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "15x15",
+    "epochs": 150,
+    "batch_size": 128,
+    "learning_rate": "1e-4 (AdamW, linear warmup, cosine annealing)",
+    "augmentations": null,
+    "mask_ratio": 0.5,
+    "num_layers": 12,
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "BigEarthNet",
+        "regions_coverage": [
+          "Serbia"
+        ],
+        "time_range": "summer",
+        "num_images": 14832,
+        "sampling": "Random selection of image pairs",
+        "processing:lineage": "Bicubic interpolation for 20m bands",
+        "patch_size": "15x15",
+        "epochs": 150,
+        "batch_size": 128,
+        "learning_rate": "1e-4 (AdamW, linear warmup, cosine annealing)",
+        "mask_ratio": 0.5
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Content-based image retrieval (CBIR)",
+      "application": "Sensor-agnostic and cross-modal image retrieval",
+      "dataset": "BigEarthNet (BEN-270K, BEN-14K)",
+      "metrics": [
+        "F1 score (result 1 of 4)",
+        "F1 score (result 2 of 4)",
+        "F1 score (result 3 of 4)",
+        "F1 score (result 4 of 4)"
+      ],
+      "metrics_value": [
+        71.22,
+        72.98,
+        71.61,
+        72.18
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "10 European countries",
+        "Serbia"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "10m and 20m (20m bands upsampled to 10m)",
+      "split_ratio": "52% train, 24% val, 24% test; samples used: 270470 of 590326 (45.83%)"
+    },
+    {
+      "task": "Content-based image retrieval (CBIR)",
+      "application": "Sensor-agnostic and cross-modal image retrieval",
+      "dataset": "BigEarthNet (BEN-14K)",
+      "metrics": [
+        "F1 score (result 1 of 4)",
+        "F1 score (result 2 of 4)",
+        "F1 score (result 3 of 4)",
+        "F1 score (result 4 of 4)"
+      ],
+      "metrics_value": [
+        70.18,
+        72.3,
+        70.75,
+        71.39
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Serbia"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "10m and 20m (20m bands upsampled to 10m)",
+      "split_ratio": "52% train, 24% val, 24% test; samples used: 14832 of 590326 (2.51%)"
+    }
+  ]
+}

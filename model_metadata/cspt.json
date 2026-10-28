@@ -1,0 +1,244 @@
+{
+  "id": "cspt",
+  "mlm:name": "CSPT",
+  "version": "1.0",
+  "release_date": "2022-11-10T00:00:00Z",
+  "updated": "2022-11-10T00:00:00Z",
+  "description": "CSPT (Consecutive Pre-Training) is a self-supervised knowledge transfer learning strategy for remote sensing, leveraging vision transformers and masked image modeling to bridge domain gaps and utilize unlabeled data for downstream tasks such as scene classification, object detection, and land cover classification.",
+  "sci:doi": "10.3390/rs14225675",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/ZhAnGToNG1/transfer_learning_cspt",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://github.com/ZhAnGToNG1/transfer_learning_cspt",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-B/L",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Self-supervised masked image modeling (MIM)",
+  "masking_strategy": "Randomly mask 75% of image patches (tokens) and reconstruct them",
+  "pretraining": "Consecutive self-supervised pre-training: first on large-scale unlabeled ImageNet (IN1K), then further pre-training on task-related unlabeled remote sensing data",
+  "domain_knowledge": null,
+  "backbone_modifications": [
+    "Encoder-decoder structure with ViT encoder and lightweight transformer decoder"
+  ],
+  "supported_sensors": [
+    "Optical RGB",
+    "SAR"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Optical RGB, SAR",
+      "bands": [
+        "RGB",
+        "SAR"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          2,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "ImageNet (IN1K)",
+  "regions_coverage": [
+    "Global"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1331167,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "16x16 patches",
+    "epochs": 800,
+    "batch_size": 64,
+    "learning_rate": "3.75e-5 (cosine decay)",
+    "augmentations": [
+      "random scale [0.2, 1.0]",
+      "random crop",
+      "random horizontal flip"
+    ],
+    "mask_ratio": 0.75,
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "Task-related unlabeled remote sensing data (e.g., AID, NR45, M-AID, DOTA, DIOR, etc.)",
+        "regions_coverage": [
+          "various, depending on dataset"
+        ],
+        "image_resolution": "224x224",
+        "patch_size": "16x16 patches",
+        "epochs": 800,
+        "batch_size": 64,
+        "learning_rate": "3.75e-5 (cosine decay)",
+        "augmentations": [
+          "random scale [0.2, 1.0]",
+          "random crop",
+          "random horizontal flip"
+        ],
+        "mask_ratio": 0.75
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Aerial scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        96.75
+      ],
+      "sensor": [
+        "Optical RGB"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "0.5 to 8 m",
+      "split_ratio": "2:8 (train:test); samples used: 10000 of 10000 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Aerial scene classification",
+      "dataset": "NWPU-RESISC45 (NR45)",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        95.62
+      ],
+      "sensor": [
+        "Optical RGB"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "0.2 to 30 m",
+      "split_ratio": "2:8 (train:test); samples used: 31500 of 31500 (100%)"
+    },
+    {
+      "task": "Land cover classification",
+      "application": "Semantic segmentation",
+      "dataset": "ISPRS POTSDAM",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        78.7
+      ],
+      "sensor": [
+        "Optical RGB"
+      ],
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.05 m",
+      "split_ratio": "samples used: 5472 of 5472 (100%)"
+    },
+    {
+      "task": "Object detection",
+      "application": "Object detection in aerial images",
+      "dataset": "DIOR",
+      "metrics": [
+        "mAP@0.5"
+      ],
+      "metrics_value": [
+        71.7
+      ],
+      "sensor": [
+        "Optical RGB"
+      ],
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.5 to 30 m",
+      "split_ratio": "samples used: 23463 of 23463 (100%)"
+    },
+    {
+      "task": "Target classification",
+      "application": "SAR target classification",
+      "dataset": "MSTAR",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        99.97
+      ],
+      "sensor": [
+        "SAR"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": "0.3 m",
+      "split_ratio": "samples used: 9466 of 9466 (100%)"
+    },
+    {
+      "task": "Ship detection",
+      "application": "SAR ship detection",
+      "dataset": "SSDD",
+      "metrics": [
+        "mAP@0.5"
+      ],
+      "metrics_value": [
+        91.8
+      ],
+      "sensor": [
+        "SAR"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": "1 to 15 m",
+      "split_ratio": "samples used: 1160 of 1160 (100%)"
+    },
+    {
+      "task": "Ship detection",
+      "application": "SAR ship detection",
+      "dataset": "HRSID",
+      "metrics": [
+        "mAP@0.5"
+      ],
+      "metrics_value": [
+        70.2
+      ],
+      "sensor": [
+        "SAR"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": "0.5 to 3 m",
+      "split_ratio": "samples used: 5604 of 5604 (100%)"
+    }
+  ]
+}
