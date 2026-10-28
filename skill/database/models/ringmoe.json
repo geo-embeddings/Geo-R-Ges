@@ -1,0 +1,494 @@
+{
+  "id": "ringmoe",
+  "mlm:name": "RingMoE",
+  "version": "1.0",
+  "release_date": null,
+  "updated": null,
+  "description": "RingMoE is a 14.7-billion-parameter multi-modal remote sensing foundation model, pre-trained on 400 million images from nine satellites across four modalities (Optical, Multi-spectral, SAR-L1, SAR-L2). It uses a hierarchical Mixture-of-Experts (MoE) architecture with modal-specialized, collaborative, and shared experts, incorporates physics-informed self-supervised learning, and supports dynamic expert pruning for efficient deployment. RingMoE achieves SOTA results on 23 out of 25 public benchmarks across six key remote sensing tasks.",
+  "sci:doi": "10.48550/arXiv.2504.03166",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "Swin Transformer v2",
+  "mlm:total_parameters": 14700000000,
+  "pretext_training_type": "Masked image modeling (MIM) with physics-informed self-supervised learning",
+  "masking_strategy": "Random masking of image patches; physics-informed masking for SAR-L1",
+  "pretraining": "Self-supervised masked image reconstruction with modal-specific decoders and hierarchical Mixture-of-Experts encoder",
+  "domain_knowledge": [
+    "Physics-informed loss for SAR-L1 (power conservation)",
+    "Sensor-specific radiometric characteristics"
+  ],
+  "backbone_modifications": [
+    "Replace FFN with hierarchical Mixture-of-Experts (RMoE) layer",
+    "Modal-specialized, collaborative, and shared experts"
+  ],
+  "supported_sensors": [
+    "JL-1",
+    "GF-2",
+    "GeoEye",
+    "WorldView",
+    "QuickBird",
+    "IKONOS",
+    "SPOT",
+    "GF-1",
+    "GF-3"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Optical",
+    "Multi-spectral",
+    "SAR-L1 (complex-valued)",
+    "SAR-L2 (amplitude)"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": "0.3m~30m (Optical), 3.2m/8m (MS), 1m (SAR)",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "JL-1, GF-2, GeoEye, WorldView, QuickBird, IKONOS, SPOT, GF-1, GF-3",
+      "bands": [
+        "Blue",
+        "Green",
+        "Red",
+        "Near-infrared",
+        "SAR HH",
+        "SAR HV",
+        "SAR VH",
+        "SAR VV"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          192,
+          192
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "RingMOSS",
+  "regions_coverage": [
+    "Global (six continents, 57 countries, e.g., United States, China, Japan)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 400000000,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": "Sliding window tiling (step size 64); Discard tiles with >30% black border; Cloud cover removal",
+  "cloud_cover": "Tiles with cloud cover automatically detected and removed",
+  "missing_data": "Tiles with >30% black border discarded",
+  "mlm:hyperparameters": {
+    "patch_size": "192x192 pixel tiles",
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": [
+      "Random crop (0.2x-1.0x)",
+      "Resize to 192x192",
+      "Horizontal flip",
+      "Normalization"
+    ],
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Land cover/scene category identification",
+      "dataset": "NWPU-RESISC45",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        95.9
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "256x256 (cropped to 224x224)",
+      "spatial_resolution": "0.2m~30m",
+      "split_ratio": "10% train / 90% test; samples used: 31500 of 31500 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Land cover/scene category identification",
+      "dataset": "AID",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        98.19
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "600x600 (cropped to 512x512)",
+      "spatial_resolution": "0.5m~8m",
+      "split_ratio": "20% train / 80% test; samples used: 10000 of 10000 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Object/land cover segmentation",
+      "dataset": "iSAID",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        69.7
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "800x800~4000x13000 (cropped to 896x896)",
+      "spatial_resolution": null,
+      "split_ratio": "1411 train / 458 val / 937 test; samples used: 2806 of 2806 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Object/land cover segmentation",
+      "dataset": "Potsdam",
+      "metrics": [
+        "mF1"
+      ],
+      "metrics_value": [
+        93.54
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "6000x6000 (cropped to 512x512)",
+      "spatial_resolution": "0.05m",
+      "split_ratio": "24 train / 14 test; samples used: 38 of 38 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "Dyna.-pla",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        47.6
+      ],
+      "sensor": [
+        "Multi-spectral"
+      ],
+      "regions": null,
+      "image_resolution": "1024x1024",
+      "spatial_resolution": "3m",
+      "split_ratio": "55 train / 10 val / 10 test (locations)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "SAR segmentation",
+      "dataset": "SARSegL1",
+      "metrics": [
+        "mIoU",
+        "OA"
+      ],
+      "metrics_value": [
+        51.24,
+        86.97
+      ],
+      "sensor": [
+        "SAR (complex-valued)"
+      ],
+      "regions": [
+        "Guangzhou",
+        "Hangzhou"
+      ],
+      "image_resolution": "500x500",
+      "spatial_resolution": "5m",
+      "split_ratio": "8:2 train/test; samples used: 540 of 540 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "SAR segmentation",
+      "dataset": "AIR-POLSAR-SEG",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        70.59
+      ],
+      "sensor": [
+        "SAR (amplitude)"
+      ],
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "8m",
+      "split_ratio": "7:3 train/test; samples used: 500 of 500 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Multi-modal segmentation",
+      "dataset": "WHU-OPT-SAR",
+      "metrics": [
+        "mIoU",
+        "OA"
+      ],
+      "metrics_value": [
+        54.7,
+        84.1
+      ],
+      "sensor": [
+        "Optical",
+        "SAR (amplitude)"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "5m",
+      "split_ratio": "8:2 train/test"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Multi-modal segmentation",
+      "dataset": "DFC23",
+      "metrics": [
+        "mIoU",
+        "OA"
+      ],
+      "metrics_value": [
+        73.4,
+        95.8
+      ],
+      "sensor": [
+        "Optical",
+        "SAR (amplitude)"
+      ],
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.5m, 0.8m, 1m",
+      "split_ratio": "7:2:1 train/val/test"
+    },
+    {
+      "task": "Object detection",
+      "application": "Object detection (horizontal)",
+      "dataset": "DIOR",
+      "metrics": [
+        "mAP50"
+      ],
+      "metrics_value": [
+        82.45
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "800x800",
+      "spatial_resolution": null,
+      "split_ratio": "5862 train / 5863 val / 11738 test; samples used: 23463 of 23463 (100%)"
+    },
+    {
+      "task": "Object detection",
+      "application": "Object detection (oriented)",
+      "dataset": "DIOR-R",
+      "metrics": [
+        "mAP50"
+      ],
+      "metrics_value": [
+        76.04
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "800x800",
+      "spatial_resolution": null,
+      "split_ratio": "5862 train / 5863 val / 11738 test; samples used: 23463 of 23463 (100%)"
+    },
+    {
+      "task": "Object detection",
+      "application": "Ship detection",
+      "dataset": "HRSC2016",
+      "metrics": [
+        "mAP50"
+      ],
+      "metrics_value": [
+        97.8
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection",
+      "application": "Ship detection",
+      "dataset": "HRSID",
+      "metrics": [
+        "mAP50"
+      ],
+      "metrics_value": [
+        94.2
+      ],
+      "sensor": [
+        "SAR (amplitude)"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection",
+      "application": "Plane detection",
+      "dataset": "SAR-AIRCraft-1.0",
+      "metrics": [
+        "mAP50"
+      ],
+      "metrics_value": [
+        88.7
+      ],
+      "sensor": [
+        "SAR (amplitude)"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object tracking",
+      "application": "Object tracking",
+      "dataset": "AIR-MOT",
+      "metrics": [
+        "MOTA",
+        "IDF1"
+      ],
+      "metrics_value": [
+        92.59,
+        86.19
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object tracking",
+      "application": "Object tracking",
+      "dataset": "AIR-HSAO",
+      "metrics": [
+        "MOTA",
+        "IDF1"
+      ],
+      "metrics_value": [
+        97.89,
+        95.87
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Change detection",
+      "dataset": "LEVIR-CD",
+      "metrics": [
+        "IoU",
+        "F1"
+      ],
+      "metrics_value": [
+        0.915,
+        0.946
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Change detection",
+      "dataset": "CDD",
+      "metrics": [
+        "IoU",
+        "F1"
+      ],
+      "metrics_value": [
+        0.756,
+        0.941
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Depth estimation",
+      "application": "Depth estimation",
+      "dataset": "ISPRS Vaihingen",
+      "metrics": [
+        "Rel",
+        "?1",
+        "?2",
+        "?3"
+      ],
+      "metrics_value": [
+        0.046,
+        0.97,
+        0.998,
+        0.999
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "2000x2400",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Depth estimation",
+      "application": "Depth estimation",
+      "dataset": "ISPRS Potsdam",
+      "metrics": [
+        "Rel",
+        "?1",
+        "?2",
+        "?3"
+      ],
+      "metrics_value": [
+        0.063,
+        0.979,
+        0.997,
+        0.999
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

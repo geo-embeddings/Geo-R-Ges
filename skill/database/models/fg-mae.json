@@ -1,0 +1,219 @@
+{
+  "id": "fg-mae",
+  "mlm:name": "FG-MAE",
+  "version": "1.0",
+  "release_date": "2023-10-28T00:00:00Z",
+  "updated": "2023-10-28T00:00:00Z",
+  "description": "Feature Guided Masked Autoencoder (FG-MAE) is a self-supervised learning model for remote sensing, improving MAE by reconstructing image features (HOG, NDI) instead of raw pixels, with strong performance on multispectral and SAR imagery.",
+  "sci:doi": "10.48550/arXiv.2310.18653",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/zhu-xlab/FGMAE",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "Vision Transformer (ViT)",
+  "mlm:total_parameters": 700000000,
+  "pretext_training_type": "Masked image modeling (MIM) with feature reconstruction",
+  "masking_strategy": "Random patch masking (70%)",
+  "pretraining": "Self-supervised pretraining on SSL4EO-S12 using feature reconstruction (HOG+NDI for multispectral, HOG for SAR)",
+  "domain_knowledge": [
+    "Histograms of Oriented Gradients (HOG)",
+    "Normalized Difference Indices (NDI)",
+    "CannyEdge",
+    "SIFT"
+  ],
+  "backbone_modifications": null,
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "seasonal (4 images per location, one per season)",
+  "mlm:input": [
+    {
+      "name": "Sentinel-1, Sentinel-2",
+      "bands": [
+        "VV",
+        "VH",
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B8",
+        "B8A",
+        "B9",
+        "B10",
+        "B11",
+        "B12"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "SSL4EO-S12",
+  "regions_coverage": [
+    "global (250K locations around the world)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": "One image from a random season per location; Time range: 4 seasons per location",
+  "processing:level": "Sentinel-2 L1C, Sentinel-1 GRD",
+  "processing:lineage": "Patchify; Normalization",
+  "cloud_cover": "No cloud filtering for SAR; not specified for MS",
+  "missing_data": "Not specified",
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 100,
+    "batch_size": 256,
+    "learning_rate": "1.5e-4 (AdamW, weight decay 0.05, warmup 10 epochs, cosine decay)",
+    "augmentations": [
+      "RandomResizedCrop (224x224)",
+      "RandomHorizontalFlip"
+    ],
+    "mask_ratio": 0.7,
+    "image_resolution": "264x264 (cropped to 224x224 for training)"
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Multi-label land cover classification",
+      "dataset": "BigEarthNet-MM",
+      "metrics": [
+        "mAP",
+        "F1"
+      ],
+      "metrics_value": [
+        78.5,
+        68.7
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "official train/val/test"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Single-label land cover classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "OA",
+        "AA"
+      ],
+      "metrics_value": [
+        94.8,
+        94.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "random 80/20 train/test"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "DFC2020",
+      "metrics": [
+        "OA",
+        "mIoU",
+        "AA"
+      ],
+      "metrics_value": [
+        69.6,
+        51.4,
+        66.46
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "official train/val/test; samples used: 5128 of 6114"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Multi-label land cover classification",
+      "dataset": "BigEarthNet-MM (SAR)",
+      "metrics": [
+        "mAP",
+        "F1"
+      ],
+      "metrics_value": [
+        72.3,
+        62.2
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "official train/val/test"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Single-label land cover classification",
+      "dataset": "EuroSAT-SAR",
+      "metrics": [
+        "OA",
+        "AA"
+      ],
+      "metrics_value": [
+        80.7,
+        79.9
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": null,
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "random 80/20 train/test"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "DFC2020 (SAR)",
+      "metrics": [
+        "OA",
+        "mIoU",
+        "AA"
+      ],
+      "metrics_value": [
+        62.3,
+        39.3,
+        57.0
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "official train/val/test; samples used: 5128 of 6114"
+    }
+  ],
+  "provenance": null
+}

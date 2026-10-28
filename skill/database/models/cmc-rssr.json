@@ -1,0 +1,181 @@
+{
+  "id": "cmc-rssr",
+  "mlm:name": "CMC-RSSR",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "Self-supervised learning of remote sensing scene representations using Contrastive Multiview Coding (CMC), evaluated on both RGB and multispectral images for remote sensing scene classification.",
+  "sci:doi": null,
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/vladan-stojnic/CMC-RSSR",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ResNet50",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Contrastive Multiview Coding (CMC)",
+  "masking_strategy": null,
+  "pretraining": "Self-supervised contrastive learning using CMC. Images are split into two views (e.g., L*a*b* channels for RGB, or spectral splits/PCA for multispectral), encoded separately, and representations are contrasted to maximize agreement between views of the same image.",
+  "domain_knowledge": null,
+  "backbone_modifications": null,
+  "supported_sensors": [
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (0.08-60m)",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "8A",
+        "11",
+        "12"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "ImageNet",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1281167,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 400,
+    "batch_size": 100,
+    "learning_rate": "0.03 (SGD, reduced by 10x at 250th, 300th, 350th epoch)",
+    "augmentations": [
+      "random resized cropping",
+      "horizontal flipping"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "up to 4488x7056",
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "NWPU-DOTA (combination of NWPU-RESISC45, DOTA, NWPU VHR-10)",
+        "num_images": 196215,
+        "processing:lineage": "manual cropping of DOTA images; patch extraction",
+        "image_resolution": "256x256",
+        "epochs": 400,
+        "batch_size": 100,
+        "learning_rate": "0.03 (SGD, reduced by 10x at 250th, 300th, 350th epoch)",
+        "augmentations": [
+          "random resized cropping",
+          "horizontal flipping"
+        ]
+      },
+      {
+        "mlm:pretrained_source": "BigEarthNet (Sentinel-2)",
+        "num_images": 269695,
+        "image_resolution": "up to 120x120",
+        "epochs": 400,
+        "batch_size": 100,
+        "learning_rate": "0.03 (SGD, reduced by 10x at 250th, 300th, 350th epoch)",
+        "augmentations": [
+          "random resized cropping",
+          "horizontal flipping"
+        ]
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "classification",
+      "application": "scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "accuracy"
+      ],
+      "metrics_value": [
+        95.58
+      ],
+      "sensor": [
+        "aerial imagery"
+      ],
+      "regions": null,
+      "image_resolution": "600x600",
+      "spatial_resolution": "0.5-8m",
+      "split_ratio": "50% train / 50% test; samples used: 10000 of 10000 (100%)"
+    },
+    {
+      "task": "classification",
+      "application": "scene classification",
+      "dataset": "MLRSNet",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        96.43
+      ],
+      "sensor": [
+        "aerial imagery"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.1-10m",
+      "split_ratio": "20% train / 80% test; samples used: 109161 of 109161 (100%)"
+    },
+    {
+      "task": "classification",
+      "application": "multi-label land use classification",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        82.9
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "up to 120x120",
+      "spatial_resolution": "10-60m",
+      "split_ratio": "269695 train / 123723 val / 125866 test; samples used: 519284 of 519284 (100%)"
+    },
+    {
+      "task": "classification",
+      "application": "local climate zones classification",
+      "dataset": "So2Sat",
+      "metrics": [
+        "accuracy"
+      ],
+      "metrics_value": [
+        60.84
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "32x32",
+      "spatial_resolution": "10m",
+      "split_ratio": "352366 train / 24119 val; samples used: 376485 of 376485 (100%)"
+    }
+  ],
+  "provenance": null
+}

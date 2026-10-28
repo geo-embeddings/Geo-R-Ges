@@ -1,0 +1,200 @@
+{
+  "id": "charting-new-territories",
+  "mlm:name": "GPT-4V",
+  "version": null,
+  "release_date": "2023-10-01T00:00:00Z",
+  "updated": "2024-01-16T00:00:00Z",
+  "description": "GPT-4V is a multimodal large language model capable of processing both text and images, evaluated for its geographic and geospatial reasoning abilities, including remote sensing, map interpretation, and visual localisation tasks.",
+  "sci:doi": "10.48550/arXiv.2311.14656",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "Transformer",
+  "mlm:total_parameters": null,
+  "pretext_training_type": null,
+  "masking_strategy": null,
+  "pretraining": null,
+  "domain_knowledge": null,
+  "backbone_modifications": null,
+  "supported_sensors": null,
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "Natural Images",
+    "Maps",
+    "Text"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": null,
+  "temporal_resolution": null,
+  "mlm:input": null,
+  "mlm:pretrained_source": null,
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": null,
+  "benchmarks": [
+    {
+      "task": "Image Classification",
+      "application": "Remote Sensing",
+      "dataset": "SATIN metadataset (subset)",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        0.52
+      ],
+      "sensor": [
+        "Satellite (various, not specified)"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 144"
+    },
+    {
+      "task": "Change Detection (Season Classification)",
+      "application": "Remote Sensing Time Series",
+      "dataset": "SSL4EO-S12 (quadlets from [33])",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        0.38
+      ],
+      "sensor": [
+        "Satellite (not specified)"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 24"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Land Cover Segmentation",
+      "dataset": "LoveDA",
+      "metrics": [
+        "Qualitative"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Satellite (not specified)"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Localisation (Country Prediction from Street View)",
+      "application": "Geographic Localisation",
+      "dataset": "GeoLocation dataset (GeoGuessr images)",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Street View"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 100 of 100 (100%)"
+    },
+    {
+      "task": "Map Localisation (Map to Real-world Coordinates)",
+      "application": "Cartographic Localisation",
+      "dataset": "Custom (Cartopy-generated continent maps)",
+      "metrics": [
+        "Mean Distance Error (km)"
+      ],
+      "metrics_value": [
+        1351
+      ],
+      "sensor": [
+        "Maps"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 10 of 10 (100%)"
+    },
+    {
+      "task": "Flag Identification",
+      "application": "Visual Recognition",
+      "dataset": "Sporcle flag grids",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Natural Images"
+      ],
+      "regions": [
+        "Africa",
+        "Asia",
+        "North America",
+        "South America"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Region Identification (State/City/Island from Map)",
+      "application": "Geographic Pattern Recognition",
+      "dataset": "Custom (GeoPandas, Maputnik, OpenStreetMap, GeoNames)",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Maps"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "1000x1000",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 16 of 16 (100%)"
+    },
+    {
+      "task": "Counting (Object Counting in Aerial Images)",
+      "application": "Object Counting",
+      "dataset": "NOAA Fisheries Steller Sea Lion Population Count",
+      "metrics": [
+        "Count Accuracy"
+      ],
+      "metrics_value": [
+        36
+      ],
+      "sensor": [
+        "Aerial"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 1 of 1 (100%)"
+    }
+  ],
+  "provenance": null
+}

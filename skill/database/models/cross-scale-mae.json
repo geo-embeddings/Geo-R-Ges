@@ -1,0 +1,215 @@
+{
+  "id": "cross-scale-mae",
+  "mlm:name": "Cross-Scale MAE",
+  "version": "1.0",
+  "release_date": "2023-12-01T00:00:00Z",
+  "updated": "2023-12-01T00:00:00Z",
+  "description": "Cross-Scale MAE is a self-supervised masked autoencoder model for remote sensing, designed to learn robust multi-scale representations by enforcing cross-scale consistency at both structural and semantic levels using contrastive and generative losses. It leverages scale augmentation and xFormers for efficient training.",
+  "sci:doi": "10.48550/arXiv.2310.20513",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "ViT-Base (12-layer encoder) or ViT-Large",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Self-supervised masked autoencoding with cross-scale contrastive and generative losses",
+  "masking_strategy": "Random masking of image patches after scale augmentation",
+  "pretraining": "Masked autoencoding with scale augmentation, cross-scale contrastive loss (InfoNCE) in encoder, cross-scale prediction loss (MSE) and reconstruction loss in decoder",
+  "domain_knowledge": [
+    "Scale augmentation",
+    "Cross-scale consistency",
+    "Contrastive learning",
+    "Generative learning"
+  ],
+  "backbone_modifications": [
+    "Integration of scale augmentation",
+    "Cross-scale contrastive loss",
+    "Cross-scale prediction loss"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "Landsat-8",
+    "WorldView-3",
+    "General satellite RGB"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2, Landsat-8, WorldView-3, General satellite RGB",
+      "bands": [
+        "R",
+        "G",
+        "B"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "fMoW-RGB",
+  "regions_coverage": [
+    "Global (various regions, as fMoW is worldwide)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 363600,
+  "sampling": "Random scale ratios selected from [0.2, 0.8]",
+  "processing:level": null,
+  "processing:lineage": "Patchification; Random masking",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 300,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": [
+      "Scale augmentation (random cropping and resizing to generate two scales per image)"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "variable, resized to 128x128 for pretraining",
+    "num_layers": 12
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "RESISC45",
+      "metrics": [
+        "KNN accuracy"
+      ],
+      "metrics_value": [
+        75.6
+      ],
+      "sensor": [
+        "Generic (multi-source)"
+      ],
+      "regions": null,
+      "image_resolution": "variable (0.2-30m GSD)",
+      "spatial_resolution": "0.2-30m",
+      "split_ratio": "samples used: 31500 of 31500 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "WHU-RS19",
+      "metrics": [
+        "KNN accuracy"
+      ],
+      "metrics_value": [
+        79.8
+      ],
+      "sensor": [
+        "Generic (multi-source)"
+      ],
+      "regions": null,
+      "image_resolution": "0.5m GSD",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "samples used: 1050 of 1050 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "UC Merced",
+      "metrics": [
+        "KNN accuracy"
+      ],
+      "metrics_value": [
+        74.5
+      ],
+      "sensor": [
+        "Generic (multi-source)"
+      ],
+      "regions": null,
+      "image_resolution": "0.3m GSD",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "samples used: 2100 of 2100 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "KNN accuracy"
+      ],
+      "metrics_value": [
+        87.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "10m GSD",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 27000 of 27000 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "fMoW-RGB",
+      "metrics": [
+        "Top-1 accuracy",
+        "Top-5 accuracy"
+      ],
+      "metrics_value": [
+        0.632,
+        0.914
+      ],
+      "sensor": [
+        "Generic (multi-source)"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Remote sensing semantic segmentation",
+      "dataset": "Potsdam",
+      "metrics": [
+        "mIoU (result 1 of 3)",
+        "mIoU (result 2 of 3)",
+        "mIoU (result 3 of 3)"
+      ],
+      "metrics_value": [
+        0.7082,
+        0.7225,
+        0.7617
+      ],
+      "sensor": [
+        "Generic (multi-source)"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Remote sensing semantic segmentation",
+      "dataset": "Vaihingen",
+      "metrics": [
+        "mIoU (result 1 of 3)",
+        "mIoU (result 2 of 3)",
+        "mIoU (result 3 of 3)"
+      ],
+      "metrics_value": [
+        0.7163,
+        0.7354,
+        0.7603
+      ],
+      "sensor": [
+        "Generic (multi-source)"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

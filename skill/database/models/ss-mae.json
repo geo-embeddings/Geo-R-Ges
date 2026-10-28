@@ -1,0 +1,164 @@
+{
+  "id": "ss-mae",
+  "mlm:name": "SS-MAE",
+  "version": "1.0",
+  "release_date": "2023-11-09T00:00:00Z",
+  "updated": "2023-11-29T00:00:00Z",
+  "description": "SS-MAE is a Spatial?Spectral Masked Autoencoder for multisource remote sensing image classification, supporting joint HSI and LiDAR/SAR data. It uses spatialwise and spectralwise masking branches and a hybrid Transformer-CNN architecture for global and local feature modeling.",
+  "sci:doi": "10.1109/TGRS.2023.3331717",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/summitgao/SS-MAE",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "Dual-attention Transformer with lightweight CNNs (IRBs)",
+  "mlm:total_parameters": 4400000,
+  "pretext_training_type": "Masked image modeling (MIM) with spatialwise and spectralwise masking",
+  "masking_strategy": "Spatialwise masking (random patches) and spectralwise masking (random spectral channels)",
+  "pretraining": "Self-supervised pretraining using spatial?spectral masked autoencoding on large-scale unlabeled multisource remote sensing data",
+  "domain_knowledge": [
+    "Spatial?spectral feature modeling",
+    "Multisource data fusion",
+    "Dual-branch architecture"
+  ],
+  "backbone_modifications": [
+    "Dual-attention (spatial and spectral) Transformer",
+    "Integration of lightweight CNNs (IRBs) for local feature extraction"
+  ],
+  "supported_sensors": [
+    "EnMAP (simulated)",
+    "HyMap",
+    "HySpex",
+    "Sentinel-1",
+    "LiDAR"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Hyperspectral",
+    "SAR",
+    "LiDAR"
+  ],
+  "spectral_alignment": "full",
+  "temporal_alignment": "none",
+  "spatial_resolution": "30m",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "EnMAP (simulated), HyMap, HySpex, Sentinel-1, LiDAR",
+      "bands": [
+        "All available HSI bands per dataset",
+        "SAR polarization features",
+        "LiDAR bands"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Berlin, Augsburg, Houston 2018 (unlabeled pixels)",
+  "regions_coverage": [
+    "Berlin, Germany",
+    "Augsburg, Germany",
+    "Houston, USA"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": "Random sampling of pixels for pretraining (e.g., 200000 for Berlin, 50000 for Augsburg/Houston)",
+  "processing:level": null,
+  "processing:lineage": "PCA for HSI bands reduction",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "7x7 patches, 256-D tokens",
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "Varies (e.g., Berlin: 797x220, Augsburg: 332x485, Houston: not specified)",
+    "num_layers": 2
+  },
+  "benchmarks": [
+    {
+      "task": "Classification",
+      "application": "Land cover classification",
+      "dataset": "Berlin",
+      "metrics": [
+        "OA",
+        "AA",
+        "Kappa"
+      ],
+      "metrics_value": [
+        71.15,
+        null,
+        null
+      ],
+      "sensor": [
+        "EnMAP (simulated)",
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Berlin, Germany"
+      ],
+      "image_resolution": "797x220",
+      "spatial_resolution": "Matched (not specified, but both images matched)",
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Land cover classification",
+      "dataset": "Augsburg",
+      "metrics": [
+        "OA",
+        "AA",
+        "Kappa"
+      ],
+      "metrics_value": [
+        91.59,
+        null,
+        null
+      ],
+      "sensor": [
+        "HySpex",
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Augsburg, Germany"
+      ],
+      "image_resolution": "332x485",
+      "spatial_resolution": "30m",
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Land cover classification",
+      "dataset": "Houston 2018",
+      "metrics": [
+        "OA",
+        "AA",
+        "Kappa"
+      ],
+      "metrics_value": [
+        91.91,
+        null,
+        null
+      ],
+      "sensor": [
+        "HSI",
+        "LiDAR"
+      ],
+      "regions": [
+        "Houston, USA"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

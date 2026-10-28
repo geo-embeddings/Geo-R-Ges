@@ -1,0 +1,227 @@
+{
+  "id": "satmaeplusplus",
+  "mlm:name": "SatMAE++",
+  "version": "1.0",
+  "release_date": "2024-03-08T00:00:00Z",
+  "updated": "2024-03-08T00:00:00Z",
+  "description": "SatMAE++ is a multi-scale masked autoencoder framework for pre-training transformers on multi-spectral and optical satellite imagery, leveraging convolution-based upsampling blocks for multi-scale reconstruction. It achieves state-of-the-art results on several remote sensing benchmarks.",
+  "sci:doi": "10.48550/arXiv.2403.05419",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/techmn/satmae_pp",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-Large",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Masked Autoencoder (MAE) with multi-scale reconstruction",
+  "masking_strategy": "Random masking of 75% of patch tokens; independent masking for multi-spectral channel groups",
+  "pretraining": "Multi-scale masked autoencoder pretraining on large-scale RGB and multi-spectral satellite datasets (fMoW-RGB, fMoW-Sentinel), reconstructing images at multiple scales using convolution-based upsampling blocks.",
+  "domain_knowledge": [
+    "Multi-scale information",
+    "Channel grouping based on GSD for multi-spectral data"
+  ],
+  "backbone_modifications": [
+    "Convolution-based upsampling blocks for multi-scale reconstruction"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "High-resolution commercial satellites (fMoW-RGB)"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "Optical (RGB)"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (10m, 20m, 60m for Sentinel-2; high-res for fMoW-RGB)",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Sentinel-2, High-resolution commercial satellites (fMoW-RGB)",
+      "bands": [
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B8",
+        "B8A",
+        "B11",
+        "B12"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          10,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "fMoW-RGB",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 363000,
+  "sampling": "Random crop",
+  "processing:level": null,
+  "processing:lineage": "Resize; Crop; Downsample",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "16x16",
+    "epochs": 800,
+    "batch_size": 64,
+    "learning_rate": "7e-4",
+    "augmentations": [
+      "Random crop (448x448)",
+      "Resize shorter side to 448",
+      "Bilinear interpolation to 224x224"
+    ],
+    "mask_ratio": 0.75,
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "fMoW-Sentinel",
+        "num_images": 712874,
+        "sampling": "Random crop",
+        "processing:lineage": "Channel grouping; Discard B1, B9, B10",
+        "image_resolution": "96x96",
+        "patch_size": "8x8",
+        "epochs": 50,
+        "batch_size": 8,
+        "learning_rate": "1e-4",
+        "augmentations": [
+          "Resize shorter side to 384",
+          "Random crop (384x384)",
+          "Downsample to 192x192 and 96x96"
+        ],
+        "mask_ratio": 0.75
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "fMoW-RGB",
+      "metrics": [
+        "Top1 Acc."
+      ],
+      "metrics_value": [
+        78.14
+      ],
+      "sensor": [
+        "High-resolution commercial satellites"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 363000 of 363000 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "fMoW-Sentinel",
+      "metrics": [
+        "Top1 Acc."
+      ],
+      "metrics_value": [
+        63.23
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "96x96",
+      "spatial_resolution": "10m, 20m, 60m",
+      "split_ratio": "samples used: 712874 of 712874 (100%)"
+    },
+    {
+      "task": "Land cover classification",
+      "application": "Land use/land cover classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Top1 Acc."
+      ],
+      "metrics_value": [
+        99.04
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 27000 of 27000 (100%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "RESISC-45",
+      "metrics": [
+        "Top1 Acc."
+      ],
+      "metrics_value": [
+        97.48
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 31500 of 31500 (100%)"
+    },
+    {
+      "task": "Land cover classification",
+      "application": "Land use/land cover classification",
+      "dataset": "UC-Merced",
+      "metrics": [
+        "Top1 Acc."
+      ],
+      "metrics_value": [
+        97.62
+      ],
+      "sensor": null,
+      "regions": [
+        "US"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 2100 of 2100 (100%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land cover multi-label classification",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        85.11
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 59032 of 590326 (10%)"
+    }
+  ],
+  "provenance": null
+}

@@ -1,0 +1,269 @@
+{
+  "id": "mapex",
+  "mlm:name": "MAPEX",
+  "version": null,
+  "release_date": "2025-07-10T00:00:00Z",
+  "updated": null,
+  "description": "MAPEX is a remote sensing foundation model based on a mixture-of-modality experts architecture with modality-aware routing and pruning, enabling efficient, modality-specialized models for downstream tasks.",
+  "sci:doi": "10.48550/arXiv.2507.07527",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/HSG-AIML/MAPEX",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-base",
+  "mlm:total_parameters": 360000000,
+  "pretext_training_type": "Masked autoencoding (self-supervised masked image modeling)",
+  "masking_strategy": "75% of tokens independently masked per modality",
+  "pretraining": "Self-supervised masked autoencoding on multi-modal remote sensing data using a mixture-of-modality experts ViT-base architecture with modality-aware routing and load balancing loss.",
+  "domain_knowledge": [
+    "Modality-aware expert routing",
+    "Modality dropout",
+    "Shared expert for cross-modal features"
+  ],
+  "backbone_modifications": [
+    "Feed-forward layers replaced with mixture-of-experts modules",
+    "Modality-conditioned token routing",
+    "Learnable modality embeddings",
+    "Shared expert module"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR",
+    "Elevation"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": "224x224 pixels (input size); Sentinel-2 native resolution varies (10m, 20m, 60m)",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Sentinel-1, Sentinel-2",
+      "bands": [
+        "Sentinel-2 B02",
+        "Sentinel-2 B03",
+        "Sentinel-2 B04",
+        "Sentinel-2 B05",
+        "Sentinel-2 B06",
+        "Sentinel-2 B07",
+        "Sentinel-2 B08",
+        "Sentinel-2 B8A",
+        "Sentinel-2 B11",
+        "Sentinel-2 B12",
+        "Sentinel-1 VV",
+        "Sentinel-1 VH"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "BigEarthNet-GeoEnvironment (ben-ge)",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 590326,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": "Images resized to 224x224; Channel-wise normalization",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 50,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": 0.75
+  },
+  "benchmarks": [
+    {
+      "task": "Multi-label classification",
+      "application": "Land-use/land-cover classification",
+      "dataset": "ben-ge-8k",
+      "metrics": [
+        "accuracy"
+      ],
+      "metrics_value": [
+        67.2
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "variable (Sentinel-2: 10m?60m)",
+      "split_ratio": "samples used: 8000 of 8000 (100%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land-use/land-cover classification",
+      "dataset": "ben-ge-8k",
+      "metrics": [
+        "accuracy"
+      ],
+      "metrics_value": [
+        66.7
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "variable (Sentinel-2: 10m?60m)",
+      "split_ratio": "samples used: 8000 of 8000 (100%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land-use/land-cover classification",
+      "dataset": "ben-ge-8k",
+      "metrics": [
+        "accuracy"
+      ],
+      "metrics_value": [
+        72.4
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "variable (Sentinel-2: 10m?60m)",
+      "split_ratio": "samples used: 8000 of 8000 (100%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land-use/land-cover classification",
+      "dataset": "ben-ge-8k",
+      "metrics": [
+        "accuracy"
+      ],
+      "metrics_value": [
+        56.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "variable (Sentinel-2: 10m?60m)",
+      "split_ratio": "samples used: 8000 of 8000 (100%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land-use/land-cover classification",
+      "dataset": "ben-ge-8k",
+      "metrics": [
+        "accuracy"
+      ],
+      "metrics_value": [
+        66.1
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 8000 of 8000 (100%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land-use/land-cover classification",
+      "dataset": "ben-ge-8k",
+      "metrics": [
+        "accuracy"
+      ],
+      "metrics_value": [
+        48.2
+      ],
+      "sensor": [
+        "Elevation"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 8000 of 8000 (100%)"
+    },
+    {
+      "task": "Binary classification",
+      "application": "Flood detection",
+      "dataset": "SEN12-FLOOD",
+      "metrics": [
+        "accuracy"
+      ],
+      "metrics_value": [
+        83.2
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Binary classification",
+      "application": "Wildfire detection",
+      "dataset": "California Wildfire",
+      "metrics": [
+        "accuracy"
+      ],
+      "metrics_value": [
+        90.5
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "California"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 20000 of 20000 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land-cover segmentation",
+      "dataset": "ben-ge-8k",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        56.9
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "variable",
+      "split_ratio": "samples used: 8000 of 8000 (100%)"
+    }
+  ],
+  "provenance": null
+}

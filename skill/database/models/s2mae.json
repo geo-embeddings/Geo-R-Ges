@@ -1,0 +1,152 @@
+{
+  "id": "s2mae",
+  "mlm:name": "S2MAE",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "S2MAE is a spatial-spectral masked autoencoder foundation model for spectral remote sensing data, employing a 3D transformer with a 90% masking ratio and learnable spectral-spatial embeddings. It is pretrained progressively on large-scale Sentinel-2 datasets and evaluated on classification and change detection tasks.",
+  "sci:doi": null,
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "ViT (Vision Transformer)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Masked Image Modeling (MIM)",
+  "masking_strategy": "3D random masking with 90% masking ratio",
+  "pretraining": "Progressive pretraining on fMoW-S2 and BigEarthNet Sentinel-2 datasets using 3D masked autoencoding with learnable spatial-spectral embeddings.",
+  "domain_knowledge": null,
+  "backbone_modifications": [
+    "3D patchification (spatial and spectral)",
+    "Learnable spatial-spectral positional embeddings"
+  ],
+  "supported_sensors": [
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "full",
+  "temporal_alignment": "none",
+  "spatial_resolution": "10m, 20m, 60m",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B8",
+        "B8A",
+        "B9",
+        "B11",
+        "B12"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "fMoW-S2",
+  "regions_coverage": [
+    "Global"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 712874,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "8x8x3",
+    "epochs": 200,
+    "batch_size": null,
+    "learning_rate": "2e-4",
+    "augmentations": null,
+    "mask_ratio": 0.9,
+    "image_resolution": "96x96x12",
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "BigEarthNet",
+        "regions_coverage": [
+          "Europe (10 countries)"
+        ],
+        "time_range": "June 2017 to May 2018",
+        "num_images": 354196,
+        "image_resolution": "128x128x12",
+        "patch_size": "8x8x3",
+        "epochs": 100,
+        "learning_rate": "2e-4",
+        "mask_ratio": 0.9
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Single-label classification",
+      "application": "Land use/land cover classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Top1 Accuracy"
+      ],
+      "metrics_value": [
+        99.19
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe (34 countries)"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": null,
+      "split_ratio": "train/validation as in [29]; samples used: 27000 of 27000 (100%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Scene classification",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        87.41
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe (10 countries)"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "train/validation as in [29]; samples used: 35419 of 354196 (10%)"
+    },
+    {
+      "task": "Change detection",
+      "application": "Urban change detection",
+      "dataset": "OSCD",
+      "metrics": [
+        "Precision",
+        "Recall",
+        "F1"
+      ],
+      "metrics_value": [
+        54.9,
+        56.81,
+        54.26
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "128x128",
+      "spatial_resolution": "10m, 20m, 60m",
+      "split_ratio": "14 train / 10 test"
+    }
+  ],
+  "provenance": null
+}

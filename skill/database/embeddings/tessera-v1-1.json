@@ -1,0 +1,129 @@
+{
+  "id": "tessera-v1-1",
+  "title": "TESSERA embeddings",
+  "version": "v1.1",
+  "description": "Annual 10 m, 128-dimensional per-pixel embeddings from the TESSERA model (University of Cambridge), which encodes a full year of Sentinel-1 and Sentinel-2 observations per pixel. Wall-to-wall global for land, served as tiles on a 0.1-degree grid and as Zarr/Icechunk stores; suited to crop, habitat and land cover mapping from few labels.",
+  "updated": "2026-10-28T00:00:00Z",
+  "license": "CC0-1.0",
+  "sci:doi": "10.48550/arXiv.2506.20380",
+  "provenance": {
+    "source": "manual extraction",
+    "source_id": null,
+    "source_url": "https://github.com/ucam-eo/tessera",
+    "references": [
+      "https://github.com/ucam-eo/geotessera",
+      "https://registry.opendata.aws/tessera/",
+      "https://source.coop/tessera/tessera",
+      "https://docs.torchgeo.org/en/latest/api/datasets.html"
+    ],
+    "retrieved": "2026-10-28T00:00:00Z",
+    "review": [
+      "License: the producer's README says CC0 for embeddings and weights; the AWS Open Data registry lists CC-BY-SA. Recorded the producer's statement.",
+      "Year coverage: README says global for 2024 and 2017-2025 for regions such as the US and Europe, back-filling; AWS registry and geotessera say 2017-2025."
+    ]
+  },
+  "providers": [
+    {
+      "name": "University of Cambridge, Energy and Environment Group",
+      "roles": [
+        "producer",
+        "licensor"
+      ],
+      "url": "https://github.com/ucam-eo"
+    },
+    {
+      "name": "dClimate",
+      "roles": [
+        "processor",
+        "host"
+      ],
+      "url": "https://www.dclimate.net"
+    },
+    {
+      "name": "Source Cooperative",
+      "roles": [
+        "host"
+      ],
+      "url": "https://source.coop"
+    }
+  ],
+  "encoder_model": {
+    "id": "tessera",
+    "name": "TESSERA",
+    "checkpoint": "v1.1",
+    "href": null
+  },
+  "emb:type": "pixel",
+  "emb:dimensions": [
+    128
+  ],
+  "emb:chip_size": null,
+  "emb:stride": null,
+  "emb:grid_id": null,
+  "emb:temporal_period": "P1Y",
+  "data_type": "int8",
+  "emb:original_data_type": "float32",
+  "emb:quantization_method": "int8 values with separate float32 scales (geotessera.dequantize_embedding); Zarr API returns float32",
+  "source_sensors": [
+    "Sentinel-2",
+    "Sentinel-1"
+  ],
+  "processing:level": "Sentinel-2 L2A; Sentinel-1 RTC",
+  "processing:lineage": "A full year of Sentinel-2 L2A (10 bands) and Sentinel-1 RTC (VV, VH, ascending and descending) stacked along time per pixel; v1.1 uses every valid observation instead of 40 sampled timesteps. Tiles on a 0.1 x 0.1 degree grid (about 11 km).",
+  "spatial_resolution": "10m",
+  "regions_coverage": [
+    "Global (land)"
+  ],
+  "bbox": null,
+  "start_datetime": "2017-01-01T00:00:00Z",
+  "end_datetime": null,
+  "temporal_coverage_note": "Global for 2024; other years 2017-2025 complete only in some regions (e.g. US, Europe), back-filling year by year.",
+  "num_embeddings": null,
+  "assets": {
+    "zarr": {
+      "href": "s3://tessera-embeddings/v1.1/dclimate.icechunk/",
+      "title": "TESSERA v1.1 Icechunk store (AWS Open Data)",
+      "type": "application/vnd+zarr",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    },
+    "source-coop": {
+      "href": "https://source.coop/tessera/tessera",
+      "title": "Source Cooperative (NPY tiles, Zarr)",
+      "type": "text/html",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    },
+    "readme": {
+      "href": "https://github.com/ucam-eo/tessera",
+      "title": "TESSERA repository",
+      "type": "text/html",
+      "roles": [
+        "metadata"
+      ]
+    },
+    "geotessera": {
+      "href": "https://github.com/ucam-eo/geotessera",
+      "title": "geotessera access library",
+      "type": "text/html",
+      "roles": [
+        "metadata"
+      ]
+    }
+  },
+  "hosting": [
+    "Source Cooperative",
+    "AWS Open Data"
+  ],
+  "access_requirements": "open HTTP/S3, no account; v2 embeddings only on request",
+  "loaders": [
+    "geotessera.GeoTesseraZarr",
+    "geotessera.GeoTessera",
+    "geotessera download (CLI)"
+  ],
+  "benchmarks": null
+}

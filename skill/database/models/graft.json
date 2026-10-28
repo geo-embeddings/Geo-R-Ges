@@ -1,0 +1,351 @@
+{
+  "id": "graft",
+  "mlm:name": "GRAFT",
+  "version": "v1",
+  "release_date": null,
+  "updated": null,
+  "description": "GRAFT is a vision-language model for remote sensing images trained without textual annotations by aligning satellite images with CLIP's ground image encoder using large-scale ground-satellite image pairs. It enables zero-shot, open-vocabulary classification, retrieval, segmentation, and VQA for satellite imagery.",
+  "sci:doi": "10.48550/arXiv.2312.06960",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "ViT-B/16 (also ViT-B/32 for some experiments)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Contrastive learning with ground-satellite image pairs (unsupervised, no text)",
+  "masking_strategy": null,
+  "pretraining": "Satellite image encoder is trained to align with CLIP's ground image encoder using contrastive loss on large-scale ground-satellite image pairs. Pixel-level model uses patch-level alignment with ground images.",
+  "domain_knowledge": null,
+  "backbone_modifications": [
+    "Patch embedding input dimension changed from 3 to 12 for multispectral Sentinel-2 experiments"
+  ],
+  "supported_sensors": [
+    "NAIP",
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB",
+    "Text (via CLIP text encoder)"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "1m (NAIP), 10m (Sentinel-2)",
+  "temporal_resolution": "NAIP: ~2 years revisit; Sentinel-2: ~5 days revisit",
+  "mlm:input": [
+    {
+      "name": "NAIP",
+      "bands": [
+        "RGB"
+      ]
+    },
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "B4, B3, B2 (RGB); also multispectral (12 bands)"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "NAIP",
+  "regions_coverage": [
+    "United States"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 2000000,
+  "sampling": "Uniform spatial sampling, at least 112m apart, max 25 ground images per satellite image",
+  "processing:level": null,
+  "processing:lineage": "download RGB bands; normalized imagery",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "224x224",
+    "epochs": 10,
+    "batch_size": null,
+    "learning_rate": "0 to 1e-5 (image-level), 0 to 5e-5 (pixel-level), cosine schedule",
+    "augmentations": [
+      "rotation",
+      "translation",
+      "zero-padding (for ViT-B/16)"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "1m",
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "Sentinel-2",
+        "regions_coverage": [
+          "Global"
+        ],
+        "time_range": "2017 onward (Flickr images from 2014, matched to closest Sentinel-2 image)",
+        "num_images": 1900000,
+        "sampling": "Uniform spatial sampling, at least 112m apart, max 25 ground images per satellite image",
+        "processing:lineage": "download B4, B3, B2 bands; downscale intensities by 3000",
+        "cloud_cover": "Sentinel-2: <1% cloud cover",
+        "image_resolution": "10m",
+        "patch_size": "224x224",
+        "epochs": 10,
+        "learning_rate": "0 to 1e-5 (image-level), 0 to 5e-5 (pixel-level), cosine schedule",
+        "augmentations": [
+          "rotation",
+          "translation"
+        ]
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Zero-shot image classification",
+      "application": "Land use/land cover classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        63.76
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 5400 of 5400 (100%)"
+    },
+    {
+      "task": "Zero-shot image retrieval",
+      "application": "Text-to-image retrieval",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "mAP@100",
+        "mAP@20"
+      ],
+      "metrics_value": [
+        81.56,
+        85.21
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 5400 of 5400 (100%)"
+    },
+    {
+      "task": "Zero-shot image classification",
+      "application": "Land use/land cover classification",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        32.46
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "120x120",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 104000 of 104000 (100%)"
+    },
+    {
+      "task": "Zero-shot image retrieval",
+      "application": "Text-to-image retrieval",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mAP@100",
+        "mAP@20"
+      ],
+      "metrics_value": [
+        49.61,
+        53.86
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "120x120",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 104000 of 104000 (100%)"
+    },
+    {
+      "task": "Zero-shot image classification",
+      "application": "Land use/land cover classification",
+      "dataset": "SAT-4",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        53.42
+      ],
+      "sensor": [
+        "NAIP"
+      ],
+      "regions": [
+        "United States"
+      ],
+      "image_resolution": "28x28",
+      "spatial_resolution": "1m",
+      "split_ratio": "samples used: 64000 of 64000 (100%)"
+    },
+    {
+      "task": "Zero-shot image classification",
+      "application": "Land use/land cover classification",
+      "dataset": "SAT-6",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        66.57
+      ],
+      "sensor": [
+        "NAIP"
+      ],
+      "regions": [
+        "United States"
+      ],
+      "image_resolution": "28x28",
+      "spatial_resolution": "1m",
+      "split_ratio": "samples used: 81000 of 81000 (100%)"
+    },
+    {
+      "task": "Zero-shot image classification",
+      "application": "Land use/land cover classification",
+      "dataset": "NAIP-OSM",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        42.47
+      ],
+      "sensor": [
+        "NAIP"
+      ],
+      "regions": [
+        "United States"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": "1m",
+      "split_ratio": "samples used: 1700000 of 1700000 (100%)"
+    },
+    {
+      "task": "Zero-shot image retrieval",
+      "application": "Text-to-image retrieval",
+      "dataset": "NAIP-OSM",
+      "metrics": [
+        "mAP@100",
+        "mAP@20"
+      ],
+      "metrics_value": [
+        75.35,
+        76.55
+      ],
+      "sensor": [
+        "NAIP"
+      ],
+      "regions": [
+        "United States"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": "1m",
+      "split_ratio": "samples used: 1700000 of 1700000 (100%)"
+    },
+    {
+      "task": "Zero-shot segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "Satlas (NAIP)",
+      "metrics": [
+        "Per-class accuracy"
+      ],
+      "metrics_value": [
+        49.38
+      ],
+      "sensor": [
+        "NAIP"
+      ],
+      "regions": [
+        "United States"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "1m",
+      "split_ratio": "samples used: 39000 of 39000 (100%)"
+    },
+    {
+      "task": "Zero-shot segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "Satlas (Sentinel-2)",
+      "metrics": [
+        "Per-class accuracy"
+      ],
+      "metrics_value": [
+        31.95
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "United States"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 2183 of 2183 (100%)"
+    },
+    {
+      "task": "Zero-shot segmentation (with SAM)",
+      "application": "Land cover segmentation",
+      "dataset": "Satlas (Sentinel-2)",
+      "metrics": [
+        "Per-class accuracy"
+      ],
+      "metrics_value": [
+        32.43
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "United States"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 2183 of 2183 (100%)"
+    },
+    {
+      "task": "Zero-shot VQA",
+      "application": "Visual question answering",
+      "dataset": "RSVQA (high-res, NAIP)",
+      "metrics": [
+        "Accuracy (Presence)",
+        "Accuracy (Area)",
+        "Accuracy (Comparison)",
+        "Accuracy (Count)",
+        "Average Accuracy"
+      ],
+      "metrics_value": [
+        61.46,
+        32.04,
+        50.34,
+        44.38,
+        44.05
+      ],
+      "sensor": [
+        "NAIP"
+      ],
+      "regions": [
+        "United States"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "1m",
+      "split_ratio": "samples used: 2985 of 2985 (100%)"
+    }
+  ],
+  "provenance": null
+}

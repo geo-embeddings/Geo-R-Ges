@@ -1,0 +1,460 @@
+{
+  "id": "fomo",
+  "mlm:name": "FoMo-Net",
+  "version": "v1",
+  "release_date": null,
+  "updated": null,
+  "description": "FoMo-Net is a pretraining framework for remote sensing foundation models, designed to process any combination of commonly used modalities and spectral bands in remote sensing. It is trained on a diverse set of satellite and aerial datasets and evaluated on the FoMo-Bench benchmark for forest monitoring tasks.",
+  "sci:doi": "10.48550/arXiv.2312.10114",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/RolnickLab/FoMo-Bench",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "Vision Transformer (ViT)",
+  "mlm:total_parameters": 66390000,
+  "pretext_training_type": "Masked Autoencoding (MAE)",
+  "masking_strategy": "Random spectral band selection and token masking",
+  "pretraining": "Masked autoencoding with random spectral band selection, spectral and positional embeddings, and gradient accumulation, trained on a mixture of satellite and aerial datasets covering a wide range of modalities and spatial resolutions.",
+  "domain_knowledge": null,
+  "backbone_modifications": [
+    "Spectral and positional embeddings",
+    "Single shared linear projection for all spectral bands"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2",
+    "Landsat 8",
+    "Landsat 9",
+    "Planet",
+    "Gaofen-2",
+    "UAV (various aerial sensors)"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR",
+    "Optical",
+    "DEM",
+    "Aerial RGB"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "variable (few centimeters to 60m)",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Sentinel-1, Sentinel-2, Landsat 8, Landsat 9, Planet, Gaofen-2, UAV (various aerial sensors)",
+      "bands": [
+        "Sentinel-1 bands",
+        "Sentinel-2 bands",
+        "Landsat 8-9 bands",
+        "Planet bands",
+        "Gaofen-2 bands",
+        "DEM"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "SSL4EO-Landsat",
+  "regions_coverage": [
+    "global"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": "sampling weight 0.2",
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "low",
+    "num_layers": 12,
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "RapidAI4EO",
+        "regions_coverage": [
+          "Europe"
+        ],
+        "sampling": "sampling weight 0.2",
+        "image_resolution": "medium, low"
+      },
+      {
+        "mlm:pretrained_source": "TalloS",
+        "regions_coverage": [
+          "global"
+        ],
+        "time_range": "2016-2023",
+        "sampling": "sampling weight 0.2",
+        "cloud_cover": "Sentinel-2 data selected with cloud coverage below 30%",
+        "image_resolution": "low"
+      },
+      {
+        "mlm:pretrained_source": "FLAIR #1",
+        "regions_coverage": [
+          "France"
+        ],
+        "sampling": "sampling weight 0.1",
+        "image_resolution": "high"
+      },
+      {
+        "mlm:pretrained_source": "FiveBillionPixels",
+        "regions_coverage": [
+          "China"
+        ],
+        "sampling": "sampling weight 0.2",
+        "image_resolution": "medium"
+      },
+      {
+        "mlm:pretrained_source": "UAV-datasets (Woody, Spekboom, Waititu, ReforesTree, etc.)",
+        "regions_coverage": [
+          "Chile",
+          "South Africa",
+          "New Zealand",
+          "various"
+        ],
+        "sampling": "sampling weight 0.1",
+        "image_resolution": "very high"
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Multi-label classification",
+      "application": "Land use/land cover and tree species recognition",
+      "dataset": "BigEarthNet-MM",
+      "metrics": [
+        "F1 micro",
+        "F1 macro"
+      ],
+      "metrics_value": [
+        73.42,
+        61.36
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe (10 countries)"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land use/land cover",
+      "dataset": "Sen12MS",
+      "metrics": [
+        "F1 micro",
+        "F1 macro"
+      ],
+      "metrics_value": [
+        42.87,
+        25.15
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Tree genus classification",
+      "dataset": "TalloS",
+      "metrics": [
+        "F1 micro",
+        "F1 macro"
+      ],
+      "metrics_value": [
+        18.5,
+        0.52
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "DEM"
+      ],
+      "regions": [
+        "global"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 251000 of 335000 (74.9%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land use/land cover",
+      "dataset": "RapidAI4EO",
+      "metrics": [
+        "F1 micro",
+        "F1 macro"
+      ],
+      "metrics_value": [
+        54.69,
+        33.47
+      ],
+      "sensor": [
+        "Planet",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "3m",
+      "spatial_resolution": "3m",
+      "split_ratio": null
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Tree species classification",
+      "dataset": "TreeSatAI",
+      "metrics": [
+        "F1 micro",
+        "F1 macro"
+      ],
+      "metrics_value": [
+        45.02,
+        18.93
+      ],
+      "sensor": [
+        "Aerial",
+        "SAR",
+        "Multispectral"
+      ],
+      "regions": [
+        "Germany (Lower Saxony)"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover mapping",
+      "dataset": "Waititu",
+      "metrics": [
+        "F1 micro",
+        "mIoU"
+      ],
+      "metrics_value": [
+        74.26,
+        59.1
+      ],
+      "sensor": [
+        "Aerial RGB"
+      ],
+      "regions": [
+        "New Zealand"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover mapping",
+      "dataset": "FLAIR #1",
+      "metrics": [
+        "F1 micro",
+        "mIoU"
+      ],
+      "metrics_value": [
+        66.16,
+        49.43
+      ],
+      "sensor": [
+        "Aerial multispectral"
+      ],
+      "regions": [
+        "France"
+      ],
+      "image_resolution": "0.2m",
+      "spatial_resolution": "0.2m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover mapping",
+      "dataset": "FLAIR #2",
+      "metrics": [
+        "F1 micro",
+        "mIoU"
+      ],
+      "metrics_value": [
+        64.69,
+        47.81
+      ],
+      "sensor": [
+        "Aerial multispectral",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "France"
+      ],
+      "image_resolution": "0.2m",
+      "spatial_resolution": "0.2m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Tree species mapping",
+      "dataset": "Spekboom",
+      "metrics": [
+        "F1 micro",
+        "mIoU"
+      ],
+      "metrics_value": [
+        95.59,
+        91.56
+      ],
+      "sensor": [
+        "Aerial RGB"
+      ],
+      "regions": [
+        "South Africa"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover mapping",
+      "dataset": "FiveBillionPixels",
+      "metrics": [
+        "F1 micro",
+        "mIoU"
+      ],
+      "metrics_value": [
+        72.75,
+        57.18
+      ],
+      "sensor": [
+        "Gaofen-2"
+      ],
+      "regions": [
+        "China"
+      ],
+      "image_resolution": "4m",
+      "spatial_resolution": "4m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Deforestation drivers",
+      "dataset": "ForestNet",
+      "metrics": [
+        "F1 micro",
+        "mIoU"
+      ],
+      "metrics_value": [
+        95.22,
+        90.89
+      ],
+      "sensor": [
+        "Landsat-8"
+      ],
+      "regions": [
+        "Indonesia"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Woody invasive species mapping",
+      "dataset": "Woody",
+      "metrics": [
+        "F1 micro",
+        "mIoU"
+      ],
+      "metrics_value": [
+        89.7,
+        81.32
+      ],
+      "sensor": [
+        "Aerial RGB"
+      ],
+      "regions": [
+        "Chile"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection",
+      "application": "Tree crown detection",
+      "dataset": "NeonTree",
+      "metrics": [
+        "mIoU",
+        "mAP 50",
+        "mAP 50:95"
+      ],
+      "metrics_value": [
+        51.95,
+        5.67,
+        1.52
+      ],
+      "sensor": [
+        "Airborne RGB",
+        "LiDAR",
+        "Hyperspectral"
+      ],
+      "regions": [
+        "USA (various)"
+      ],
+      "image_resolution": "0.1m",
+      "spatial_resolution": "0.1m",
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection",
+      "application": "Tree crown detection and biomass estimation",
+      "dataset": "ReforesTree",
+      "metrics": [
+        "mIoU",
+        "mAP 50",
+        "mAP 50:95"
+      ],
+      "metrics_value": [
+        51.63,
+        1.32,
+        0.46
+      ],
+      "sensor": [
+        "Aerial RGB",
+        "Ground measurements"
+      ],
+      "regions": [
+        "Tropical (various)"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

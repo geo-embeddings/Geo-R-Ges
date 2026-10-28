@@ -1,0 +1,214 @@
+{
+  "id": "cmid",
+  "mlm:name": "CMID",
+  "version": "1.0",
+  "release_date": "2023-04-19T00:00:00Z",
+  "updated": "2023-05-03T00:00:00Z",
+  "description": "CMID (Contrastive Mask Image Distillation) is a unified self-supervised learning framework for remote sensing image understanding, combining contrastive learning and masked image modeling in a teacher-student self-distillation architecture. It is architecture-agnostic and effective for both CNNs and ViTs, learning representations with both global semantic separability and local spatial perceptibility.",
+  "sci:doi": "10.1109/TGRS.2023.3268232",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/NJU-LHRS/official-CMID",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://github.com/NJU-LHRS/official-CMID",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "ResNet-50 or Swin Transformer-B",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Self-supervised learning combining contrastive learning (CL) and masked image modeling (MIM) in a teacher-student self-distillation framework",
+  "masking_strategy": "Mask patches filled with mean spectral value and add learnable mask token to patch embedding",
+  "pretraining": "Teacher-student self-distillation with three branches: MIM branch (local spatial perceptibility), global branch (contrastive learning for global semantic separability), and local branch (object-level alignment via prototypes)",
+  "domain_knowledge": null,
+  "backbone_modifications": [
+    "Added MIM head (1x1 conv)",
+    "Global projector (1-hidden layer MLP)",
+    "Local projector (2-hidden layer MLP)",
+    "EMA for teacher-student weights"
+  ],
+  "supported_sensors": [
+    "Various sensors (MillionAID images from Google Earth, multiple sensors)"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Various sensors (MillionAID images from Google Earth, multiple sensors)",
+      "bands": [
+        "RGB"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          1,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "MillionAID",
+  "regions_coverage": [
+    "Global (images from Google Earth, various locations)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1000848,
+  "sampling": "All images used",
+  "processing:level": null,
+  "processing:lineage": "Resize to 224x224",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 200,
+    "batch_size": 512,
+    "learning_rate": "0.0088 (ResNet-50), 0.002 (Swin-B)",
+    "augmentations": [
+      "Random crop",
+      "Random resize",
+      "RandAug",
+      "Mixup",
+      "Cutmix",
+      "Label smoothing",
+      "Random erasing"
+    ],
+    "mask_ratio": 0.6
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Land use classification",
+      "dataset": "UC Merced Land Use (UCM)",
+      "metrics": [
+        "Overall Accuracy"
+      ],
+      "metrics_value": [
+        0.995
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": [
+        "United States"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "8:2 (train:test); samples used: 2100 of 2100 (100%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Urban land cover segmentation",
+      "dataset": "ISPRS Potsdam",
+      "metrics": [
+        "Overall Accuracy",
+        "mIoU",
+        "mF1"
+      ],
+      "metrics_value": [
+        0.95,
+        0.857,
+        0.912
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": [
+        "Potsdam, Germany"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "default mmsegmentation split; samples used: 21888 of 38"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Urban land cover segmentation",
+      "dataset": "ISPRS Vaihingen",
+      "metrics": [
+        "Overall Accuracy",
+        "mIoU",
+        "mF1"
+      ],
+      "metrics_value": [
+        0.93,
+        0.8,
+        0.87
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": [
+        "Vaihingen, Germany"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.9m",
+      "split_ratio": "default mmsegmentation split"
+    },
+    {
+      "task": "Object detection",
+      "application": "Oriented bounding box detection",
+      "dataset": "DOTA",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        0.753
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "1024x1024",
+      "spatial_resolution": "0.3m-1.0m",
+      "split_ratio": "official DOTA split"
+    },
+    {
+      "task": "Change detection",
+      "application": "Bitemporal change detection",
+      "dataset": "CDD",
+      "metrics": [
+        "mF1"
+      ],
+      "metrics_value": [
+        0.893
+      ],
+      "sensor": [
+        "Google Earth imagery"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.03m-1.0m",
+      "split_ratio": "10000 train / 3000 val / 3000 test; samples used: 16000 of 11"
+    }
+  ],
+  "provenance": null
+}

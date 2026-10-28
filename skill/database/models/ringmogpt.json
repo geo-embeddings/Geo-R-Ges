@@ -1,0 +1,422 @@
+{
+  "id": "ringmogpt",
+  "mlm:name": "RingMoGPT",
+  "version": "1.0",
+  "release_date": "2024-12-04T00:00:00Z",
+  "updated": "2025-02-25T00:00:00Z",
+  "description": "RingMoGPT is a unified multimodal remote sensing foundation model integrating vision, language, and localization tasks. It features a location- and instruction-aware Q-Former and a change detection module, trained on large-scale high-quality image-text and instruction-tuning datasets, supporting tasks such as scene classification, object detection, VQA, image captioning, grounded captioning, and change captioning.",
+  "sci:doi": "10.1109/TGRS.2024.3510833",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "ViT-g/14 (from EVA-CLIP) as visual encoder, Vicuna-13B as LLM",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Adapter-based domain adaptation with frozen visual encoder and LLM, training only adapter parameters",
+  "masking_strategy": "Masked image modeling and instruction-based masking",
+  "pretraining": "Pretrained on 522,769 high-quality RS image-text pairs with rule-based and VLM-generated captions, followed by instruction-tuning on 1.6M QA pairs across six tasks.",
+  "domain_knowledge": [
+    "Remote sensing domain adaptation",
+    "Location-aware querying",
+    "Multitemporal change analysis"
+  ],
+  "backbone_modifications": [
+    "Integration of Q-Former with location and semantic queries",
+    "Graph Attention Networks in cross-attention module",
+    "Change detection module (2-layer MLP)"
+  ],
+  "supported_sensors": [
+    "Optical remote sensing imagery"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB",
+    "Text"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "variable (datasets include 256x256, 400x400, 448x448, 800x800, 1024x1024)",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Optical remote sensing imagery",
+      "bands": [
+        "RGB",
+        "Multispectral (where available in datasets)"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Large-scale RS image-text pretraining dataset (522,769 pairs)",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 522769,
+  "sampling": "Random and category-balanced sampling from public RS datasets",
+  "processing:level": null,
+  "processing:lineage": "Rule-based supervision prompt; Multistyle text generation; Self-assessment validation; Manual sampling and correction",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "variable (cropped to 400x400, 448x448, 800x800, 1024x1024, 256x256)",
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "RingMo-VL1M instruction-tuning dataset (1.6M QA pairs)",
+        "sampling": "Random and task-balanced sampling",
+        "processing:lineage": "Instruction template diversification; Manual review",
+        "image_resolution": "variable (cropped to 400x400, 800x800, 256x256)"
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "DOTA-Cap",
+      "metrics": [
+        "METEOR",
+        "ROUGE-L",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        null,
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "variable (cropped to 400x400, 448x448, 800x800)",
+      "spatial_resolution": "variable",
+      "split_ratio": "80% train, 10% val, 10% test"
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "DIOR-Cap",
+      "metrics": [
+        "METEOR",
+        "ROUGE-L",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        null,
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "variable (cropped to 400x400, 448x448, 800x800)",
+      "spatial_resolution": "variable",
+      "split_ratio": "80% train, 10% val, 10% test"
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "UCM Captions",
+      "metrics": [
+        "METEOR",
+        "ROUGE-L",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        null,
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": "80% train, 10% val, 10% test"
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "Sydney Captions",
+      "metrics": [
+        "METEOR",
+        "ROUGE-L",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        null,
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": "80% train, 10% val, 10% test"
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "RSICD",
+      "metrics": [
+        "METEOR",
+        "ROUGE-L",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        null,
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": "80% train, 10% val, 10% test"
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning (zero-shot)",
+      "dataset": "NWPU-Captions",
+      "metrics": [
+        "METEOR",
+        "ROUGE-L",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        null,
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "AID, NWPU-RESISC45",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Remote sensing scene classification (zero-shot)",
+      "dataset": "UC Merced Land-Use, WHU-RS19",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "Remote sensing VQA",
+      "dataset": "HRVQA",
+      "metrics": [
+        "Overall Accuracy",
+        "Average Accuracy",
+        "Per-type Accuracy"
+      ],
+      "metrics_value": [
+        null,
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Grounded Captioning",
+      "application": "Grounded image captioning",
+      "dataset": "DOTA-GC, DIOR-GC",
+      "metrics": [
+        "mAP",
+        "METEOR",
+        "ROUGE-L",
+        "BLEU-1",
+        "BLEU-2",
+        "BLEU-3",
+        "BLEU-4",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "800x800",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Grounded Captioning",
+      "application": "Grounded image captioning (zero-shot)",
+      "dataset": "NWPU-GC",
+      "metrics": [
+        "mAP",
+        "METEOR",
+        "ROUGE-L",
+        "BLEU-1",
+        "BLEU-2",
+        "BLEU-3",
+        "BLEU-4",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "800x800",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Object Detection",
+      "application": "Object detection in RS images",
+      "dataset": "DOTA",
+      "metrics": [
+        "AP per class",
+        "mAP"
+      ],
+      "metrics_value": [
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Object Detection",
+      "application": "Object detection in RS images",
+      "dataset": "DIOR",
+      "metrics": [
+        "AP per class",
+        "mAP"
+      ],
+      "metrics_value": [
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Object Detection",
+      "application": "Object detection in RS images (zero-shot)",
+      "dataset": "NWPU VHR-10",
+      "metrics": [
+        "AP per class",
+        "mAP"
+      ],
+      "metrics_value": [
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "variable",
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    },
+    {
+      "task": "Change Captioning",
+      "application": "Change captioning in bi-temporal RS images",
+      "dataset": "LEVIR-CC",
+      "metrics": [
+        "BLEU-1",
+        "BLEU-2",
+        "BLEU-3",
+        "BLEU-4",
+        "METEOR",
+        "ROUGE-L",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "variable",
+      "split_ratio": "6815 train, 1333 val, 1929 test; samples used: 10077 of 10077 (100%)"
+    }
+  ],
+  "provenance": null
+}

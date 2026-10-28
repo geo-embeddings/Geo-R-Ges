@@ -1,0 +1,98 @@
+{
+  "id": "clay-v1-5-naip",
+  "title": "NAIP data embedded with Clay v1.5 (rev2)",
+  "version": "rev2",
+  "description": "Clay v1.5 class-token embeddings for the whole NAIP archive on AWS (2010-2021, 4-band RGB + NIR aerial imagery over the US), one 1024-dimensional vector per 256 x 256 px chip. Produced by Development Seed for Clay with AWS compute support.",
+  "updated": "2026-10-28T00:00:00Z",
+  "license": "CC-BY-4.0",
+  "sci:doi": null,
+  "provenance": {
+    "source": "manual extraction",
+    "source_id": null,
+    "source_url": "https://source.coop/clay/clay-v1-5-naip-2",
+    "references": [
+      "https://docs.torchgeo.org/en/latest/api/datasets.html"
+    ],
+    "retrieved": "2026-10-28T00:00:00Z",
+    "review": [
+      "data_type and spatial_resolution from TorchGeo's embedding table."
+    ]
+  },
+  "providers": [
+    {
+      "name": "Clay",
+      "roles": [
+        "licensor"
+      ],
+      "url": "https://madewithclay.org"
+    },
+    {
+      "name": "Development Seed",
+      "roles": [
+        "producer",
+        "processor"
+      ],
+      "url": "https://developmentseed.org"
+    },
+    {
+      "name": "Source Cooperative",
+      "roles": [
+        "host"
+      ],
+      "url": "https://source.coop"
+    }
+  ],
+  "encoder_model": {
+    "id": null,
+    "name": "Clay",
+    "checkpoint": "v1.5",
+    "href": "https://huggingface.co/made-with-clay/Clay"
+  },
+  "emb:type": "chip",
+  "emb:dimensions": [
+    1024
+  ],
+  "emb:chip_size": [
+    256,
+    256
+  ],
+  "emb:stride": null,
+  "emb:grid_id": null,
+  "emb:temporal_period": null,
+  "data_type": "float32",
+  "emb:original_data_type": null,
+  "emb:quantization_method": null,
+  "source_sensors": [
+    "NAIP"
+  ],
+  "processing:level": null,
+  "processing:lineage": "NAIP naip-analytic 4-band GeoTIFFs split into 256 x 256 px chips; embedding is the encoder's class token. Folder structure mirrors NAIP.",
+  "spatial_resolution": "154-256m",
+  "regions_coverage": [
+    "United States (CONUS)"
+  ],
+  "bbox": null,
+  "start_datetime": "2010-01-01T00:00:00Z",
+  "end_datetime": "2021-12-31T23:59:59Z",
+  "temporal_coverage_note": "Follows the NAIP state-by-state acquisition cycle; not every year for every state.",
+  "num_embeddings": null,
+  "assets": {
+    "data": {
+      "href": "https://source.coop/clay/clay-v1-5-naip-2",
+      "title": "Source Cooperative (GeoParquet)",
+      "type": "text/html",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    }
+  },
+  "hosting": [
+    "Source Cooperative"
+  ],
+  "access_requirements": "open HTTP/S3, no account",
+  "loaders": [
+    "torchgeo.datasets.ClayEmbeddings"
+  ],
+  "benchmarks": null
+}

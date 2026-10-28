@@ -1,0 +1,507 @@
+{
+  "id": "earthdial",
+  "mlm:name": "EarthDial",
+  "version": "v1",
+  "release_date": null,
+  "updated": null,
+  "description": "EarthDial is a domain-specialized vision-language model (VLM) for Earth Observation (EO) data, capable of processing multi-spectral, multi-temporal, and multi-resolution remote sensing imagery for a wide range of tasks including classification, detection, captioning, question answering, visual reasoning, and visual grounding. It is trained on the largest remote sensing instruction dataset (11.11M pairs) covering RGB, SAR, multispectral, NIR, and infrared modalities.",
+  "sci:doi": "10.48550/arXiv.2412.15190",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/hiyamdebary/EarthDial",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "InternViT-300M (vision encoder), Phi-3-mini (LLM)",
+  "mlm:total_parameters": 4000000000,
+  "pretext_training_type": "Instruction tuning with multi-stage pretraining (conversational pretraining, RGB/temporal finetuning, multispectral/SAR finetuning)",
+  "masking_strategy": null,
+  "pretraining": "Three-stage pretraining: (1) conversational pretraining on large-scale remote sensing image-text pairs, (2) RGB and temporal finetuning for downstream tasks, (3) multispectral and SAR finetuning with data fusion module.",
+  "domain_knowledge": [
+    "Adaptive High Resolution module",
+    "Data Fusion module for multi-spectral/temporal/SAR"
+  ],
+  "backbone_modifications": [
+    "Adaptive High Resolution block",
+    "Data Fusion module for multi-spectral/temporal"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "Sentinel-1",
+    "Landsat 8",
+    "NAIP",
+    "Aerial imagery"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR",
+    "RGB",
+    "Infrared",
+    "NIR",
+    "Hyperspectral",
+    "Aerial"
+  ],
+  "spectral_alignment": "full",
+  "temporal_alignment": "full",
+  "spatial_resolution": "variable (supports high and low resolution, e.g., 0.5m, 10m, 30m)",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2, Sentinel-1, Landsat 8, NAIP, Aerial imagery",
+      "bands": [
+        "RGB",
+        "NIR",
+        "Infrared",
+        "SAR",
+        "Mag1c",
+        "Multispectral"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "EarthDial-Instruct (SkyScript, SatlasPretrain, NAIP, Sentinel-2, Landsat, Sentinel-1)",
+  "regions_coverage": [
+    "global",
+    "various geographical locations"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 11110000,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": "luminance and coverage-based filtering; label-based filtering",
+  "cloud_cover": "luminance and coverage-based filtering to remove cloudy images",
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "up to 4096 tokens",
+    "epochs": null,
+    "batch_size": 2,
+    "learning_rate": "4e-5 (cosine scheduler)",
+    "augmentations": [
+      "thumbnails for local features",
+      "adaptive patch size (1 to 6)"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "variable (e.g., 0.5m, 10m, 30m)"
+  },
+  "benchmarks": [
+    {
+      "task": "Scene Classification",
+      "application": "Land cover/scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        88.76
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Land cover/scene classification",
+      "dataset": "UCMerced",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        92.42
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Land cover/scene classification",
+      "dataset": "WHU-19",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        96.21
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Land cover/scene classification",
+      "dataset": "BigEarthNet (RGB)",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        68.82
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Disaster assessment",
+      "dataset": "xBD Set 1",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        96.37
+      ],
+      "sensor": [
+        "Optical",
+        "Temporal"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Temporal scene classification",
+      "dataset": "fMoW",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        70.03
+      ],
+      "sensor": [
+        "Optical",
+        "Temporal"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Multi-spectral classification",
+      "dataset": "BigEarthNet (MS)",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        69.94
+      ],
+      "sensor": [
+        "Optical",
+        "Multispectral"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Local Climate Zones",
+      "dataset": "SoSAT-LCZ42",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        60.72
+      ],
+      "sensor": [
+        "S2",
+        "Multispectral"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Tree species classification",
+      "dataset": "TreeSatAI",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        56.61
+      ],
+      "sensor": [
+        "Optical",
+        "NIR"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object Detection",
+      "application": "Ship detection",
+      "dataset": "Ship Dataset (SAR Imagery)",
+      "metrics": [
+        "mAP@0.5 (result 1 of 5)",
+        "mAP@0.5 (result 2 of 5)",
+        "mAP@0.5 (result 3 of 5)",
+        "mAP@0.5 (result 4 of 5)",
+        "mAP@0.5 (result 5 of 5)"
+      ],
+      "metrics_value": [
+        12.14,
+        26.02,
+        35.56,
+        26.03,
+        6.06
+      ],
+      "sensor": [
+        "SAR"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object Detection",
+      "application": "Referred object detection",
+      "dataset": "GeoChat-Instruct",
+      "metrics": [
+        "mAP@0.5 (result 1 of 5)",
+        "mAP@0.5 (result 2 of 5)",
+        "mAP@0.5 (result 3 of 5)",
+        "mAP@0.5 (result 4 of 5)",
+        "mAP@0.5 (result 5 of 5)"
+      ],
+      "metrics_value": [
+        11.43,
+        31.76,
+        39.07,
+        34.29,
+        13.41
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Region Captioning",
+      "application": "Region-level captioning",
+      "dataset": "HIT UA V",
+      "metrics": [
+        "ROUGE-1",
+        "ROUGE-L",
+        "METEOR"
+      ],
+      "metrics_value": [
+        73.38,
+        73.34,
+        62.72
+      ],
+      "sensor": [
+        "Infrared"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Image captioning",
+      "dataset": "NWPU RESISC45 Captions",
+      "metrics": [
+        "ROUGE-1",
+        "ROUGE-L",
+        "METEOR"
+      ],
+      "metrics_value": [
+        45.84,
+        39.96,
+        80.61
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "VQA",
+      "dataset": "RSVQA-LRBEN",
+      "metrics": [
+        "Presence",
+        "Comp",
+        "R/U",
+        "Avg."
+      ],
+      "metrics_value": [
+        92.58,
+        92.75,
+        94,
+        92.7
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "VQA",
+      "dataset": "RSVQA-HRBEN",
+      "metrics": [
+        "Presence",
+        "Comp",
+        "Avg."
+      ],
+      "metrics_value": [
+        58.89,
+        83.11,
+        72.45
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change Detection",
+      "application": "Change detection",
+      "dataset": "LEVIR MCI",
+      "metrics": [
+        "ROUGE-1",
+        "ROUGE-L",
+        "METEOR"
+      ],
+      "metrics_value": [
+        31.94,
+        30.66,
+        55.83
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change Detection",
+      "application": "Change detection",
+      "dataset": "MUDS",
+      "metrics": [
+        "ROUGE-1",
+        "ROUGE-L",
+        "METEOR"
+      ],
+      "metrics_value": [
+        33.78,
+        30.47,
+        74.8
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change Detection",
+      "application": "Change detection",
+      "dataset": "SYSU",
+      "metrics": [
+        "ROUGE-1",
+        "ROUGE-L",
+        "METEOR"
+      ],
+      "metrics_value": [
+        18.03,
+        17.42,
+        14.98
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Methane Plume Detection",
+      "application": "Methane plume detection",
+      "dataset": "STARCOP",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        77.09
+      ],
+      "sensor": [
+        "Hyperspectral"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Urban Heat Island Classification",
+      "application": "Urban heat island detection",
+      "dataset": "UHI-AD",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        56.77
+      ],
+      "sensor": [
+        "Landsat8"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

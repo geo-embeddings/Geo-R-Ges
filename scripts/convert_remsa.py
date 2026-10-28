@@ -1,5 +1,5 @@
 """Convert REMSA model metadata (../REMSA/model_metadata/*_prediction.json)
-to the RS-FMD MLM record schema (model_schema_mlm.json).
+to the RS-FMD MLM record schema (skill/schema/model_schema_mlm.json).
 
 Usage: python scripts/convert_remsa.py [SRC_DIR] [OUT_DIR]
 """
@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT.parent / "REMSA" / "model_metadata"
-OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "model_metadata"
+OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "skill" / "database" / "models"
 
 MONTHS = {m: i for i, m in enumerate(
     ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"], 1)}

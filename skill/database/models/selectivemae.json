@@ -1,0 +1,231 @@
+{
+  "id": "selectivemae",
+  "mlm:name": "SelectiveMAE",
+  "version": "v1",
+  "release_date": "2025-07-02T00:00:00Z",
+  "updated": "2025-07-02T00:00:00Z",
+  "description": "SelectiveMAE is an efficient masked image modeling (MIM) method for remote sensing foundation models, pre-trained on the large-scale OpticalRS-13M dataset (13 million optical satellite images). It accelerates pre-training by dynamically encoding and reconstructing semantically rich patch tokens, reducing computational overhead while maintaining or improving downstream performance.",
+  "sci:doi": "10.48550/arXiv.2406.11933",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/SelectiveMAE",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://github.com/SelectiveMAE/releases",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-B, ViT-L",
+  "mlm:total_parameters": 86000000,
+  "pretext_training_type": "Masked Image Modeling (MIM)",
+  "masking_strategy": "Progressive Semantic Token Selection (PSTS) with HOG-based semantic patch selection; 85% mask ratio, 25% reconstruction ratio",
+  "pretraining": "Self-supervised masked image modeling on OpticalRS-13M, using SelectiveMAE with partial reconstruction and progressive semantic token selection",
+  "domain_knowledge": [
+    "Histogram of Oriented Gradients (HOG) for semantic patch selection",
+    "Progressive Semantic Token Selection (PSTS)",
+    "Remote sensing image characteristics (sparse foreground, dense background)"
+  ],
+  "backbone_modifications": [
+    "Partial patch encoding and reconstruction",
+    "Cross-attention decoder (as in CrossMAE)"
+  ],
+  "supported_sensors": [
+    "WorldView",
+    "QuickBird",
+    "GeoEye"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "Optical RGB"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (typically 0.3m to 30m)",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "WorldView, QuickBird, GeoEye",
+      "bands": [
+        "R",
+        "G",
+        "B"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "OpticalRS-13M",
+  "regions_coverage": [
+    "Global (multiple continents, diverse scenes, urban/rural, events, etc.)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 13203698,
+  "sampling": "Random sampling from curated public datasets, with diversity and richness criteria; Time range: 2011-2024 (various, depending on source datasets)",
+  "processing:level": "varied (depends on source, but all visible light, preprocessed to standard size)",
+  "processing:lineage": "Exclusion of non-visible bands; Random cropping; Deduplication (perceptual hashing + manual review)",
+  "cloud_cover": "Not explicitly filtered; some source datasets may include cloud cover filtering",
+  "missing_data": "Duplicates removed; missing/corrupt images excluded",
+  "mlm:hyperparameters": {
+    "patch_size": "16x16",
+    "epochs": 800,
+    "batch_size": 1024,
+    "learning_rate": "1.5e-4 (scaled for mask/reconstruction ratio)",
+    "augmentations": [
+      "RandomCrop",
+      "RandomFlip"
+    ],
+    "mask_ratio": 0.85,
+    "image_resolution": "64x64 to 1024x1024 (cropped to 224x224 for pretraining)",
+    "num_layers": 12
+  },
+  "benchmarks": [
+    {
+      "task": "Scene Classification",
+      "application": "Aerial scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "Overall Accuracy (result 1 of 2)",
+        "Overall Accuracy (result 2 of 2)"
+      ],
+      "metrics_value": [
+        97.1,
+        98.28
+      ],
+      "sensor": [
+        "WorldView",
+        "QuickBird",
+        "GeoEye"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "600x600",
+      "spatial_resolution": "0.5m-8m",
+      "split_ratio": "20/80, 50/50; samples used: 10000 of 10000 (100%)"
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Aerial scene classification",
+      "dataset": "RESISC-45",
+      "metrics": [
+        "Overall Accuracy (result 1 of 2)",
+        "Overall Accuracy (result 2 of 2)"
+      ],
+      "metrics_value": [
+        93.7,
+        95.48
+      ],
+      "sensor": [
+        "WorldView",
+        "QuickBird",
+        "GeoEye"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.5m-30m",
+      "split_ratio": "10/90, 20/80; samples used: 31500 of 31500 (100%)"
+    },
+    {
+      "task": "Object Detection",
+      "application": "Horizontal object detection",
+      "dataset": "DIOR",
+      "metrics": [
+        "mAP50"
+      ],
+      "metrics_value": [
+        75.8
+      ],
+      "sensor": [
+        "WorldView",
+        "QuickBird",
+        "GeoEye"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "800x800",
+      "spatial_resolution": "0.5m-30m",
+      "split_ratio": "train/val/test: 5862/5863/11738; samples used: 23463 of 23463 (100%)"
+    },
+    {
+      "task": "Object Detection",
+      "application": "Oriented object detection",
+      "dataset": "DIOR-R",
+      "metrics": [
+        "mAP50"
+      ],
+      "metrics_value": [
+        67.69
+      ],
+      "sensor": [
+        "WorldView",
+        "QuickBird",
+        "GeoEye"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "800x800",
+      "spatial_resolution": "0.5m-30m",
+      "split_ratio": "train/val/test: 5862/5863/11738; samples used: 23463 of 23463 (100%)"
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "LoveDA",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        52.68
+      ],
+      "sensor": [
+        "WorldView",
+        "QuickBird",
+        "GeoEye"
+      ],
+      "regions": [
+        "Nanjing",
+        "Changzhou",
+        "Wuhan"
+      ],
+      "image_resolution": "1024x1024 (cropped to 512x512)",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "official train/val/test; samples used: 5987 of 5987 (100%)"
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Building footprint segmentation",
+      "dataset": "SpaceNetv1",
+      "metrics": [
+        "mF1"
+      ],
+      "metrics_value": [
+        79.44
+      ],
+      "sensor": [
+        "WorldView"
+      ],
+      "regions": [
+        "Rio de Janeiro"
+      ],
+      "image_resolution": "variable (cropped to 384x384)",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "train/test: 5000/1940; samples used: 6940 of 6940 (100%)"
+    }
+  ],
+  "provenance": null
+}

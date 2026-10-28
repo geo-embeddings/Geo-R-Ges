@@ -1,0 +1,274 @@
+{
+  "id": "rs-vheat",
+  "mlm:name": "RS-vHeat",
+  "version": "v3",
+  "release_date": "2025-06-26T00:00:00Z",
+  "updated": "2025-06-26T00:00:00Z",
+  "description": "RS-vHeat is a multi-modal remote sensing foundation model inspired by heat conduction, supporting optical and SAR data. It uses a heat conduction operator for efficient global feature modeling, frequency domain hierarchical masking, and multi-domain reconstruction for self-supervised pretraining. RS-vHeat achieves state-of-the-art performance and efficiency across semantic segmentation, object detection, classification, and change detection tasks on 10 datasets.",
+  "sci:doi": "10.48550/arXiv.2411.17984",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "vHeat-B + SCEs (based on Swin-B)",
+  "mlm:total_parameters": 148000000,
+  "pretext_training_type": "Self-supervised learning with frequency domain hierarchical masking and multi-domain reconstruction",
+  "masking_strategy": "Frequency domain hierarchical masking (20%-30% random sector mask in DCT domain) and spatial domain masking",
+  "pretraining": "Self-supervised pretraining on 3 million optical and SAR images using frequency domain hierarchical masking, multi-domain reconstruction, and contrastive loss in a heat-conduction-based visual encoder.",
+  "domain_knowledge": [
+    "Heat conduction theory",
+    "Frequency domain analysis",
+    "Spatial correction embeddings"
+  ],
+  "backbone_modifications": [
+    "Heat Conduction Operator replaces attention/residual blocks",
+    "Spatial Correction Embeddings (SCEs)"
+  ],
+  "supported_sensors": [
+    "Optical",
+    "SAR"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (5m for WHU-OPT-SAR, 0.5m for Potsdam, 0.3m for iSAID, 5m for Air-PolSAR-Seg)",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Optical, SAR",
+      "bands": [
+        "RGB",
+        "SAR"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          2,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "Large-scale multi-modal dataset (450k matched optical and SAR pairs, >3 million entries)",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 3000000,
+  "sampling": "Random sector masking in frequency domain",
+  "processing:level": null,
+  "processing:lineage": "DCT/IDCT; Frequency domain masking; Random sector mask (20%-30%)",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "variable (patch size 16x16 for 224x224 images)",
+    "epochs": 200,
+    "batch_size": 32,
+    "learning_rate": "1e-6 (warmup), up to 2e-4 (cosine annealing), min 1e-5",
+    "augmentations": null,
+    "mask_ratio": 0.25,
+    "num_layers": 24
+  },
+  "benchmarks": [
+    {
+      "task": "Semantic Segmentation",
+      "application": "Urban land cover segmentation",
+      "dataset": "Potsdam",
+      "metrics": [
+        "mF1"
+      ],
+      "metrics_value": [
+        92.82
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "official split; samples used: 38 of 38 (100%)"
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Instance segmentation in aerial images",
+      "dataset": "iSAID",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        68.72
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "896x896",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "official split; samples used: 2806 of 2806 (100%)"
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Terrain segmentation in PolSAR images",
+      "dataset": "AIR-PolSAR-Seg",
+      "metrics": [
+        "mIoU",
+        "OA",
+        "AA"
+      ],
+      "metrics_value": [
+        57.46,
+        81.46,
+        65.92
+      ],
+      "sensor": [
+        "SAR"
+      ],
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "1m",
+      "split_ratio": "official split; samples used: 2000 of 2000 (100%)"
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Multi-modal land use classification",
+      "dataset": "WHU-OPT-SAR",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        83.9
+      ],
+      "sensor": [
+        "Optical",
+        "SAR"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "5m",
+      "split_ratio": "official split"
+    },
+    {
+      "task": "Object Detection",
+      "application": "General object detection",
+      "dataset": "DIOR",
+      "metrics": [
+        "mAP50"
+      ],
+      "metrics_value": [
+        82.3
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "800x800",
+      "spatial_resolution": null,
+      "split_ratio": "official split; samples used: 23463 of 23463 (100%)"
+    },
+    {
+      "task": "Object Detection",
+      "application": "Fine-grained aircraft detection",
+      "dataset": "SAR-AIRcraft-1.0",
+      "metrics": [
+        "mAP50",
+        "mAP75"
+      ],
+      "metrics_value": [
+        87.1,
+        67.4
+      ],
+      "sensor": [
+        "SAR"
+      ],
+      "regions": null,
+      "image_resolution": "640x640",
+      "spatial_resolution": null,
+      "split_ratio": "official split; samples used: 4368 of 4368 (100%)"
+    },
+    {
+      "task": "Object Detection",
+      "application": "Fine-grained object detection",
+      "dataset": "FAIR1M-2.0",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        48.29
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": null,
+      "split_ratio": "official split; samples used: 40000 of 40000 (100%)"
+    },
+    {
+      "task": "Change Detection",
+      "application": "Building change detection",
+      "dataset": "LEVIR-CD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        93.48
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": "official split; samples used: 637 of 637 (100%)"
+    },
+    {
+      "task": "Image Classification",
+      "application": "Aerial scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "OA (result 1 of 2)",
+        "OA (result 2 of 2)"
+      ],
+      "metrics_value": [
+        96.81,
+        97.58
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "600x600",
+      "spatial_resolution": null,
+      "split_ratio": "20%/50% train; samples used: 10000 of 10000 (100%)"
+    },
+    {
+      "task": "Image Classification",
+      "application": "Aerial scene classification",
+      "dataset": "NWPU-RESISC45",
+      "metrics": [
+        "OA (result 1 of 2)",
+        "OA (result 2 of 2)"
+      ],
+      "metrics_value": [
+        92.01,
+        95.66
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": "600x600",
+      "spatial_resolution": null,
+      "split_ratio": "10%/20% train; samples used: 31500 of 31500 (100%)"
+    }
+  ],
+  "provenance": null
+}

@@ -1,0 +1,106 @@
+{
+  "id": "majortom-core-s1rtc-decur",
+  "title": "Major TOM Core-S1RTC-DeCUR",
+  "version": null,
+  "description": "Major TOM Core-S1RTC-DeCUR: one DeCUR embedding per 224 x 224 px fragment of the Major TOM Core Sentinel-1 RTC dataset, released by ESA Φ-lab and CloudFerro as part of the Major TOM embedding expansion. Global and dense over land; useful for similarity search, retrieval and frozen-feature probing.",
+  "updated": "2026-10-28T00:00:00Z",
+  "license": "CC-BY-SA-4.0",
+  "sci:doi": "10.57967/hf/5239",
+  "provenance": {
+    "source": "manual extraction",
+    "source_id": null,
+    "source_url": "https://huggingface.co/datasets/Major-TOM/Core-S1RTC-DeCUR",
+    "references": [
+      "https://arxiv.org/abs/2412.05600",
+      "https://docs.torchgeo.org/en/latest/api/datasets.html"
+    ],
+    "retrieved": "2026-10-28T00:00:00Z",
+    "review": [
+      "emb:dimensions not stated and dataset viewer unavailable.",
+      "Dataset metadata lists 36,834,922 rows vs 36,748,875 in the card's table."
+    ]
+  },
+  "providers": [
+    {
+      "name": "ESA Φ-lab",
+      "roles": [
+        "producer",
+        "licensor"
+      ],
+      "url": "https://philab.esa.int"
+    },
+    {
+      "name": "CloudFerro",
+      "roles": [
+        "processor"
+      ],
+      "url": "https://cloudferro.com"
+    },
+    {
+      "name": "Hugging Face",
+      "roles": [
+        "host"
+      ],
+      "url": "https://huggingface.co"
+    }
+  ],
+  "encoder_model": {
+    "id": "decur",
+    "name": "DeCUR",
+    "checkpoint": null,
+    "href": null
+  },
+  "emb:type": "chip",
+  "emb:dimensions": null,
+  "emb:chip_size": [
+    224,
+    224
+  ],
+  "emb:stride": null,
+  "emb:grid_id": "MAJORTOM",
+  "emb:temporal_period": null,
+  "data_type": "float32",
+  "emb:original_data_type": null,
+  "emb:quantization_method": null,
+  "source_sensors": [
+    "Sentinel-1"
+  ],
+  "processing:level": "RTC",
+  "processing:lineage": "Each Major TOM Core grid cell (1068 x 1068 px at 10 m) is cut into 224 x 224 px fragments with a 10% target overlap and border shift (the last fragment touches the far edge), and each fragment is encoded once. Sentinel-1 RTC SAR input, DeCUR image encoder.",
+  "spatial_resolution": "2.24km chips",
+  "regions_coverage": [
+    "Global"
+  ],
+  "bbox": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "temporal_coverage_note": "Major TOM Core snapshots, one acquisition per grid cell; the paper and dataset card give no overall date range (TorchGeo lists 2015-2024, sparse, for the Major TOM embeddings).",
+  "num_embeddings": 36748875,
+  "assets": {
+    "data": {
+      "href": "https://huggingface.co/datasets/Major-TOM/Core-S1RTC-DeCUR",
+      "title": "Hugging Face dataset (GeoParquet)",
+      "type": "application/vnd.apache.parquet",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    },
+    "paper": {
+      "href": "https://arxiv.org/abs/2412.05600",
+      "title": "Global and Dense Embeddings of Earth: Major TOM Floating in the Latent Space",
+      "type": "text/html",
+      "roles": [
+        "metadata"
+      ]
+    }
+  },
+  "hosting": [
+    "Hugging Face"
+  ],
+  "access_requirements": "open download from Hugging Face, no account",
+  "loaders": [
+    "datasets.load_dataset(\"Major-TOM/Core-S1RTC-DeCUR\")"
+  ],
+  "benchmarks": null
+}

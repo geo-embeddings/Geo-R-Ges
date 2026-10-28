@@ -1,0 +1,290 @@
+{
+  "id": "georssd",
+  "mlm:name": "RS5M",
+  "version": "v1",
+  "release_date": null,
+  "updated": null,
+  "description": "RS5M is a large-scale remote sensing vision-language dataset containing 5 million remote sensing images paired with English descriptions, constructed by filtering public image-text datasets and captioning label-only RS datasets with pre-trained VLMs. It is designed to enable domain-specific transfer of general vision-language models to remote sensing tasks.",
+  "sci:doi": "10.48550/arXiv.2306.11300",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/om-ai-lab/RS5M",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "CLIP ViT-B32",
+  "mlm:total_parameters": 152000000,
+  "pretext_training_type": "Contrastive learning (InfoNCE loss), optionally with image-text matching and self-supervised loss",
+  "masking_strategy": null,
+  "pretraining": "RS5M is constructed by filtering 11 public image-text datasets (PUB11) using RS-related keywords and deduplication, and by generating captions for 3 large-scale RS datasets (RS3: BigEarthNet, FMoW, MillionAID) using BLIP2. Extensive denoising and quality assurance methods are applied, including rotation-invariant caption selection and meta-information integration.",
+  "domain_knowledge": [
+    "Remote sensing-specific keyword filtering",
+    "Rotation-invariant caption selection",
+    "Integration of geospatial meta-information into captions"
+  ],
+  "backbone_modifications": [
+    "Adapters (Pfeiffer, LoRA, Prefix-tuning, UniPELT) inserted into CLIP encoders"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2",
+    "Gaofen",
+    "USGS",
+    "NAIP",
+    "MODIS",
+    "EOSDIS",
+    "WorldView",
+    "Planet Dove",
+    "Maxar",
+    "Landsat"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB",
+    "Text"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Sentinel-1, Sentinel-2, Gaofen, USGS, NAIP, MODIS, EOSDIS, WorldView, Planet Dove, Maxar, Landsat",
+      "bands": [
+        "RGB",
+        "Multispectral (up to 12 bands for Sentinel-2, 2 bands for Sentinel-1, 4/8 bands for FMoW)"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "RS5M (PUB11 + RS3)",
+  "regions_coverage": [
+    "Global (with overrepresentation in North America, Europe, Asia, and underrepresentation in Africa, Australia, northern Canada/Russia, South America)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 5000000,
+  "sampling": "PUB11: top 90% VLM similarity, top 80% RS classifier; RS3: all available images from selected splits",
+  "processing:level": null,
+  "processing:lineage": "Keyword filtering; Deduplication; Invalid image removal; VLM and RS image detector filtering; Caption generation with BLIP2; Meta-information integration",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 10,
+    "batch_size": 500,
+    "learning_rate": "1e-4",
+    "augmentations": [
+      "Image rotation (12 angles, 30 deg increments) for rotation-invariant caption selection"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "variable (average ~400x520 px, BigEarthNet 120x120 px, others up to 800x800 px)"
+  },
+  "benchmarks": [
+    {
+      "task": "Zero-shot classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        70.92
+      ],
+      "sensor": [
+        "Google Earth",
+        "Aerial"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "95% train, 5% val"
+    },
+    {
+      "task": "Zero-shot classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "RESISC45",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        67.79
+      ],
+      "sensor": [
+        "Google Earth",
+        "Aerial"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "95% train, 5% val"
+    },
+    {
+      "task": "Zero-shot classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        61.24
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "95% train, 5% val"
+    },
+    {
+      "task": "Vision-language retrieval",
+      "application": "Image-to-text retrieval",
+      "dataset": "RSICD",
+      "metrics": [
+        "Recall@1",
+        "Recall@5",
+        "Recall@10",
+        "Mean Recall"
+      ],
+      "metrics_value": [
+        9.61,
+        22.05,
+        32.11,
+        20.99
+      ],
+      "sensor": [
+        "Google Earth",
+        "Baidu Map",
+        "MapABC",
+        "Tianditu"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "95% train, 5% val"
+    },
+    {
+      "task": "Vision-language retrieval",
+      "application": "Text-to-image retrieval",
+      "dataset": "RSICD",
+      "metrics": [
+        "Recall@1",
+        "Recall@5",
+        "Recall@10",
+        "Mean Recall"
+      ],
+      "metrics_value": [
+        6.99,
+        22.09,
+        33.06,
+        20.99
+      ],
+      "sensor": [
+        "Google Earth",
+        "Baidu Map",
+        "MapABC",
+        "Tianditu"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "95% train, 5% val"
+    },
+    {
+      "task": "Vision-language retrieval",
+      "application": "Image-to-text retrieval",
+      "dataset": "RSITMD",
+      "metrics": [
+        "Recall@1",
+        "Recall@5",
+        "Recall@10",
+        "Mean Recall"
+      ],
+      "metrics_value": [
+        13.72,
+        30.97,
+        43.14,
+        29.06
+      ],
+      "sensor": [
+        "Satellite"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "95% train, 5% val"
+    },
+    {
+      "task": "Vision-language retrieval",
+      "application": "Text-to-image retrieval",
+      "dataset": "RSITMD",
+      "metrics": [
+        "Recall@1",
+        "Recall@5",
+        "Recall@10",
+        "Mean Recall"
+      ],
+      "metrics_value": [
+        9.25,
+        30.04,
+        47.26,
+        29.06
+      ],
+      "sensor": [
+        "Satellite"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "95% train, 5% val"
+    },
+    {
+      "task": "Semantic localization",
+      "application": "Semantic localization (visual grounding)",
+      "dataset": "AIR-SLT",
+      "metrics": [
+        "Rsu",
+        "Ras",
+        "Rda",
+        "Rmi"
+      ],
+      "metrics_value": [
+        0.7292,
+        0.3463,
+        0.6461,
+        0.682
+      ],
+      "sensor": [
+        "Satellite"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "95% train, 5% val"
+    }
+  ],
+  "provenance": null
+}

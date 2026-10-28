@@ -1,0 +1,152 @@
+{
+  "id": "matter",
+  "mlm:name": "MATTER",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "MATTER is a self-supervised material and texture representation learning method for remote sensing tasks. It leverages multi-temporal, spatially aligned satellite imagery over unchanged regions to learn invariance to illumination and viewing angle, enabling improved performance and faster convergence on downstream tasks such as change detection, land cover classification, and semantic segmentation.",
+  "sci:doi": null,
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/periakiva/MATTER",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ResNet-34",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Self-supervised contrastive learning with material and texture consistency objective",
+  "masking_strategy": null,
+  "pretraining": "Self-supervised pretraining on multi-temporal, spatially aligned Sentinel-2 imagery over unchanged regions, using patch-wise crops and contrastive learning of surface residuals.",
+  "domain_knowledge": [
+    "Material and texture representation",
+    "Patch-wise residual encoding",
+    "Texture Refinement Network (TeRN)",
+    "Surface Residual Encoder"
+  ],
+  "backbone_modifications": [
+    "Insertion of Texture Refinement Network (TeRN) after first layer",
+    "Surface Residual Encoder as output layer"
+  ],
+  "supported_sensors": [
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "full",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "variable",
+  "mlm:input": null,
+  "mlm:pretrained_source": "Self-collected, orthorectified, atmospherically corrected Sentinel-2 imagery",
+  "regions_coverage": [
+    "27 regions of interest spanning 1217 km2 over three years, rural and remote regions with limited human development"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 14857,
+  "sampling": "Manual selection of regions, maximum 100 images per region; Time range: Three years",
+  "processing:level": null,
+  "processing:lineage": "Orthorectification; Atmospheric correction; Cloud cover filtering (>20% removed); Data coverage filtering (<80% removed)",
+  "cloud_cover": "Removed images with >20% cloud cover",
+  "missing_data": "Removed images with <80% data coverage",
+  "mlm:hyperparameters": {
+    "patch_size": "7x7 patch",
+    "epochs": null,
+    "batch_size": 32,
+    "learning_rate": "0.01",
+    "augmentations": null,
+    "mask_ratio": null,
+    "image_resolution": "1096x1096 px"
+  },
+  "benchmarks": [
+    {
+      "task": "Change detection",
+      "application": "Remote sensing change detection",
+      "dataset": "Onera Satellite Change Detection (OSCD)",
+      "metrics": [
+        "Precision",
+        "Recall",
+        "F-1"
+      ],
+      "metrics_value": [
+        37.52,
+        72.65,
+        49.48
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection (fine-tuned)",
+      "application": "Remote sensing change detection",
+      "dataset": "Onera Satellite Change Detection (OSCD)",
+      "metrics": [
+        "Precision",
+        "Recall",
+        "F-1"
+      ],
+      "metrics_value": [
+        61.8,
+        57.13,
+        59.37
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Land cover classification",
+      "application": "Multi-label land cover classification",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        87.98
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "120x120",
+      "spatial_resolution": "10m",
+      "split_ratio": "95%/5%"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Building segmentation",
+      "dataset": "SpaceNet",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        81.12
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "163x163",
+      "spatial_resolution": "10m",
+      "split_ratio": "90%/10%"
+    }
+  ],
+  "provenance": null
+}

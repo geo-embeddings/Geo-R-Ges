@@ -1,0 +1,161 @@
+{
+  "id": "satmamba",
+  "mlm:name": "SatMamba",
+  "version": "B",
+  "release_date": "2024-09-01T00:00:00Z",
+  "updated": "2024-09-01T00:00:00Z",
+  "description": "SatMamba is a foundation model for remote sensing imagery that combines masked autoencoders with a State Space Model (Mamba) backbone, enabling linear computational scaling and competitive performance on high-resolution image-to-image tasks.",
+  "sci:doi": "10.48550/arXiv.2502.00435",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/mdchuc/HRSFM",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "Mamba (State Space Model)",
+  "mlm:total_parameters": 229860000,
+  "pretext_training_type": "Masked Autoencoder (MAE) with self-supervised masked image modeling",
+  "masking_strategy": "Random patch masking with 75% masking ratio; masking applied before flattening, supporting up to four scanning directions (row-major forward/backward, column-major forward/backward)",
+  "pretraining": "Self-supervised masked autoencoding with Mamba backbone on high-resolution RGB satellite images (fMoW dataset), using normalized pixel values as reconstruction target and up to four scanning directions.",
+  "domain_knowledge": null,
+  "backbone_modifications": [
+    "Multi-way Mamba block with up to four scanning directions (row-major forward/backward, column-major forward/backward)",
+    "No positional encoding or fixed positional encoding (ablation)"
+  ],
+  "supported_sensors": [
+    "RGB (high-resolution satellite/aerial imagery)"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral (RGB)"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (pretraining at 224x224 pixels)",
+  "temporal_resolution": "N/A",
+  "mlm:input": [
+    {
+      "name": "RGB (high-resolution satellite/aerial imagery)",
+      "bands": [
+        "Red",
+        "Green",
+        "Blue"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "Functional Map of the World (fMoW)",
+  "regions_coverage": [
+    "Global"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 363572,
+  "sampling": "Random sampling without replacement",
+  "processing:level": null,
+  "processing:lineage": "Patchify; Linear projection; Normalization of pixel values",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "16x16",
+    "epochs": 800,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": 0.75,
+    "num_layers": 12
+  },
+  "benchmarks": [
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover classification",
+      "dataset": "OpenEarthMap",
+      "metrics": [
+        "IoU (per class)",
+        "mIoU",
+        "unnamed metric (result 3)",
+        "unnamed metric (result 4)",
+        "unnamed metric (result 5)",
+        "unnamed metric (result 6)",
+        "unnamed metric (result 7)",
+        "unnamed metric (result 8)",
+        "unnamed metric (result 9)"
+      ],
+      "metrics_value": [
+        43.44,
+        58.79,
+        55.39,
+        65.98,
+        72.17,
+        78.83,
+        77.54,
+        79.57,
+        66.46
+      ],
+      "sensor": [
+        "Aerial",
+        "Satellite"
+      ],
+      "regions": [
+        "44 countries (global)"
+      ],
+      "image_resolution": "variable (high-resolution)",
+      "spatial_resolution": "variable",
+      "split_ratio": "2500 train / 500 val / 500 test; samples used: 2500 of 3500 (71.43%)"
+    },
+    {
+      "task": "Change detection, semantic segmentation",
+      "application": "Building damage assessment after disasters",
+      "dataset": "xBD",
+      "metrics": [
+        "IoU",
+        "F1 (localization)",
+        "F1 (damage classification)",
+        "F1 (overall)",
+        "F1 (per class: No damage, Minor damage, Major damage, Destroyed)",
+        "unnamed metric (result 6)",
+        "unnamed metric (result 7)",
+        "unnamed metric (result 8)"
+      ],
+      "metrics_value": [
+        77.04,
+        87.03,
+        77.77,
+        80.55,
+        94.8,
+        61.84,
+        76.03,
+        86.51
+      ],
+      "sensor": [
+        "Satellite"
+      ],
+      "regions": [
+        "Global (19 disaster events, 6 types)"
+      ],
+      "image_resolution": "variable (high-resolution)",
+      "spatial_resolution": "variable",
+      "split_ratio": "9168 train / 933 val / 933 test; samples used: 9168 of 11034 (83.08%)"
+    }
+  ],
+  "provenance": null
+}

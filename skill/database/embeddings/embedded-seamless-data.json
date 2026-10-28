@@ -1,0 +1,94 @@
+{
+  "id": "embedded-seamless-data",
+  "title": "Embedded Seamless Data (ESD)",
+  "version": "v1",
+  "description": "Global 30 m annual Earth embedding database for 2000-2024 produced with ESDNet from Landsat 5/7/8/9 and MODIS Terra, with each year's phenology condensed into quantized (FSQ) latent codes. About 2.4 TB per global year; supports reconstruction of surface reflectance and land cover classification.",
+  "updated": "2026-10-28T00:00:00Z",
+  "license": "CC-BY-4.0",
+  "sci:doi": "10.12436/iEarth.0000.20251229.000064.v1",
+  "provenance": {
+    "source": "manual extraction",
+    "source_id": null,
+    "source_url": "https://github.com/shuangchencc/ESD",
+    "references": [
+      "https://arxiv.org/abs/2601.11183",
+      "https://docs.torchgeo.org/en/latest/api/datasets/embedded-seamless-data.html",
+      "https://docs.torchgeo.org/en/latest/api/datasets.html"
+    ],
+    "retrieved": "2026-10-28T00:00:00Z",
+    "review": [
+      "License, dtype (uint16 -> float32) from TorchGeo's table; the repo states neither.",
+      "Per-pixel layout unclear: TorchGeo lists 12 dims, the paper 12 temporal steps per year; emb:dimensions left null."
+    ]
+  },
+  "providers": [
+    {
+      "name": "Peng Cheng Laboratory (iEarth)",
+      "roles": [
+        "host"
+      ],
+      "url": "https://data-starcloud.pcl.ac.cn/iearthdata/64"
+    }
+  ],
+  "encoder_model": {
+    "id": null,
+    "name": "ESDNet",
+    "checkpoint": null,
+    "href": "https://github.com/shuangchencc/ESD"
+  },
+  "emb:type": "pixel",
+  "emb:dimensions": null,
+  "emb:chip_size": null,
+  "emb:stride": null,
+  "emb:grid_id": "MGRS",
+  "emb:temporal_period": "P1Y",
+  "data_type": "uint16",
+  "emb:original_data_type": "float32",
+  "emb:quantization_method": "Finite Scalar Quantization (FSQ)",
+  "source_sensors": [
+    "Landsat-5",
+    "Landsat-7",
+    "Landsat-8",
+    "Landsat-9",
+    "MODIS Terra",
+    "NASADEM"
+  ],
+  "processing:level": null,
+  "processing:lineage": "Yearly multi-sensor fusion encoded by ESDNet; tiles of 3600 x 3600 px on MGRS, organised by year.",
+  "spatial_resolution": "30m",
+  "regions_coverage": [
+    "Global (land)"
+  ],
+  "bbox": null,
+  "start_datetime": "2000-01-01T00:00:00Z",
+  "end_datetime": "2024-12-31T23:59:59Z",
+  "temporal_coverage_note": null,
+  "num_embeddings": null,
+  "assets": {
+    "data": {
+      "href": "https://data-starcloud.pcl.ac.cn/iearthdata/64",
+      "title": "iEarth data portal",
+      "type": "text/html",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    },
+    "code": {
+      "href": "https://github.com/shuangchencc/ESD",
+      "title": "ESD repository and decoding notebooks",
+      "type": "text/html",
+      "roles": [
+        "metadata"
+      ]
+    }
+  },
+  "hosting": [
+    "iEarth (Peng Cheng Laboratory)"
+  ],
+  "access_requirements": "account on the iEarth data portal",
+  "loaders": [
+    "torchgeo.datasets.EmbeddedSeamlessData"
+  ],
+  "benchmarks": null
+}

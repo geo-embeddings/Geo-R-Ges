@@ -1,0 +1,185 @@
+{
+  "id": "usat",
+  "mlm:name": "USat",
+  "version": "ViT-L",
+  "release_date": "2023-12-02T00:00:00Z",
+  "updated": "2023-12-02T00:00:00Z",
+  "description": "USat is a unified self-supervised encoder for multi-sensor satellite imagery, based on a vision transformer with modified patch projection layers and positional encodings to handle spectral bands with varying spatial scales from multiple sensors. It is pre-trained using a masked autoencoder (MAE) approach and supports flexible input of arbitrary subsets of spectral bands from multiple sensors.",
+  "sci:doi": "10.48550/arXiv.2312.02199",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/stanfordmlgroup/USat",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://github.com/stanfordmlgroup/USat",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-L",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Masked Autoencoder (MAE)",
+  "masking_strategy": "Inconsistent random spatial masking per band, with masking ratio 0.75 and equal ground cover masked across bands",
+  "pretraining": "Self-supervised masked autoencoding on paired NAIP and Sentinel-2 imagery from the Satlas dataset, using superpositional, spectral group, and sensor encodings to model multi-sensor, multi-spectral data with varying GSDs.",
+  "domain_knowledge": [
+    "Superpositional encodings for GSD alignment",
+    "Spectral group pooling",
+    "Sensor encodings"
+  ],
+  "backbone_modifications": [
+    "Separate patch projection per spectral band",
+    "Spectral group pooling layer",
+    "Superpositional positional encodings",
+    "Support for arbitrary subset of bands"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "NAIP"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "Aerial RGB"
+  ],
+  "spectral_alignment": "full",
+  "temporal_alignment": "none",
+  "spatial_resolution": "1m, 10m, 20m (native GSDs for NAIP and Sentinel-2 bands)",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2, NAIP",
+      "bands": [
+        "Red",
+        "Green",
+        "Blue",
+        "NIR",
+        "Red Edge 1",
+        "Red Edge 2",
+        "Red Edge 3",
+        "SWIR-1",
+        "SWIR-2"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Satlas (paired NAIP and Sentinel-2 imagery)",
+  "regions_coverage": [
+    "Contiguous United States"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 3615184,
+  "sampling": "Paired images by closest time, selected pairs with all required bands",
+  "processing:level": null,
+  "processing:lineage": "Paired NAIP and Sentinel-2 by ground area and time; Cropped Sentinel-2 to NAIP footprint; Resized bands to native GSDs (1m, 10m, 20m)",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "20x20 (NAIP 1m), 4x4 (Sentinel-2 10m), 2x2 (Sentinel-2 20m)",
+    "epochs": 25,
+    "batch_size": 160,
+    "learning_rate": "0.00015 (cosine scheduler)",
+    "augmentations": [
+      "Random horizontal flip",
+      "Random vertical flip"
+    ],
+    "mask_ratio": 0.75,
+    "image_resolution": "320m x 320m footprint, patches of 16x16 (NAIP), 8x8 (Sentinel-2)"
+  },
+  "benchmarks": [
+    {
+      "task": "Multi-label classification",
+      "application": "Land cover and infrastructure classification",
+      "dataset": "USatlas (modified Satlas)",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        72.53
+      ],
+      "sensor": [
+        "Sentinel-2",
+        "NAIP"
+      ],
+      "regions": [
+        "Contiguous United States"
+      ],
+      "image_resolution": "320m x 320m",
+      "spatial_resolution": "1m, 10m, 20m",
+      "split_ratio": "train/val/test as in Satlas (per [2]); samples used: 3615184 of 3615184 (100%)"
+    },
+    {
+      "task": "Multi-class classification",
+      "application": "Land use/land cover classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        98.37
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "16200/5400/5400 (train/val/test); samples used: 16200 of 27000 (60%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land cover classification",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        85.82
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "10 European countries"
+      ],
+      "image_resolution": "128x128",
+      "spatial_resolution": "10m",
+      "split_ratio": "31166/103944/103728 (train/val/test); samples used: 31166 of 590326 (5.28%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Infrastructure mapping",
+      "dataset": "METER-ML",
+      "metrics": [
+        "MAP (result 1 of 2)",
+        "MAP (result 2 of 2)"
+      ],
+      "metrics_value": [
+        73.95,
+        83.5
+      ],
+      "sensor": [
+        "Sentinel-2",
+        "NAIP"
+      ],
+      "regions": [
+        "Contiguous United States"
+      ],
+      "image_resolution": "720x720",
+      "spatial_resolution": "1m (NAIP), 10m (Sentinel-2)",
+      "split_ratio": "85065/515/1018 (train/val/test); samples used: 85065 of 86625 (98.2%)"
+    }
+  ],
+  "provenance": null
+}

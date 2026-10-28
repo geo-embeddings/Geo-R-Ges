@@ -1,0 +1,526 @@
+{
+  "id": "teochat",
+  "mlm:name": "TEOChat",
+  "version": "1.0",
+  "release_date": null,
+  "updated": null,
+  "description": "TEOChat is the first vision-language model (VLM) for temporal earth observation (EO) data, capable of engaging in conversations about temporal sequences of EO images. It is trained on TEOChatlas, a large instruction-following dataset with both single image and temporal EO tasks, and demonstrates strong spatial and temporal reasoning, outperforming prior VLMs and rivaling specialist models.",
+  "sci:doi": "10.48550/arXiv.2410.06234",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/ermongroup/TEOChat",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://github.com/ermongroup/TEOChat",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "CLIP ViT-L/14 (Radford et al., 2021)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Instruction tuning (visual instruction tuning) with next-token cross-entropy loss",
+  "masking_strategy": "None (no explicit masking, uses instruction tuning)",
+  "pretraining": "Instruction-tuned on TEOChatlas, which includes both single image and temporal EO tasks from multiple datasets and sensors",
+  "domain_knowledge": [
+    "Temporal reasoning",
+    "Spatial reasoning",
+    "Change detection",
+    "Scene classification",
+    "Visual question answering",
+    "Region-based reasoning"
+  ],
+  "backbone_modifications": [
+    "Temporally-shared image encoder (Siamese across time)",
+    "2-layer MLP vision-language connector",
+    "LLM decoder (Llama 2)"
+  ],
+  "supported_sensors": [
+    "WorldView-2",
+    "WorldView-3",
+    "Sentinel-2",
+    "GaoFen",
+    "Jilin-1",
+    "DJI Mavic Pro",
+    "SuperView",
+    "BeiJing-2"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Optical RGB",
+    "Multispectral (Sentinel-2)"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "224x224 pixels (input images resized and cropped)",
+  "temporal_resolution": "variable (bitemporal, pentatemporal, multitemporal up to 8 images)",
+  "mlm:input": [
+    {
+      "name": "WorldView-2, WorldView-3, Sentinel-2, GaoFen, Jilin-1, DJI Mavic Pro, SuperView, BeiJing-2",
+      "bands": [
+        "RGB",
+        "Sentinel-2 bands (multispectral)"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          -1,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "time",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "TEOChatlas (GeoChat Instruct, fMoW, xBD, S2Looking, QFabric)",
+  "regions_coverage": [
+    "Global (fMoW, xBD, S2Looking, QFabric, GeoChat Instruct cover worldwide locations)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1244393,
+  "sampling": "Random sampling of up to 8 images for long sequences; random sampling of shorter sequences from QFabric",
+  "processing:level": null,
+  "processing:lineage": "Resize shorter side to 224; Center crop to 224x224",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 2,
+    "batch_size": 1,
+    "learning_rate": "2e-5 (peak, cosine schedule, 3% warmup)",
+    "augmentations": [
+      "Random sampling of instruction phrasings",
+      "Random inclusion of image resolution and sensor name in prompt"
+    ],
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Temporal Scene Classification",
+      "application": "Land use/land cover classification over time",
+      "dataset": "fMoW RGB",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        75.1
+      ],
+      "sensor": [
+        "WorldView-2",
+        "WorldView-3"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Temporal Scene Classification",
+      "application": "Land use/land cover classification over time",
+      "dataset": "fMoW Sentinel",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        45.5
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Building Localization",
+      "application": "Disaster response, building localization",
+      "dataset": "xBD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        38.9
+      ],
+      "sensor": [
+        "WorldView-2"
+      ],
+      "regions": [
+        "Global (disaster regions)"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Building Damage Classification",
+      "application": "Disaster response, building damage assessment",
+      "dataset": "xBD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        50.0
+      ],
+      "sensor": [
+        "WorldView-2"
+      ],
+      "regions": [
+        "Global (disaster regions)"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Building Change Detection",
+      "application": "Urban development monitoring",
+      "dataset": "S2Looking",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        34.5
+      ],
+      "sensor": [
+        "GaoFen",
+        "SuperView",
+        "BeiJing-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Spatial Change Referring Expression",
+      "application": "Disaster response, spatial change localization",
+      "dataset": "xBD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        25.1
+      ],
+      "sensor": [
+        "WorldView-2"
+      ],
+      "regions": [
+        "Global (disaster regions)"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Spatial Change Referring Expression",
+      "application": "Urban development monitoring, spatial change localization",
+      "dataset": "S2Looking",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        32.9
+      ],
+      "sensor": [
+        "GaoFen",
+        "SuperView",
+        "BeiJing-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change Question Answering",
+      "application": "Disaster response, change QA",
+      "dataset": "xBD",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        89.9
+      ],
+      "sensor": [
+        "WorldView-2"
+      ],
+      "regions": [
+        "Global (disaster regions)"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change Question Answering",
+      "application": "Urban development monitoring, change QA",
+      "dataset": "S2Looking",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        73.4
+      ],
+      "sensor": [
+        "GaoFen",
+        "SuperView",
+        "BeiJing-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Region-based Change Question Answering",
+      "application": "Disaster response, region-based change QA",
+      "dataset": "xBD",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        94.0
+      ],
+      "sensor": [
+        "WorldView-2"
+      ],
+      "regions": [
+        "Global (disaster regions)"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Region-based Change Question Answering",
+      "application": "Urban development monitoring, region-based change QA",
+      "dataset": "S2Looking",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        90.0
+      ],
+      "sensor": [
+        "GaoFen",
+        "SuperView",
+        "BeiJing-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Region-based Change Question Answering",
+      "application": "Urban change detection",
+      "dataset": "QFabric [2 images]",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        66.7
+      ],
+      "sensor": [
+        "WorldView-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Region-based Change Question Answering",
+      "application": "Urban change detection",
+      "dataset": "QFabric [5 images]",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        74.3
+      ],
+      "sensor": [
+        "WorldView-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Temporal Referring Expression",
+      "application": "Urban change detection, temporal localization",
+      "dataset": "QFabric",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        74.9
+      ],
+      "sensor": [
+        "WorldView-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Region-based Temporal Question Answering",
+      "application": "Urban change detection, temporal QA",
+      "dataset": "QFabric",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        71.7
+      ],
+      "sensor": [
+        "WorldView-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Region-based Temporal Question Answering",
+      "application": "Urban change detection, temporal QA",
+      "dataset": "QFabric [5 images]",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        66.4
+      ],
+      "sensor": [
+        "WorldView-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Single image scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        80.9
+      ],
+      "sensor": [
+        "Various (AID)"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Scene Classification",
+      "application": "Single image scene classification",
+      "dataset": "UCMerced",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        86.3
+      ],
+      "sensor": [
+        "Various (UCMerced)"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "Single image VQA",
+      "dataset": "LRBEN",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        91.7
+      ],
+      "sensor": [
+        "Various (LRBEN)"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "Single image VQA",
+      "dataset": "HRBEN",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        67.5
+      ],
+      "sensor": [
+        "Various (HRBEN)"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

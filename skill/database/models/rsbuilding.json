@@ -1,0 +1,248 @@
+{
+  "id": "rsbuilding",
+  "mlm:name": "RSBuilding",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "RSBuilding is a general remote sensing foundation model for building extraction and change detection, designed to enhance cross-scene generalization and task universality. It uses a Transformer-based encoder (ViT or Swin), a multi-level feature sampler, and a cross-attention decoder with task prompts, and is trained with a federated strategy on a large-scale curated dataset.",
+  "sci:doi": "10.48550/arXiv.2403.07564",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/Meize0729/RSBuilding",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT or Swin Transformer",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Multi-task federated training (building extraction and change detection)",
+  "masking_strategy": null,
+  "pretraining": "Federated training on a curated dataset of ~245,000 images for building extraction and change detection, using both single-task and dual-task annotated data.",
+  "domain_knowledge": [
+    "Building extraction",
+    "Change detection",
+    "Remote sensing imagery",
+    "Multi-scale feature enhancement",
+    "Spatiotemporal information integration"
+  ],
+  "backbone_modifications": [
+    "Multi-level feature sampler",
+    "Cross-attention decoder with task prompts"
+  ],
+  "supported_sensors": [
+    "Optical satellites",
+    "Aerial imagery"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "variable (0.3m to 0.8m, depending on dataset)",
+  "temporal_resolution": "variable (single-temporal and bi-temporal)",
+  "mlm:input": [
+    {
+      "name": "Optical satellites, Aerial imagery",
+      "bands": [
+        "RGB"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          1,
+          512,
+          512
+        ],
+        "dim_order": [
+          "batch",
+          "time",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "RSBuilding Dataset (curated from WHU, INRIA, Massachusetts, Map Challenge, Tanzania Challenge, EGY-BCD, MSBC, MSOSCD, LEVIR-CD, S2Looking, WHU-CD, BANDON, xView2)",
+  "regions_coverage": [
+    "Global (including China, East Asia, US, Europe, Africa)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 245000,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": "crop to 512x512; data selection from multiple sources",
+  "cloud_cover": null,
+  "missing_data": "Federated training strategy to handle missing task labels",
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": 16,
+    "learning_rate": "1e-4",
+    "augmentations": [
+      "random cropping",
+      "flipping",
+      "photometric distortion",
+      "mosaic",
+      "temporal exchange"
+    ],
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Building Extraction",
+      "application": "Building segmentation from remote sensing imagery",
+      "dataset": "WHU",
+      "metrics": [
+        "Precision",
+        "Recall",
+        "F1",
+        "IoU"
+      ],
+      "metrics_value": [
+        95.93,
+        95.82,
+        95.88,
+        92.15
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": [
+        "China"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "4736/1036/2416 (train/val/test); samples used: 8189 of 8189 (100%)"
+    },
+    {
+      "task": "Building Extraction",
+      "application": "Building segmentation from remote sensing imagery",
+      "dataset": "INRIA",
+      "metrics": [
+        "Precision",
+        "Recall",
+        "F1",
+        "IoU"
+      ],
+      "metrics_value": [
+        91.4,
+        89.65,
+        90.52,
+        82.68
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": [
+        "Austin",
+        "Chicago",
+        "Kitsap",
+        "Tyrol",
+        "Vienna"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 360 of 360 (100%)"
+    },
+    {
+      "task": "Change Detection",
+      "application": "Building change detection from bi-temporal remote sensing imagery",
+      "dataset": "LEVIR-CD",
+      "metrics": [
+        "Precision",
+        "Recall",
+        "F1",
+        "IoU"
+      ],
+      "metrics_value": [
+        93.39,
+        91.8,
+        92.59,
+        86.19
+      ],
+      "sensor": [
+        "Google Earth"
+      ],
+      "regions": null,
+      "image_resolution": "1024x1024 (cropped to 512x512)",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "445/64/128 (train/val/test); samples used: 637 of 637 (100%)"
+    },
+    {
+      "task": "Change Detection",
+      "application": "Building change detection from bi-temporal remote sensing imagery",
+      "dataset": "S2Looking",
+      "metrics": [
+        "Precision",
+        "Recall",
+        "F1",
+        "IoU"
+      ],
+      "metrics_value": [
+        73.14,
+        64.97,
+        68.81,
+        52.46
+      ],
+      "sensor": [
+        "Optical satellites"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "1024x1024 (cropped to 512x512)",
+      "spatial_resolution": "0.5-0.8m",
+      "split_ratio": "7:1:2 (train/val/test); samples used: 5000 of 5000 (100%)"
+    },
+    {
+      "task": "Building Extraction & Change Detection",
+      "application": "Joint building segmentation and change detection",
+      "dataset": "BANDON",
+      "metrics": [
+        "Precision",
+        "Recall",
+        "F1",
+        "IoU",
+        "unnamed metric (result 5)",
+        "unnamed metric (result 6)",
+        "unnamed metric (result 7)",
+        "unnamed metric (result 8)"
+      ],
+      "metrics_value": [
+        88.82,
+        89.64,
+        89.23,
+        80.55,
+        75.55,
+        72.44,
+        73.96,
+        58.68
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": [
+        "Beijing",
+        "Shanghai",
+        "Wuhan",
+        "Shenzhen",
+        "Hong Kong",
+        "Jinan"
+      ],
+      "image_resolution": "2048x2048 (cropped to 512x512)",
+      "spatial_resolution": "0.6m",
+      "split_ratio": "1689/202/392 (train/val/test); samples used: 2283 of 2283 (100%)"
+    }
+  ],
+  "provenance": null
+}

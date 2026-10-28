@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rsfmd-emb.schema.json",
+  "title": "RS-FMD embedding product record (Embeddings extension field names)",
+  "description": "One precomputed embedding product: embeddings produced by running a geospatial foundation model over Earth observation data and published for reuse (e.g. Google Satellite Embedding, Major TOM Embeddings, Clay Embeddings). Uses the field names of the proposed STAC Embeddings extension (https://github.com/geo-embeddings/embeddings-stac-specification, v0.0.1, maturity 'Proposal') and STAC common metadata wherever one exists; other fields are RS-FMD's own. Companion to model_schema_mlm.json: the encoder model is referenced by its RS-FMD 'id' in encoder_model.id. This is a flat record, not a complete STAC Collection: it has no extent object, links, or stac_extensions. Unknown values are null; a field that is present but null means 'not stated in the source'. Fields described as free text hold natural-language summaries rather than controlled values.",
+  "type": "object",
+  "required": ["id", "title", "emb:type"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique, stable identifier for the product, e.g. 'google-satellite-embedding-v1'. Primary key."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The product's name as published, e.g. 'Google Satellite Embedding V1 Annual'."
+    },
+    "version": {
+      "type": ["string", "null"],
+      "description": "Version identifier of the product as named by its publishers (e.g. 'v1', '2024')."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "A few sentences summarising what the product contains, how it was produced, and what it is suited for."
+    },
+    "updated": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
+      "description": "When this product metadata was last updated, as an RFC 3339 timestamp."
+    },
+    "license": {
+      "$comment": "STAC common metadata `license`.",
+      "type": ["string", "null"],
+      "description": "License of the embedding data as an SPDX identifier (e.g. 'CC-BY-4.0', 'CC0-1.0', 'ODC-By-1.0'), 'other' for a custom license, or 'various'. This can differ from the encoder model's license."
+    },
+    "sci:doi": {
+      "type": ["string", "null"],
+      "pattern": "^10\\.[0-9]{4,}/\\S+$",
+      "description": "DOI of the product or its describing publication, without the 'https://doi.org/' prefix."
+    },
+    "provenance": {
+      "$ref": "model_schema_mlm.json#/$defs/Provenance"
+    },
+    "providers": {
+      "$comment": "STAC common metadata `providers`, reduced to the Provider Object fields RS-FMD uses.",
+      "type": ["array", "null"],
+      "items": { "$ref": "#/$defs/Provider" },
+      "description": "Organisations that produced or host the product."
+    },
+    "encoder_model": {
+      "$comment": "Embeddings extension: the `emb:encoder_model` link relation, which should point to a STAC MLM Item. Here it is an object so a product can reference a model that is not (yet) in RS-FMD, such as a general-purpose vision model.",
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "id": {
+          "type": ["string", "null"],
+          "description": "The model's 'id' in RS-FMD (model_schema_mlm.json). Null if the model has no RS-FMD record."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of the encoder model, e.g. 'AlphaEarth Foundations', 'SigLIP', 'Clay'."
+        },
+        "checkpoint": {
+          "type": ["string", "null"],
+          "description": "The specific variant or checkpoint used, e.g. 'v1.5', 'ViT-B/16', 'SSL4EO-S12 MoCo ResNet-50'."
+        },
+        "href": {
+          "type": ["string", "null"],
+          "pattern": "^https?://",
+          "description": "URL of the model's weights or model card, if the model has no RS-FMD record."
+        }
+      },
+      "description": "The model whose encoder produced the embeddings."
+    },
+    "emb:type": {
+      "$comment": "Embeddings extension `emb:type`.",
+      "type": "string",
+      "enum": ["pixel", "chip"],
+      "description": "pixel: one vector per pixel of a raster (e.g. Google Satellite Embedding, Tessera). chip: one vector per image patch or tile (e.g. Clay, Major TOM, Earth Index). The literature also calls chip embeddings 'patch' embeddings."
+    },
+    "emb:dimensions": {
+      "$comment": "Embeddings extension `emb:dimensions`.",
+      "type": ["array", "null"],
+      "items": { "type": "integer", "minimum": 1 },
+      "description": "Embedding size as an array of sizes, e.g. [64] for one 64-dimensional vector."
+    },
+    "emb:chip_size": {
+      "$comment": "Embeddings extension `emb:chip_size`.",
+      "type": ["array", "null"],
+      "items": { "type": "integer", "minimum": 1 },
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "For chip embeddings, chip size in source pixels as [height, width], e.g. [256, 256]. Null for pixel embeddings."
+    },
+    "emb:stride": {
+      "$comment": "Embeddings extension `emb:stride`.",
+      "type": ["array", "null"],
+      "items": { "type": "integer", "minimum": 1 },
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "Step between neighbouring chip origins in source pixels as [row_stride, col_stride]. Smaller than emb:chip_size means chips overlap."
+    },
+    "emb:grid_id": {
+      "$comment": "Embeddings extension `emb:grid_id`, using Grid Extension designations.",
+      "type": ["string", "null"],
+      "description": "Grid the chips or tiles are aligned to, e.g. 'MGRS', 'MAJORTOM', 'EASE-DGGS'."
+    },
+    "emb:temporal_period": {
+      "$comment": "Embeddings extension `emb:temporal_period`.",
+      "type": ["string", "null"],
+      "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?$",
+      "description": "Period each embedding summarises, as an ISO 8601 duration, e.g. 'P1Y' for annual embeddings, 'P3M' for seasonal ones. Null for single-scene or single-mosaic ('snapshot') embeddings."
+    },
+    "data_type": {
+      "$comment": "STAC common metadata `data_type`.",
+      "type": ["string", "null"],
+      "enum": ["int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64", "float16", "float32", "float64", "cint16", "cint32", "cfloat32", "cfloat64", "other", null],
+      "description": "Data type of the embedding values as stored."
+    },
+    "emb:original_data_type": {
+      "$comment": "Embeddings extension `emb:original_data_type`.",
+      "type": ["string", "null"],
+      "description": "Data type before quantization, e.g. 'float32' when data_type is 'int8'. Null if not quantized."
+    },
+    "emb:quantization_method": {
+      "$comment": "Embeddings extension `emb:quantization_method`.",
+      "type": ["string", "null"],
+      "description": "How values were quantized for storage, e.g. 'linear'. Null if not quantized."
+    },
+    "source_sensors": {
+      "type": ["array", "null"],
+      "items": { "type": "string" },
+      "description": "Sensors or data products the embeddings were computed from, with the same naming as the model record's supported_sensors (e.g. 'Sentinel-2', 'Sentinel-1', 'Landsat-8')."
+    },
+    "processing:level": {
+      "$comment": "STAC Processing Extension `processing:level`, applied to the source imagery.",
+      "type": ["string", "null"],
+      "description": "Processing level of the source imagery, e.g. 'L2A', 'GRD'."
+    },
+    "processing:lineage": {
+      "$comment": "STAC Processing Extension `processing:lineage`.",
+      "type": ["string", "null"],
+      "description": "How the source imagery was prepared before encoding (compositing, cloud masking, normalisation, resampling). Free text."
+    },
+    "spatial_resolution": {
+      "$comment": "Kept as free text: STAC `gsd` is a number in metres and cannot hold degree grids such as '0.25°'.",
+      "type": ["string", "null"],
+      "description": "Spacing between neighbouring embedding vectors on the ground: the pixel size for pixel embeddings, the chip footprint or stride for chip embeddings, e.g. '10m', '320m', '5.12km', '0.25°'. Free text."
+    },
+    "regions_coverage": {
+      "type": ["array", "null"],
+      "items": { "type": "string" },
+      "description": "Geographic coverage, by region name as in the model record, e.g. 'Global (land)', 'Europe', 'Togo'. Say so if coverage is sparse."
+    },
+    "bbox": {
+      "$comment": "STAC `bbox` (2D). Optional; regions_coverage is the primary coverage field.",
+      "type": ["array", "null"],
+      "items": { "type": "number" },
+      "minItems": 4,
+      "maxItems": 4,
+      "description": "Overall bounding box as [west, south, east, north] in WGS 84 degrees."
+    },
+    "start_datetime": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
+      "description": "Start of the period covered by the source imagery, as an RFC 3339 timestamp (e.g. '2017-01-01T00:00:00Z')."
+    },
+    "end_datetime": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
+      "description": "End of the period covered by the source imagery, as an RFC 3339 timestamp. Null if the product is still being extended."
+    },
+    "temporal_coverage_note": {
+      "type": ["string", "null"],
+      "description": "Gaps or irregularities in temporal coverage, e.g. 'one year per tile, years vary'. Free text."
+    },
+    "num_embeddings": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Number of embedding vectors (chip products) or pixels (pixel products), if stated."
+    },
+    "assets": {
+      "$comment": "Embeddings extension: Items MUST include at least one asset with the role 'embeddings'.",
+      "type": ["object", "null"],
+      "description": "Links to the data and documentation, keyed by asset name. Give the main data access point the role 'embeddings'.",
+      "additionalProperties": { "$ref": "#/$defs/Asset" }
+    },
+    "hosting": {
+      "type": ["array", "null"],
+      "items": { "type": "string" },
+      "description": "Platforms the data is served from, e.g. 'Google Earth Engine', 'Source Cooperative', 'Hugging Face', 'AWS Open Data'. Lets users filter by platforms they can access."
+    },
+    "access_requirements": {
+      "type": ["string", "null"],
+      "description": "What a user needs to get the data, e.g. 'open HTTP/S3, no account', 'Earth Engine account', 'request access by email'. Free text."
+    },
+    "loaders": {
+      "type": ["array", "null"],
+      "items": { "type": "string" },
+      "description": "Library entry points that load this product, e.g. 'torchgeo.datasets.GoogleSatelliteEmbedding', 'ee.ImageCollection(\"GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL\")'."
+    },
+    "benchmarks": {
+      "$comment": "Embeddings extension: the `emb:benchmark` link relation. Same object as Benchmark in model_schema_mlm.json, but records evaluations of these exact embeddings (usually frozen, with a linear or kNN probe).",
+      "type": ["array", "null"],
+      "items": { "$ref": "model_schema_mlm.json#/$defs/Benchmark" },
+      "description": "Downstream evaluations reported on these embeddings. One entry per (dataset, task) pair."
+    }
+  },
+  "$defs": {
+    "Provider": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "description": "Organisation name." },
+        "roles": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["producer", "processor", "host", "licensor"] },
+          "description": "STAC provider roles."
+        },
+        "url": { "type": "string", "pattern": "^https?://", "description": "Organisation homepage." }
+      }
+    },
+    "Asset": {
+      "$comment": "Subset of the STAC Asset Object.",
+      "type": "object",
+      "required": ["href"],
+      "properties": {
+        "href": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^(https?|s3|gs)://",
+          "description": "URL of the resource."
+        },
+        "title": { "type": "string", "description": "Short human-readable title." },
+        "description": { "type": "string", "description": "Longer description of the resource." },
+        "type": {
+          "type": "string",
+          "description": "Media type, e.g. 'application/vnd.apache.parquet' (GeoParquet), 'image/tiff; application=geotiff; profile=cloud-optimized' (COG), 'application/vnd+zarr' (Zarr), 'text/html' (catalog page)."
+        },
+        "roles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Asset roles, e.g. ['embeddings', 'data'] for the data itself, ['metadata'] for a catalog page."
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

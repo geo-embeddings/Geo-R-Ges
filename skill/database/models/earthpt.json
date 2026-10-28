@@ -1,0 +1,119 @@
+{
+  "id": "earthpt",
+  "mlm:name": "EarthPT",
+  "version": "700M",
+  "release_date": "2024-01-11T00:00:00Z",
+  "updated": "2024-01-11T00:00:00Z",
+  "description": "EarthPT is a 700 million parameter autoregressive decoding transformer foundation model for Earth Observation, trained on multispectral time series data to forecast future pixel-level surface reflectances and produce semantically meaningful embeddings for downstream tasks.",
+  "sci:doi": "10.48550/arXiv.2309.07207",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/aspiaspace/EarthPT",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://doi.org/10.5281/zenodo.10489724",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "Autoregressive decoding transformer (Radford et al. 2019) with MLP input embedding",
+  "mlm:total_parameters": 700000000,
+  "pretext_training_type": "Autoregressive self-supervised forecasting",
+  "masking_strategy": "None (autoregressive next-step prediction)",
+  "pretraining": "Trained in an autoregressive self-supervised manner to predict the next observation in multispectral time series of surface reflectance.",
+  "domain_knowledge": [
+    "Date embedding for temporal context",
+    "Spectral band normalization",
+    "Remote sensing indices (NDVI, NDWI, BSI, GCVI)"
+  ],
+  "backbone_modifications": [
+    "MLP input embedding for non-textual data",
+    "Additional float embeddings for date of current and next observation"
+  ],
+  "supported_sensors": [
+    "Sentinel-1 (SAR, for input to ClearSky)",
+    "Sentinel-2 (simulated via ClearSky)"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "Time series"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "full",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "5 days",
+  "mlm:input": [
+    {
+      "name": "Sentinel-1 (SAR, for input to ClearSky), Sentinel-2 (simulated via ClearSky)",
+      "bands": [
+        "Blue",
+        "Green",
+        "Red",
+        "Red Edge 1",
+        "Red Edge 2",
+        "Red Edge 3",
+        "Red Edge 4",
+        "NIR",
+        "SWIR 1",
+        "SWIR 2"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "ClearSky inferred Sentinel-2 equivalent imagery (UK, TL BNG tile)",
+  "regions_coverage": [
+    "UK (TL BNG tile, 100x100km region)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": "Time series sampled at Sentinel-1 cadence (~5 days); Time range: January 2015 to December 2022 (train/val), January 2023 to May 2023 (test)",
+  "processing:level": null,
+  "processing:lineage": "Float16 NumPy arrays; Spectral band normalization (v/500-1); Date embedding (sin/cos)",
+  "cloud_cover": "SAR-based, impervious to cloud (ClearSky algorithm)",
+  "missing_data": "ClearSky fills gaps using SAR, so no missing data due to clouds",
+  "mlm:hyperparameters": {
+    "patch_size": "Each temporal observation as a token; block size 256",
+    "epochs": null,
+    "batch_size": 164000,
+    "learning_rate": "max 2E-5, decayed by factor of 10 over 1.1x total steps",
+    "augmentations": null,
+    "mask_ratio": 0,
+    "image_resolution": "10m/pixel",
+    "num_layers": 36
+  },
+  "benchmarks": [
+    {
+      "task": "Forecasting (time series prediction)",
+      "application": "Pixel-level surface reflectance and remote sensing index forecasting",
+      "dataset": "ClearSky inferred Sentinel-2 equivalent imagery (UK, TL63 BNG tile)",
+      "metrics": [
+        "Median L1 error"
+      ],
+      "metrics_value": [
+        0.05
+      ],
+      "sensor": [
+        "Sentinel-1 (SAR, for input to ClearSky)",
+        "Sentinel-2 (simulated via ClearSky)"
+      ],
+      "regions": [
+        "UK (TL63 BNG tile)"
+      ],
+      "image_resolution": "10m/pixel",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 1000000 of 1000000 (100%)"
+    }
+  ],
+  "provenance": null
+}

@@ -1,0 +1,289 @@
+{
+  "id": "skyeyegpt",
+  "mlm:name": "SkyEyeGPT",
+  "version": "v1",
+  "release_date": "2024-01-18T00:00:00Z",
+  "updated": "2024-01-18T00:00:00Z",
+  "description": "SkyEyeGPT is a unified multi-modal large language model specifically designed for remote sensing (RS) vision-language understanding, supporting open-ended RS vision-language tasks via instruction tuning with a large language model.",
+  "sci:doi": "10.48550/arXiv.2401.09712",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "LLaMA2-chat (decoder-only LLM), visual encoder: EVA-CLIP ViT-G",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Instruction tuning (two-stage: single-task then multi-task conversation)",
+  "masking_strategy": null,
+  "pretraining": "Two-stage instruction tuning: Stage 1 aligns RS image-text using single-task instructions; Stage 2 fine-tunes for multi-task conversation using mixed instructions. Visual encoder is frozen; only alignment layer and LLM are fine-tuned with LoRA.",
+  "domain_knowledge": [
+    "Remote sensing-specific instruction templates",
+    "Manual verification of RS data",
+    "Task-specific identifiers for RS tasks"
+  ],
+  "backbone_modifications": [
+    "Linear alignment layer between visual encoder and LLM",
+    "LoRA adaptation for efficient fine-tuning"
+  ],
+  "supported_sensors": [
+    "Optical (multispectral, aerial, satellite)",
+    "UAV video"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "Aerial imagery",
+    "Satellite imagery",
+    "Text"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "variable (images standardized to 448x448 for model input)",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Optical (multispectral, aerial, satellite), UAV video",
+      "bands": [
+        "RGB (3 bands)"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          -1,
+          448,
+          448
+        ],
+        "dim_order": [
+          "batch",
+          "time",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "SkyEye-968k",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 968000,
+  "sampling": "Single-task instruction (Stage 1), then reduced single-task + multi-task conversation (Stage 2)",
+  "processing:level": null,
+  "processing:lineage": "Manual verification; Standardization of image resolution",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 35,
+    "batch_size": 1,
+    "learning_rate": "1e-5",
+    "augmentations": null,
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "UCM-captions",
+      "metrics": [
+        "BLEU-1",
+        "BLEU-2",
+        "BLEU-3",
+        "BLEU-4",
+        "METEOR",
+        "ROUGE L",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        90.71,
+        85.69,
+        81.56,
+        78.41,
+        46.24,
+        79.49,
+        236.75
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": null,
+      "image_resolution": "448x448",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Video Captioning",
+      "application": "UAV aerial video captioning",
+      "dataset": "CapERA",
+      "metrics": [
+        "BLEU-1",
+        "BLEU-2",
+        "BLEU-3",
+        "BLEU-4",
+        "METEOR",
+        "ROUGE L",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        80.13,
+        69.04,
+        59.56,
+        52.74,
+        33.97,
+        63.67,
+        91.9
+      ],
+      "sensor": [
+        "Aerial video"
+      ],
+      "regions": null,
+      "image_resolution": "448x448",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Grounding",
+      "application": "RS visual grounding",
+      "dataset": "RSVG",
+      "metrics": [
+        "Accuracy (result 1 of 2)",
+        "Accuracy (result 2 of 2)"
+      ],
+      "metrics_value": [
+        69.19,
+        70.5
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": null,
+      "image_resolution": "448x448",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Grounding",
+      "application": "RS visual grounding",
+      "dataset": "DIOR-RSVG",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        88.59
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": null,
+      "image_resolution": "448x448",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "RS VQA",
+      "dataset": "RSVQA-LR",
+      "metrics": [
+        "Presence",
+        "Comparison",
+        "Rural/Urban",
+        "Average Accuracy"
+      ],
+      "metrics_value": [
+        88.93,
+        88.63,
+        75.0,
+        84.19
+      ],
+      "sensor": [
+        "Satellite imagery"
+      ],
+      "regions": null,
+      "image_resolution": "448x448",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Visual Question Answering",
+      "application": "RS VQA",
+      "dataset": "RSVQA-HR",
+      "metrics": [
+        "Presence",
+        "Comparison",
+        "Average Accuracy"
+      ],
+      "metrics_value": [
+        83.5,
+        80.28,
+        81.89
+      ],
+      "sensor": [
+        "Satellite imagery"
+      ],
+      "regions": null,
+      "image_resolution": "448x448",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "Sydney-captions",
+      "metrics": [
+        "BLEU-1",
+        "BLEU-2",
+        "BLEU-3",
+        "BLEU-4",
+        "METEOR",
+        "ROUGE L",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        91.85,
+        85.64,
+        80.88,
+        77.4,
+        46.62,
+        77.74,
+        181.06
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": null,
+      "image_resolution": "448x448",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Image Captioning",
+      "application": "Remote sensing image captioning",
+      "dataset": "RSICD",
+      "metrics": [
+        "BLEU-1",
+        "BLEU-2",
+        "BLEU-3",
+        "BLEU-4",
+        "METEOR",
+        "ROUGE L",
+        "CIDEr"
+      ],
+      "metrics_value": [
+        86.71,
+        76.66,
+        67.31,
+        59.99,
+        35.35,
+        62.63,
+        83.65
+      ],
+      "sensor": [
+        "Aerial imagery"
+      ],
+      "regions": null,
+      "image_resolution": "448x448",
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

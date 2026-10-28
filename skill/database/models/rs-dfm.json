@@ -1,0 +1,132 @@
+{
+  "id": "rs-dfm",
+  "mlm:name": "RS-DFM",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "RS-DFM is a Remote Sensing Distributed Foundation Model enabling online collaborative perception across multiple platforms and diverse downstream tasks by mapping observations into a unified space and implementing a task-agnostic information interaction strategy. It introduces a generalized BEV generation module leveraging geometric priors and a high-low frequency decoupled collaboration module for efficient feature compression and transmission.",
+  "sci:doi": "10.48550/arXiv.2406.07032",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "Swin-Tiny",
+  "mlm:total_parameters": null,
+  "pretext_training_type": null,
+  "masking_strategy": null,
+  "pretraining": null,
+  "domain_knowledge": [
+    "ground-based geometric prior",
+    "generalized BEV mapping",
+    "high-low frequency feature decoupling"
+  ],
+  "backbone_modifications": [
+    "optimized for low inference latency",
+    "optimized memory usage"
+  ],
+  "supported_sensors": [
+    "RGB optical camera"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "0.75m",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "RGB optical camera",
+      "bands": [
+        "RGB"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": null,
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": null,
+  "benchmarks": [
+    {
+      "task": "3D object detection",
+      "application": "Collaborative UAV-based remote sensing",
+      "dataset": "AirCo-MultiTasks",
+      "metrics": [
+        "mAP",
+        "mATE",
+        "mASE",
+        "mAOE"
+      ],
+      "metrics_value": [
+        0.443,
+        0.413,
+        0.176,
+        0.123
+      ],
+      "sensor": [
+        "RGB optical camera"
+      ],
+      "regions": [
+        "Simulated urban intersections (CARLA)"
+      ],
+      "image_resolution": "1600x900",
+      "spatial_resolution": "0.75m (BEV)",
+      "split_ratio": "samples used: 38000 of 38000 (100%)"
+    },
+    {
+      "task": "BEV instance segmentation",
+      "application": "Collaborative UAV-based remote sensing",
+      "dataset": "AirCo-MultiTasks",
+      "metrics": [
+        "IoU",
+        "PQ",
+        "SQ",
+        "RQ"
+      ],
+      "metrics_value": [
+        31.17,
+        27.3,
+        74.76,
+        36.51
+      ],
+      "sensor": [
+        "RGB optical camera"
+      ],
+      "regions": [
+        "Simulated urban intersections (CARLA)"
+      ],
+      "image_resolution": "1600x900",
+      "spatial_resolution": "0.75m (BEV)",
+      "split_ratio": "samples used: 38000 of 38000 (100%)"
+    },
+    {
+      "task": "Trajectory prediction",
+      "application": "Collaborative UAV-based remote sensing",
+      "dataset": "AirCo-MultiTasks",
+      "metrics": [
+        "IoU",
+        "VPQ"
+      ],
+      "metrics_value": [
+        35.65,
+        30.27
+      ],
+      "sensor": [
+        "RGB optical camera"
+      ],
+      "regions": [
+        "Simulated urban intersections (CARLA)"
+      ],
+      "image_resolution": "1600x900",
+      "spatial_resolution": "0.75m (BEV)",
+      "split_ratio": "samples used: 38000 of 38000 (100%)"
+    }
+  ],
+  "provenance": null
+}

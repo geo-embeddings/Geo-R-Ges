@@ -1,0 +1,276 @@
+{
+  "id": "tessera",
+  "mlm:name": "TESSERA",
+  "version": "v1.0",
+  "release_date": "2025-11-19T00:00:00Z",
+  "updated": "2025-11-19T00:00:00Z",
+  "description": "TESSERA is a pixel-wise, multi-modal (Sentinel-1/2) remote sensing foundation model that learns robust, label-efficient embeddings from irregular, sparse EO time series. It uses Barlow Twins self-supervised learning, global shuffling, and mix-based regularization to produce global, annual, 10m, int8 embeddings for every land pixel, enabling state-of-the-art performance on classification, segmentation, and regression tasks with minimal computation and high label efficiency.",
+  "sci:doi": "10.48550/arXiv.2506.20380",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/ucam-eo/tessera",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://github.com/ucam-eo/geotessera",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "Dual-branch Transformer (4-layer per modality) + GRU pooling + MLP fusion",
+  "mlm:total_parameters": 45700000,
+  "pretext_training_type": "Self-supervised learning with Barlow Twins objective",
+  "masking_strategy": "Sparse random temporal sampling (cloud-free observations)",
+  "pretraining": "Self-supervised pretraining on ~800 million d-pixels from global Sentinel-1/2 time series (2017-2024), using Barlow Twins loss, global shuffling, and mix-based regularization. Quantization-aware training for int8 embeddings.",
+  "domain_knowledge": [
+    "Temporal sampling invariance",
+    "Global shuffling",
+    "Mix-based regularization",
+    "Day-of-Year positional encoding"
+  ],
+  "backbone_modifications": [
+    "Dual-branch modality-specific encoders",
+    "Learnable Day-of-Year positional encoding",
+    "GRU-based temporal pooling",
+    "Quantization-aware training"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "full",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "annual",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "B2 (blue)"
+      ]
+    },
+    {
+      "name": "Sentinel-1",
+      "bands": [
+        "VV"
+      ]
+    },
+    {
+      "name": "Sentinel-1, Sentinel-2",
+      "bands": [
+        "B3 (green)",
+        "B4 (red)",
+        "B5 (red edge 1)",
+        "B6 (red edge 2)",
+        "B7 (red edge 3)",
+        "B8 (NIR)",
+        "B8A (NIR)",
+        "B11 (SWIR)",
+        "B12 (SWIR)",
+        "VH"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Sentinel-1 and Sentinel-2 global time series (2017-2024), 3,012 MGRS tiles",
+  "regions_coverage": [
+    "Global land (distributed across all continents)"
+  ],
+  "start_datetime": "2017-01-01T00:00:00Z",
+  "end_datetime": "2024-12-31T23:59:59Z",
+  "num_images": 800000000,
+  "sampling": "Random sampling of 40 valid timesteps per year per pixel (replacement if <40)",
+  "processing:level": "Sentinel-2: L2A, Sentinel-1: GRD",
+  "processing:lineage": "Cloud masking (Sentinel-2); Spatial downsampling (20x); Standardization (global stats); Day-of-Year encoding (sine/cosine)",
+  "cloud_cover": "Cloud-masked (Sentinel-2), no explicit cloud filtering for Sentinel-1",
+  "missing_data": "Masked out (binary mask per timestep); random sampling with replacement if insufficient valid data",
+  "mlm:hyperparameters": {
+    "patch_size": "40 timesteps per modality (annual, random sampling)",
+    "epochs": 1,
+    "batch_size": 32768,
+    "learning_rate": "0.002 (AdamW, weight decay 1e-6, linear warmup + cosine decay)",
+    "augmentations": [
+      "Random temporal sampling (cloud-free)",
+      "Mixup (linear interpolation of views)"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "10m (downsampled by 20x20 for pretraining)",
+    "num_layers": 8
+  },
+  "benchmarks": [
+    {
+      "task": "Classification",
+      "application": "Tree species classification",
+      "dataset": "TreeSatAI-TS",
+      "metrics": [
+        "F1 (result 1 of 3)",
+        "F1 (result 2 of 3)",
+        "F1 (result 3 of 3)"
+      ],
+      "metrics_value": [
+        60.58,
+        75.42,
+        77.96
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Germany"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Crop type classification",
+      "dataset": "Austrian Crop",
+      "metrics": [
+        "F1 (result 1 of 8)",
+        "F1 (result 2 of 8)",
+        "F1 (result 3 of 8)",
+        "F1 (result 4 of 8)",
+        "F1 (result 5 of 8)",
+        "F1 (result 6 of 8)",
+        "F1 (result 7 of 8)",
+        "F1 (result 8 of 8)"
+      ],
+      "metrics_value": [
+        66.15,
+        71.62,
+        74.32,
+        77.22,
+        78.69,
+        80.12,
+        80.79,
+        82.09
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Austria"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Segmentation",
+      "application": "Field parcel segmentation",
+      "dataset": "PASTIS-R",
+      "metrics": [
+        "mIoU (result 1 of 3)",
+        "mIoU (result 2 of 3)",
+        "mIoU (result 3 of 3)"
+      ],
+      "metrics_value": [
+        27.54,
+        46.04,
+        50.68
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "France"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Segmentation",
+      "application": "Crop semantic segmentation",
+      "dataset": "Austrian Crop (Segmentation)",
+      "metrics": [
+        "mIoU (result 1 of 3)",
+        "mIoU (result 2 of 3)",
+        "mIoU (result 3 of 3)"
+      ],
+      "metrics_value": [
+        28.2,
+        48.29,
+        53.12
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Austria"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Regression",
+      "application": "Above-Ground Biomass (AGB) estimation",
+      "dataset": "Biomassters",
+      "metrics": [
+        "RMSE (result 1 of 3)",
+        "RMSE (result 2 of 3)",
+        "RMSE (result 3 of 3)"
+      ],
+      "metrics_value": [
+        32.5,
+        29.15,
+        27.43
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Finland"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Regression",
+      "application": "Canopy height regression",
+      "dataset": "Borneo Canopy Height",
+      "metrics": [
+        "RMSE (result 1 of 3)",
+        "RMSE (result 2 of 3)",
+        "RMSE (result 3 of 3)"
+      ],
+      "metrics_value": [
+        34.82,
+        15.18,
+        12.21
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Malaysia"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

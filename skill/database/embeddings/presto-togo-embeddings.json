@@ -1,0 +1,94 @@
+{
+  "id": "presto-togo-embeddings",
+  "title": "Togo Presto Embeddings",
+  "version": "2025-06-19",
+  "description": "10 m, 128-dimensional Presto embeddings for Togo for March 2019 - March 2020, compressing location, Sentinel-1, Sentinel-2, ERA5 and SRTM time series per pixel. Released with the 'Cropland Mapping using Geospatial Embeddings' study (NASA Harvest).",
+  "updated": "2026-10-28T00:00:00Z",
+  "license": "CC-BY-4.0",
+  "sci:doi": "10.48550/arXiv.2511.02923",
+  "provenance": {
+    "source": "manual extraction",
+    "source_id": null,
+    "source_url": "https://huggingface.co/datasets/izvonkov/Togo_Presto_Embeddings",
+    "references": [
+      "https://docs.torchgeo.org/en/latest/api/datasets/presto-embeddings.html",
+      "https://docs.torchgeo.org/en/latest/api/datasets.html"
+    ],
+    "retrieved": "2026-10-28T00:00:00Z",
+    "review": [
+      "data_type uint16 from TorchGeo's table; the dataset card does not state it."
+    ]
+  },
+  "providers": [
+    {
+      "name": "NASA Harvest",
+      "roles": [
+        "producer",
+        "licensor"
+      ],
+      "url": "https://www.nasaharvest.org"
+    },
+    {
+      "name": "Hugging Face",
+      "roles": [
+        "host"
+      ],
+      "url": "https://huggingface.co"
+    }
+  ],
+  "encoder_model": {
+    "id": "presto",
+    "name": "Presto",
+    "checkpoint": null,
+    "href": null
+  },
+  "emb:type": "pixel",
+  "emb:dimensions": [
+    128
+  ],
+  "emb:chip_size": null,
+  "emb:stride": null,
+  "emb:grid_id": null,
+  "emb:temporal_period": "P1Y",
+  "data_type": "uint16",
+  "emb:original_data_type": null,
+  "emb:quantization_method": null,
+  "source_sensors": [
+    "Sentinel-2",
+    "Sentinel-1",
+    "ERA5",
+    "SRTM"
+  ],
+  "processing:level": null,
+  "processing:lineage": "One year of monthly Sentinel-1/2, ERA5 and SRTM inputs per pixel plus location, encoded with the Presto encoder; GeoTIFF output.",
+  "spatial_resolution": "10m",
+  "regions_coverage": [
+    "Togo"
+  ],
+  "bbox": null,
+  "start_datetime": "2019-03-01T00:00:00Z",
+  "end_datetime": "2020-03-01T00:00:00Z",
+  "temporal_coverage_note": null,
+  "num_embeddings": null,
+  "assets": {
+    "data": {
+      "href": "https://huggingface.co/datasets/izvonkov/Togo_Presto_Embeddings",
+      "title": "Hugging Face dataset (GeoTIFF)",
+      "type": "image/tiff; application=geotiff",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    }
+  },
+  "hosting": [
+    "Hugging Face",
+    "Google Earth Engine"
+  ],
+  "access_requirements": "open download from Hugging Face; Earth Engine account for the EE asset",
+  "loaders": [
+    "torchgeo.datasets.PrestoEmbeddings",
+    "ee.Image(\"users/izvonkov/Togo/Presto_embeddings_v2025_06_19\")"
+  ],
+  "benchmarks": null
+}
