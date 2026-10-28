@@ -94,7 +94,9 @@ Worth checking for each record being updated:
 - null fields the paper, appendix or repo actually answers;
 - `sci:doi` still on arXiv while the paper has since been published (journal or
   conference DOI);
-- `assets`: code repo or weights released after the record was written;
+- `assets`: code repo, weights or precomputed embeddings released after the record
+  was written (an announced embedding product that has since shipped gets its
+  `embeddings` asset now);
 - `benchmarks` missing tables from the paper, or values that do not match it;
 - a newer arXiv version with changed numbers (use the latest version's numbers);
 - values that contradict the paper (fix them).

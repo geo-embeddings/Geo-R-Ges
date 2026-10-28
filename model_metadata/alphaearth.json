@@ -3,16 +3,15 @@
   "mlm:name": "AlphaEarth Foundations",
   "version": "v1",
   "release_date": "2025-09-10T00:00:00Z",
-  "updated": "2025-09-10T00:00:00Z",
+  "updated": "2026-10-28T00:00:00Z",
   "description": "AlphaEarth Foundations (AEF) is an embedding field model for geospatial representation learning, enabling accurate and efficient global mapping from sparse label data. It produces annual, global, analysis-ready embedding field layers at 10m spatial resolution, supporting multi-source, multi-modal, and time-continuous inputs.",
   "sci:doi": "10.48550/arXiv.2507.22291",
   "assets": {
-    "weights": {
+    "embeddings": {
       "href": "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL",
-      "title": "Model weights",
+      "title": "Satellite Embedding V1 annual embeddings (Google Earth Engine)",
       "roles": [
-        "mlm:model",
-        "mlm:weights"
+        "data"
       ]
     }
   },

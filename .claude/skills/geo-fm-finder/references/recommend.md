@@ -68,11 +68,13 @@ For each candidate, check against the constraints, using the record plus
 `references/selection.md`:
 
 - **Can the user run it?** Compute tier vs `mlm:total_parameters`; precomputed
-  embedding products need no inference at all. Released weights or a product link
+  embedding products need no inference at all, but only if their embeddings are
+  released (`assets.embeddings`; `embeddings` = `y` in the index). An embedding
+  product without it is announced only: treat it as a model to run. Released weights
   (`assets.weights`) vs code only.
 - **Does it cover their period?** Embedding products exist only for the years
   published: if the record's `end_datetime` is before the requested year, check the
-  product page (the `assets.weights` link) for newer layers before recommending it,
+  product page (the `assets.embeddings` link) for newer layers before recommending it,
   and say what you found. For models, check that the input sensors still acquire
   data in that period.
 - **Does it match their data and task?** Sensors, resolution vs object/field size,

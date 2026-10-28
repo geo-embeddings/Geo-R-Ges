@@ -37,7 +37,11 @@ Do not fill in values from general knowledge of similar models.
   journal/conference DOI when the paper has been published and the DOI is printed.
 - `assets`: `mlm:source_code` for the repo (`type: text/html`, roles
   `["mlm:source_code", "code"]`); `weights` for released weights (roles
-  `["mlm:model", "mlm:weights"]`). Only links you actually saw; omit the key otherwise.
+  `["mlm:model", "mlm:weights"]`); `embeddings` for released precomputed embeddings
+  (dataset page, download library or catalog entry; roles `["data"]`), kept separate
+  from model weights. Only links you actually saw; omit the key otherwise. An
+  embedding product that is announced but not yet downloadable gets no `embeddings`
+  asset; say so in `description` instead, so the index shows it as not available.
 - `mlm:architecture`: generic name first, then variants:
   `Vision Transformer (ViT-S, ViT-B, ViT-L)`.
 - `mlm:total_parameters`: raw integer of the largest released variant (300M ->

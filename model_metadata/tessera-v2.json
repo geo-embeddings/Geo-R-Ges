@@ -1,0 +1,474 @@
+{
+  "id": "tessera-v2",
+  "mlm:name": "TESSERA",
+  "version": "v2",
+  "release_date": "2026-07-04T00:00:00Z",
+  "updated": "2026-10-28T00:00:00Z",
+  "description": "TESSERA v2 is a pixel-wise Sentinel-1/2 foundation model for annual 10m Earth embeddings. A 2B dual-branch Transformer teacher is pretrained with Barlow Twins and mix-up on about 14 billion pixel time series and distilled into four compact students (1-44M parameters) that output 128-d Matryoshka embeddings, whose 16/32/64-d prefixes can be used without retraining. The authors plan to publish precomputed global annual v2 embeddings for 2017-2025, but as of 2026-10-28 they are not yet released: only the model weights are, so users must run a student on their own Sentinel-1/2 time series. In the paper the 44M student beats AlphaEarth, TESSERA v1 and OlmoEarth on a 15-task AlphaEarth suite and a 14-dataset held-out suite.",
+  "sci:doi": "10.48550/arXiv.2607.03949",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/ucam-eo/tessera",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://huggingface.co/geotessera/TESSERA-V-2.0-2B-L",
+      "title": "Model weights (TESSERA v2-2B-L student; N/S/M students in sibling repos)",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    },
+    "teacher_weights": {
+      "href": "https://huggingface.co/geotessera/TESSERA-V-2.0-2B-Teacher",
+      "title": "Model weights (2B teacher)",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "Dual-branch pixel-wise Transformer with attention pooling (students N/S/M/L: 1.1M/7.1M/21.0M/43.8M; teacher: 2.06B with cross-modal fusion Transformer)",
+  "mlm:total_parameters": 43831170,
+  "pretext_training_type": "Self-supervised Barlow Twins with mix-up regularisation (teacher), then Matryoshka knowledge distillation (students)",
+  "masking_strategy": "Random variable-length temporal subsampling (8 or 16 observations per view) and whole-modality dropout",
+  "pretraining": "The 2B teacher is pretrained for one epoch on about 14 billion d-pixels (annual Sentinel-1/2 pixel time series) sampled from 3,420,048 globally distributed 64x64 patches, with Barlow Twins plus mix-up and global shuffling, on 512 GPUs. Model size and data were allocated with a downstream-driven scaling law fitted on 395 runs. Four students are then distilled from cached teacher embeddings on 1.2 billion d-pixels with a Matryoshka cosine loss at prefixes 16/32/64/128.",
+  "domain_knowledge": [
+    "Day-of-year positional encoding",
+    "Pixel-wise annual time series (d-pixels)",
+    "Sentinel-2 SCL cloud masking",
+    "Separate standardisation of Sentinel-1 ascending and descending passes",
+    "Downstream-driven scaling law for compute allocation"
+  ],
+  "backbone_modifications": [
+    "Dual-branch per-modality Transformers",
+    "Learned attention pooling over variable-length time series",
+    "Cross-modal fusion Transformer (teacher)",
+    "Matryoshka prefix heads for nested 16/32/64/128-d embeddings (distillation only)",
+    "Adaptive bucket sampling of all valid observations at inference"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "full",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "annual (embeddings product for 2017-2025 planned, not yet released)",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "B04",
+        "B02",
+        "B03",
+        "B08",
+        "B8A",
+        "B05",
+        "B06",
+        "B07",
+        "B11",
+        "B12"
+      ]
+    },
+    {
+      "name": "Sentinel-1",
+      "bands": [
+        "VV",
+        "VH"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Global Sentinel-1/2 corpus of 3,420,048 64x64 patches (Sentinel-2 L2A, Sentinel-1 RTC, ascending and descending merged)",
+  "regions_coverage": [
+    "Global land (Equal-Earth hexagonal sampling grid)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 14000000000,
+  "sampling": "Pixels randomly sampled from global 64x64 patches; each step samples across valid-observation-count buckets; cross-patch shuffling during distillation",
+  "processing:level": "Sentinel-2 L2A, Sentinel-1 RTC",
+  "processing:lineage": "Sentinel-2 SCL cloud mask; per-band standardisation of Sentinel-2; per-orbit standardisation of Sentinel-1 ascending/descending, then merged; observations binned into fixed-length buckets (8 to 256) with resampling of residual slots",
+  "cloud_cover": "Sentinel-2 SCL cloud mask (OmniCloudMask tested but not used for production embeddings)",
+  "missing_data": "Binary validity mask per timestep; all-zero Sentinel-1 timesteps treated as missing; whole-modality dropout trains for pixels without valid observations in one modality",
+  "mlm:hyperparameters": {
+    "patch_size": "pixel-wise (single 10m pixel time series)",
+    "epochs": 1,
+    "batch_size": 131072,
+    "learning_rate": "2e-4 peak (AdamW, weight decay 1e-6, 10% linear warmup, cosine decay to 0); distillation 8e-4 peak (AdamW, 5% warmup, cosine decay)",
+    "augmentations": [
+      "Random variable-length temporal subsampling (8 or 16 observations)",
+      "Mix-up (Beta(1,1))",
+      "Whole-modality dropout"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "10m",
+    "num_layers": 4,
+    "embedding_dim": 128
+  },
+  "benchmarks": [
+    {
+      "task": "Multi-task (classification, regression, change detection)",
+      "application": "General-purpose embedding evaluation",
+      "dataset": "AlphaEarth evaluation suite (15 tasks)",
+      "metrics": [
+        "Composite chance-adjusted score (d=16)",
+        "Composite chance-adjusted score (d=32)",
+        "Composite chance-adjusted score (d=64)",
+        "Composite chance-adjusted score (d=128)"
+      ],
+      "metrics_value": [
+        0.546,
+        0.574,
+        0.588,
+        0.593
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "CONUS",
+        "Europe",
+        "Sub-Saharan Africa",
+        "Canada",
+        "Ethiopia",
+        "Global"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": "up to 300 labelled samples per task"
+    },
+    {
+      "task": "Multi-task (classification, segmentation, regression)",
+      "application": "Held-out generalisation (vegetation and urban tasks)",
+      "dataset": "TESSERA v2 held-out suite (14 datasets)",
+      "metrics": [
+        "Composite chance-adjusted score (d=128)"
+      ],
+      "metrics_value": [
+        0.647
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Germany",
+        "France",
+        "Austria",
+        "Finland",
+        "Togo",
+        "China",
+        "Cities (CityRep)"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Multilabel classification",
+      "application": "Tree species classification",
+      "dataset": "TreeSatAI-TS",
+      "metrics": [
+        "mAP (d=128)"
+      ],
+      "metrics_value": [
+        0.832
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Germany"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Agricultural parcel segmentation",
+      "dataset": "PASTIS-R",
+      "metrics": [
+        "mIoU (d=128)"
+      ],
+      "metrics_value": [
+        0.666
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "France"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Crop type segmentation",
+      "dataset": "Austrian Crop",
+      "metrics": [
+        "mIoU (d=128)"
+      ],
+      "metrics_value": [
+        0.461
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Austria"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Regression",
+      "application": "Above-ground biomass estimation",
+      "dataset": "BioMassters",
+      "metrics": [
+        "R2 (d=128)"
+      ],
+      "metrics_value": [
+        0.813
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Finland"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Cropland mapping",
+      "dataset": "CropHarvest (Togo)",
+      "metrics": [
+        "Accuracy (d=128)"
+      ],
+      "metrics_value": [
+        0.767
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Togo"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Cropland mapping",
+      "dataset": "CropHarvest (China)",
+      "metrics": [
+        "Accuracy (d=128)"
+      ],
+      "metrics_value": [
+        0.805
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "China"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Urban land use classification",
+      "dataset": "CityRep-LUC",
+      "metrics": [
+        "Macro-F1 (linear probe)"
+      ],
+      "metrics_value": [
+        0.264
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "8 cities (CityRep)"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Regression",
+      "application": "Road density estimation",
+      "dataset": "CityRep-RDE",
+      "metrics": [
+        "R2 (linear probe)"
+      ],
+      "metrics_value": [
+        0.551
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "8 cities (CityRep)"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Regression",
+      "application": "Population estimation",
+      "dataset": "CityRep-POP",
+      "metrics": [
+        "R2 (linear probe)"
+      ],
+      "metrics_value": [
+        0.624
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "8 cities (CityRep)"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Regression",
+      "application": "Age distribution estimation",
+      "dataset": "CityRep-AGE",
+      "metrics": [
+        "Symmetric KL, lower is better (linear probe)"
+      ],
+      "metrics_value": [
+        0.04
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "8 cities (CityRep)"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Regression",
+      "application": "GDP estimation",
+      "dataset": "CityRep-GDP",
+      "metrics": [
+        "R2 (linear probe)"
+      ],
+      "metrics_value": [
+        0.611
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "8 cities (CityRep)"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Regression",
+      "application": "Nighttime lights estimation",
+      "dataset": "CityRep-NTL",
+      "metrics": [
+        "R2 (linear probe)"
+      ],
+      "metrics_value": [
+        0.641
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "8 cities (CityRep)"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Regression",
+      "application": "PM2.5 estimation",
+      "dataset": "CityRep-PM2.5",
+      "metrics": [
+        "R2 (linear probe)"
+      ],
+      "metrics_value": [
+        0.457
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "8 cities (CityRep)"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Regression",
+      "application": "Land surface temperature estimation",
+      "dataset": "CityRep-LST",
+      "metrics": [
+        "R2 (linear probe)"
+      ],
+      "metrics_value": [
+        0.456
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "8 cities (CityRep)"
+      ],
+      "image_resolution": "10m",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    }
+  ]
+}

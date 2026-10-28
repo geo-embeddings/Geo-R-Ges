@@ -97,6 +97,12 @@ def code_url(r):
     return c.get("href") if isinstance(c, dict) else None
 
 
+def embeddings_url(r):
+    """Link to released precomputed embeddings; absent while a product is only announced."""
+    e = (r.get("assets") or {}).get("embeddings")
+    return e.get("href") if isinstance(e, dict) else None
+
+
 def kind(r):
     if EMBEDDING_PRODUCT.search(text(r.get("description"), r.get("pretraining"))):
         return "embedding-product"
@@ -167,8 +173,10 @@ def score(r, a):
     drop = False
     n = r.get("mlm:total_parameters")
     k = kind(r)
+    if k == "embedding-product" and not embeddings_url(r):
+        flags.append("embeddings not released (run the model yourself)")
     if a.max_params is not None:
-        if k == "embedding-product":
+        if k == "embedding-product" and embeddings_url(r):
             pts += 3
             why.append("precomputed embeddings (no inference needed)")
         elif n is None:
@@ -179,12 +187,12 @@ def score(r, a):
             drop = True
             flags.append(f"too large ({fmt_count(n)})")
 
-    if weights_url(r):
+    if weights_url(r) or embeddings_url(r):
         pts += 1
     elif a.needs_weights:
         drop = True
         flags.append("no weights listed")
-    if not code_url(r) and not weights_url(r):
+    if not code_url(r) and not weights_url(r) and not embeddings_url(r):
         flags.append("no code or weights listed")
 
     if a.year:
@@ -207,7 +215,8 @@ def cmd_candidates(recs, a):
         rows.append((pts, r, why, flags))
     rows.sort(key=lambda x: (-x[0], x[1].get("id") or ""))
     for pts, r, why, flags in rows[: a.top]:
-        avail = "weights" if weights_url(r) else ("code" if code_url(r) else "-")
+        avail = ("embeddings" if embeddings_url(r) else "weights" if weights_url(r)
+                 else "code" if code_url(r) else "-")
         print(f"{pts:>3}  {r.get('id')}  [{kind(r)}, {fmt_count(r.get('mlm:total_parameters'))}, "
               f"{r.get('spatial_resolution') or '?'}, {avail}, {(r.get('release_date') or '?')[:10]}]")
         if why:
@@ -234,6 +243,7 @@ def cmd_show(recs, a):
               f"{(r.get('start_datetime') or '?')[:4]}-{(r.get('end_datetime') or '?')[:4]}; "
               f"regions {', '.join(r.get('regions_coverage') or []) or '?'}")
         print(f"   code {code_url(r) or '-'}\n   weights {weights_url(r) or '-'}")
+        print(f"   embeddings {embeddings_url(r) or '-'}")
         print(f"   {r.get('description') or ''}")
         benches = r.get("benchmarks") or []
         if a.task or a.region:

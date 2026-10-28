@@ -180,10 +180,11 @@ One row per record; open `<id>.json` for details. `?` = not stated in the record
 - **kind**: `encoder`, `vision-language` (has a text modality) or `embedding-product` (precomputed embeddings, no inference needed)
 - **inputs**: modalities; sensors
 - **time**: temporal alignment (`none` = single date, `partial`, `full` = time series), then the years of the training data / embedding layers when known
-- **code**, **weights**: `y` if the record links source code / released weights or product
+- **code**, **weights**: `y` if the record links source code / released model weights
+- **embeddings**: `y` if precomputed embeddings are released and linked; an `embedding-product` with `n` is announced but not available yet
 
-| id | name | kind | params | inputs | res | time | coverage | code | weights |
-|---|---|---|---|---|---|---|---|---|---|
+| id | name | kind | params | inputs | res | time | coverage | code | weights | embeddings |
+|---|---|---|---|---|---|---|---|---|---|---|
 """
 
 
@@ -204,6 +205,7 @@ def cmd_write_index(root, _):
             cell(r.get("id")), cell(r.get("mlm:name")), kind(r), fmt_count(r.get("mlm:total_parameters")),
             inputs, cell(r.get("spatial_resolution")), time, cell(r.get("regions_coverage")),
             "y" if "mlm:source_code" in assets else "n", "y" if "weights" in assets else "n",
+            "y" if "embeddings" in assets else "n",
         ]) + " |")
     out = root / "model_metadata" / "INDEX.md"
     out.write_text(INDEX_HEADER + "\n".join(rows) + "\n")
