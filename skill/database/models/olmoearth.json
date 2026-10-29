@@ -1,0 +1,425 @@
+{
+  "id": "olmoearth",
+  "mlm:name": "OlmoEarth",
+  "version": "v1",
+  "release_date": "2025-11-04T00:00:00Z",
+  "updated": "2026-10-29T00:00:00Z",
+  "description": "OlmoEarth (Ai2) is a family of spatio-temporal, multimodal ViT encoder-decoder foundation models (Nano/Tiny/Base/Large, 1.4M-300M encoder parameters) for Earth observation. It takes aligned monthly time series (up to 12 timesteps over one year) of Sentinel-2, Sentinel-1 and Landsat imagery resampled to 10 m, tokenised per bandset with a variable patch size, and is pretrained with 'Latent MIM Lite' (masked tokens predicted in the latent space of a frozen random projection) plus patch-discrimination and instance-contrastive losses; six derived maps are decode-only targets, so inference needs only satellite imagery. Against 12 other foundation models it was best on 15/24 kNN/linear-probe and 19/29 fine-tuning tasks, including partner tasks such as mangrove, crop-type and vessel mapping. This record describes v1 (2025-11-04); later versions are v1.1 (arXiv 2605.20804), v1.2 and v1.3 (2026-10-22, a new model that produces the OlmoEarth v1.3 precomputed embeddings).",
+  "sci:doi": "10.48550/arXiv.2511.13655",
+  "license": "other",
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/allenai/olmoearth_pretrain",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://huggingface.co/collections/allenai/olmoearth",
+      "title": "OlmoEarth weights (Nano/Tiny/Base/Large, later versions)",
+      "type": "text/html",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    },
+    "pretraining_dataset": {
+      "href": "https://huggingface.co/datasets/allenai/olmoearth_pretrain_dataset",
+      "title": "OlmoEarth pretraining dataset",
+      "type": "text/html",
+      "roles": [
+        "data"
+      ]
+    },
+    "blog": {
+      "href": "https://allenai.org/blog/olmoearth-models",
+      "title": "Ai2 announcement",
+      "type": "text/html",
+      "roles": [
+        "metadata"
+      ]
+    }
+  },
+  "mlm:architecture": "Vision Transformer (ViT encoder-decoder (decoder depth 4, same width/heads as encoder). Encoder sizes: ViT-Nano (depth 4, dim 128, 8 heads, 1.4M), ViT-Tiny (12, 192, 3 heads, 6.2M), ViT-Base (12, 768, 12 heads, 90M), ViT-Large (24, 1024, 16 heads, 300M). The HF model cards list Base at 89M and Large at 308M encoder params.)",
+  "mlm:total_parameters": 300000000,
+  "pretext_training_type": "Masked latent prediction (Latent MIM Lite: predicting frozen random-projection token targets) with contrastive losses",
+  "masking_strategy": "Modality-aware masking: for each example, each bandset is randomly assigned not-selected, encode-only (random token masking), decode-only (full bandset reconstructed as target), or encode-and-decode (randomly masked, masked tokens are targets). Derived maps are never encoded, only decode-only or not selected. The paper gives no ratio; the official v1 config uses strategy 'modality_cross_random' with encode_ratio 0.5 and decode_ratio 0.5.",
+  "pretraining": "Latent MIM Lite. Targets come from a randomly initialised, frozen linear projection per modality, mapping masked patches into token space. This replaces Latent MIM's learned or EMA target encoder and avoids representation collapse. A depth-4 decoder with learned MASK tokens cross-attends to visible encoder tokens and predicts the latents of masked tokens. Loss 1 is modality patch discrimination: cosine similarity plus cross-entropy, contrasting each prediction only against target tokens from the same bandset/modality to remove easy negatives (tau 0.1 in the official config). Loss 2 is an instance contrastive loss (SimCLR/InfoNCE-style) on average-pooled encoder outputs of two different random maskings of the same input, weighted 0.1, applied within 32-example micro-batches. Observations and six derived maps (WorldCover, WorldCereal, CDL, OpenStreetMap raster, SRTM, canopy height) go through the same frozen-projection/loss path, which unifies self- and weakly-supervised learning; maps are targets only. Training is 667,200 steps (about 100B tokens) on H100s (Nano/Tiny/Base) and B200s (Large; 5,240 GPU-hours). Ablations show the frozen-projection targets, modality masking, per-modality patch discrimination, the contrastive loss and the maps each improve results.",
+  "domain_knowledge": [
+    "Bandset tokenisation: bands grouped by native resolution (S2: 10 m / 20 m / 60 m groups; Landsat: 15 m pan / 30 m groups)",
+    "Learnable modality (bandset) embeddings",
+    "Sinusoidal temporal embedding over monthly timesteps (the repo code also adds a fixed month-of-year encoding)",
+    "2D sincos spatial positional embedding",
+    "Weak supervision from derived EO maps (WorldCover, WorldCereal, USDA CDL, OpenStreetMap, SRTM, Meta/WRI canopy height) as decode-only targets",
+    "Geographic sampling by 120 OpenStreetMap feature categories (up to 10,000 tiles each)",
+    "Per-modality contrastive negatives (contrast only within the same bandset)",
+    "Variable patch size to trade off spatial resolution and compute"
+  ],
+  "backbone_modifications": [
+    "FlexiViT-style variable patch embedding (patch size 1-8), implemented by resizing input instead of resizing weights",
+    "Separate patch embedding per bandset (S2 split into 3, Landsat into 2, S1 VV/VH one)",
+    "Full joint self-attention across space, time and modalities in the encoder",
+    "Lightweight depth-4 cross-attention decoder for latent prediction",
+    "Average-pooled tokens over modalities, timesteps and locations as the global embedding (no CLS token)"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "Sentinel-1",
+    "Landsat-8"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR",
+    "Time series"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "full",
+  "spatial_resolution": "10m (all inputs resampled to 10 m/pixel; lower-resolution bandsets tokenised at coarser internal resolution)",
+  "temporal_resolution": "monthly (up to 12 timesteps over one year; 3-12 used in training; single images supported)",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2 L2A",
+      "description": "Three bandsets by native resolution: 10 m (B02, B03, B04, B08), 20 m (B05, B06, B07, B8A, B11, B12), 60 m (B01, B09)",
+      "bands": [
+        "B02",
+        "B03",
+        "B04",
+        "B08",
+        "B05",
+        "B06",
+        "B07",
+        "B8A",
+        "B11",
+        "B12",
+        "B01",
+        "B09"
+      ]
+    },
+    {
+      "name": "Sentinel-1",
+      "bands": [
+        "VV",
+        "VH"
+      ]
+    },
+    {
+      "name": "Landsat 8/9",
+      "description": "Two bandsets: pan (B8) and 30 m (B1-B7, B9-B11)",
+      "bands": [
+        "B8",
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B9",
+        "B10",
+        "B11"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "OlmoEarth pretraining dataset (allenai/olmoearth_pretrain_dataset): Sentinel-1, Sentinel-2, Landsat-8 observations plus WorldCereal, ESA WorldCover, USDA CDL, OpenStreetMap, SRTM and canopy height maps Acquisition period: 2016-2024 (each sample covers a one-year window starting uniformly between Jan 2016 and Dec 2024)",
+  "regions_coverage": [
+    "Global"
+  ],
+  "start_datetime": "2016-01-01T00:00:00Z",
+  "end_datetime": null,
+  "num_images": 285288,
+  "sampling": "Enumerate all 2.56 km tiles containing each of 120 OpenStreetMap feature categories (roads to geothermal power plants) and randomly sample up to 10,000 tiles per category, giving 285,288 samples",
+  "processing:level": "Sentinel-2 L2A; Sentinel-1 RTC; Landsat 8/9 Collection 2 L1 (per the repo dataset-creation configs; not stated in the paper)",
+  "processing:lineage": "All modalities resampled to 10 m/pixel; Up to 12 monthly timesteps per one-year sample; Bands grouped into bandsets by native resolution",
+  "cloud_cover": null,
+  "missing_data": "Many samples contain only a subset of timesteps and modalities; missing ones are simply absent (not selected) in masking/tokenisation",
+  "mlm:hyperparameters": {
+    "patch_size": "variable 1-8 px per bandset (random per batch in training); 4x4 default at evaluation",
+    "epochs": null,
+    "batch_size": 512,
+    "learning_rate": "AdamW, base LR 1e-4, weight decay 0.02, linear warmup 8,000 steps then cosine annealing to 0.1x over 667,200 total steps",
+    "augmentations": [
+      "Random square spatial crop (1-12 tokens per side)",
+      "Random effective patch size (1-8)",
+      "Random timestep subsets (3-12)",
+      "Two independent random maskings per sample (views for instance contrastive loss)"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "2.56 km x 2.56 km tiles (256x256 at 10 m); random square crops of 1-12 tokens per side (max 96x96 px at patch size 8); 3-12 monthly timesteps"
+  },
+  "benchmarks": [
+    {
+      "task": "Classification",
+      "application": "Land use / land cover classification",
+      "dataset": "m-eurosat (GEO-Bench)",
+      "metrics": [
+        "Top-1 Acc (kNN k=20, 100% train, ViT-Large)",
+        "Top-1 Acc (kNN k=20, 100% train, ViT-Base)",
+        "Top-1 Acc (finetune, 100% train, ViT-Large)",
+        "Top-1 Acc (finetune, 100% train, ViT-Base)"
+      ],
+      "metrics_value": [
+        96.3,
+        94.7,
+        98.5,
+        98.7
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "train 2000 / val 1000 / test 1000"
+    },
+    {
+      "task": "Multilabel classification",
+      "application": "Land cover classification",
+      "dataset": "m-bigearthnet (GEO-Bench)",
+      "metrics": [
+        "Micro-F1 (kNN k=20, 100% train, ViT-Large)",
+        "Micro-F1 (kNN k=20, 100% train, ViT-Base)",
+        "Micro-F1 (finetune, 100% train, ViT-Large)",
+        "Micro-F1 (finetune, 100% train, ViT-Base)"
+      ],
+      "metrics_value": [
+        62.0,
+        62.4,
+        72.4,
+        72.0
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "120x120",
+      "spatial_resolution": "10m",
+      "split_ratio": "train 20000 / val 1000 / test 1000"
+    },
+    {
+      "task": "Classification",
+      "application": "Local climate zone classification",
+      "dataset": "m-so2sat (GEO-Bench)",
+      "metrics": [
+        "Top-1 Acc (kNN k=20, 100% train, ViT-Large)",
+        "Top-1 Acc (kNN k=20, 100% train, ViT-Base)",
+        "Top-1 Acc (finetune, 100% train, ViT-Large)",
+        "Top-1 Acc (finetune, 100% train, ViT-Base)"
+      ],
+      "metrics_value": [
+        68.2,
+        67.7,
+        68.1,
+        68.6
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": "train 19992 / val 986 / test 986"
+    },
+    {
+      "task": "Classification",
+      "application": "Crop type mapping (pixel time series)",
+      "dataset": "BreizhCrops",
+      "metrics": [
+        "Acc (linear probe, 100% train, ViT-Large)",
+        "Acc (linear probe, 100% train, ViT-Base)"
+      ],
+      "metrics_value": [
+        70.7,
+        70.9
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Brittany, France"
+      ],
+      "image_resolution": "single-pixel time series",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Crop type mapping",
+      "dataset": "PASTIS",
+      "metrics": [
+        "mIoU (linear probe, 100% train, S2 time series, ViT-Large)",
+        "mIoU (linear probe, 100% train, S2 time series, ViT-Base)",
+        "mIoU (finetune, 100% train, S2 time series, ViT-Large)",
+        "mIoU (finetune, 100% train, S2 time series, ViT-Base)"
+      ],
+      "metrics_value": [
+        51.8,
+        50.6,
+        66.3,
+        64.3
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "France"
+      ],
+      "image_resolution": "128x128",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Cashew plantation mapping",
+      "dataset": "m-cashewplant (GEO-Bench)",
+      "metrics": [
+        "mIoU (linear probe, 100% train, ViT-Large)",
+        "mIoU (linear probe, 100% train, ViT-Base)",
+        "mIoU (finetune, 100% train, ViT-Large)",
+        "mIoU (finetune, 100% train, ViT-Base)"
+      ],
+      "metrics_value": [
+        30.9,
+        32.3,
+        80.6,
+        79.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Benin"
+      ],
+      "image_resolution": "256x256 (patch size swept; best was 16x16)",
+      "spatial_resolution": "10m",
+      "split_ratio": "train 1350 / val 400 / test 50"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Marine debris and pollutant mapping",
+      "dataset": "MADOS",
+      "metrics": [
+        "mIoU (linear probe, 100% train, ViT-Large)",
+        "mIoU (linear probe, 100% train, ViT-Base)",
+        "mIoU (finetune, 100% train, ViT-Large)",
+        "mIoU (finetune, 100% train, ViT-Base)"
+      ],
+      "metrics_value": [
+        66.4,
+        67.2,
+        81.8,
+        77.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "80x80",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Flood / surface water mapping",
+      "dataset": "Sen1Floods11",
+      "metrics": [
+        "mIoU (linear probe, 100% train, S1, ViT-Large)",
+        "mIoU (linear probe, 100% train, S1, ViT-Base)",
+        "mIoU (finetune, 100% train, S1, ViT-Large)",
+        "mIoU (finetune, 100% train, S1, ViT-Base)"
+      ],
+      "metrics_value": [
+        79.8,
+        79.2,
+        79.8,
+        79.8
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Land use / land cover classification (African Wildlife Foundation partner task)",
+      "dataset": "AWF (OlmoEarth partner task)",
+      "metrics": [
+        "Acc (kNN k=20, 100% train, S2 time series, ViT-Large)",
+        "Acc (kNN k=20, 100% train, S2 time series, ViT-Base)",
+        "Acc (finetune, 100% train, S2 time series, ViT-Large)",
+        "Acc (finetune, 100% train, S2 time series, ViT-Base)"
+      ],
+      "metrics_value": [
+        73.0,
+        77.5,
+        84.5,
+        87.0
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Southern Kenya"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Crop type mapping (CGIAR/IFPRI partner task, field-survey labels)",
+      "dataset": "Nandi (OlmoEarth partner task)",
+      "metrics": [
+        "Acc (kNN k=20, 100% train, S2 time series, ViT-Large)",
+        "Acc (kNN k=20, 100% train, S2 time series, ViT-Base)",
+        "Acc (finetune, 100% train, S2 time series, ViT-Large)",
+        "Acc (finetune, 100% train, S2 time series, ViT-Base)"
+      ],
+      "metrics_value": [
+        73.6,
+        74.7,
+        81.0,
+        81.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Nandi County, Kenya"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    }
+  ],
+  "provenance": {
+    "source": "manual extraction",
+    "source_id": null,
+    "source_url": "https://arxiv.org/abs/2511.13655",
+    "references": [
+      "https://github.com/allenai/olmoearth_pretrain",
+      "https://huggingface.co/allenai/OlmoEarth-v1-Large",
+      "https://allenai.org/blog/olmoearth-models",
+      "https://allenai.org/blog/olmoearth-embeddings"
+    ],
+    "retrieved": "2026-10-28T00:00:00Z",
+    "review": [
+      "release_date: 2025-11-04 is the public release of weights, code and tech report (Ai2 blog); arXiv v1 is 2025-11-17.",
+      "License: OlmoEarth Artifact License (restricts military, defense and extractive-industry use), recorded as 'other'.",
+      "mlm:total_parameters: paper says 300M for Large; README and HF card say 308M.",
+      "Bands and processing:level come from the current repo code (olmoearth_pretrain constants and rslearn configs), which may postdate v1; the paper does not list bands.",
+      "Sen1Floods11: the appendix says Sentinel-2 crops and accuracy, Table 2 says S1 and mIoU; followed the table.",
+      "Venue (CVPR 2026) is from the CVPR site; the arXiv page has no venue comment."
+    ]
+  }
+}
