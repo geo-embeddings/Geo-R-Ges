@@ -1,0 +1,262 @@
+{
+  "id": "csp",
+  "mlm:name": "CSP",
+  "version": "2023",
+  "release_date": "2023-07-01T00:00:00Z",
+  "updated": "2023-07-01T00:00:00Z",
+  "description": "Contrastive Spatial Pre-Training (CSP) is a self-supervised dual-encoder framework for learning geospatial-visual representations from large-scale unlabeled geo-tagged images, aligning image and location embeddings for improved downstream classification tasks.",
+  "sci:doi": "10.48550/arXiv.2305.01118",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://gengchenmai.github.io/csp-website/",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://gengchenmai.github.io/csp-website/",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "InceptionV3 (iNat2018), ResNet50 (fMoW), ViT (ablation)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Self-supervised contrastive learning between image and location embeddings",
+  "masking_strategy": "Dropout-based augmentation for location encoder (SimCSE), in-batch negatives, random negative location sampling",
+  "pretraining": "Dual-encoder contrastive pre-training: image encoder is frozen (pretrained on ImageNet or Geo-SSL), location encoder is trained to align with image embeddings using contrastive objectives (NCE or MC loss) with multiple negative sampling strategies.",
+  "domain_knowledge": [
+    "Spatial dependency",
+    "Spatial heterogeneity",
+    "Spatially explicit AI",
+    "Geospatial distribution modeling"
+  ],
+  "backbone_modifications": [
+    "Projection layer W() for image encoder",
+    "Dual-encoder architecture",
+    "Location encoder (Space2Vec grid)"
+  ],
+  "supported_sensors": [
+    "RGB camera (iNat2018)",
+    "Multispectral satellite (fMoW)"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral (fMoW)",
+    "RGB (iNat2018)",
+    "Location (latitude, longitude)"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": null,
+  "temporal_resolution": null,
+  "mlm:input": null,
+  "mlm:pretrained_source": "iNat2018 (for iNat2018 task)",
+  "regions_coverage": [
+    "Global, with US bias"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 436063,
+  "sampling": "Stratified sampling for few-shot; random negative location sampling for contrastive",
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": [
+      "Dropout (SimCSE)",
+      "Random negative sampling",
+      "In-batch negative sampling"
+    ],
+    "mask_ratio": null,
+    "additional_pretraining_stages": [
+      {
+        "mlm:pretrained_source": "fMoW (for fMoW task)",
+        "regions_coverage": [
+          "Global"
+        ],
+        "num_images": 363570,
+        "sampling": "Stratified sampling for few-shot; random negative location sampling for contrastive",
+        "augmentations": [
+          "Dropout (SimCSE)",
+          "Random negative sampling",
+          "In-batch negative sampling"
+        ]
+      }
+    ]
+  },
+  "benchmarks": [
+    {
+      "task": "Fine-grained species recognition",
+      "application": "Geo-aware image classification",
+      "dataset": "iNat2018",
+      "metrics": [
+        "Top1 accuracy"
+      ],
+      "metrics_value": [
+        9.01
+      ],
+      "sensor": [
+        "RGB camera"
+      ],
+      "regions": [
+        "Global, US bias"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 21803 of 436063 (5%)"
+    },
+    {
+      "task": "Fine-grained species recognition",
+      "application": "Geo-aware image classification",
+      "dataset": "iNat2018",
+      "metrics": [
+        "Top1 accuracy"
+      ],
+      "metrics_value": [
+        19.68
+      ],
+      "sensor": [
+        "RGB camera"
+      ],
+      "regions": [
+        "Global, US bias"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 43606 of 436063 (10%)"
+    },
+    {
+      "task": "Fine-grained species recognition",
+      "application": "Geo-aware image classification",
+      "dataset": "iNat2018",
+      "metrics": [
+        "Top1 accuracy"
+      ],
+      "metrics_value": [
+        29.61
+      ],
+      "sensor": [
+        "RGB camera"
+      ],
+      "regions": [
+        "Global, US bias"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 87212 of 436063 (20%)"
+    },
+    {
+      "task": "Fine-grained species recognition",
+      "application": "Geo-aware image classification",
+      "dataset": "iNat2018",
+      "metrics": [
+        "Top1 accuracy"
+      ],
+      "metrics_value": [
+        73.79
+      ],
+      "sensor": [
+        "RGB camera"
+      ],
+      "regions": [
+        "Global, US bias"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 436063 of 436063 (100%)"
+    },
+    {
+      "task": "Satellite image classification",
+      "application": "Remote sensing land use/object classification",
+      "dataset": "fMoW",
+      "metrics": [
+        "Top1 accuracy"
+      ],
+      "metrics_value": [
+        67.47
+      ],
+      "sensor": [
+        "Satellite"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 18178 of 363570 (5%)"
+    },
+    {
+      "task": "Satellite image classification",
+      "application": "Remote sensing land use/object classification",
+      "dataset": "fMoW",
+      "metrics": [
+        "Top1 accuracy"
+      ],
+      "metrics_value": [
+        69.23
+      ],
+      "sensor": [
+        "Satellite"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 36357 of 363570 (10%)"
+    },
+    {
+      "task": "Satellite image classification",
+      "application": "Remote sensing land use/object classification",
+      "dataset": "fMoW",
+      "metrics": [
+        "Top1 accuracy"
+      ],
+      "metrics_value": [
+        70.66
+      ],
+      "sensor": [
+        "Satellite"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 72714 of 363570 (20%)"
+    },
+    {
+      "task": "Satellite image classification",
+      "application": "Remote sensing land use/object classification",
+      "dataset": "fMoW",
+      "metrics": [
+        "Top1 accuracy"
+      ],
+      "metrics_value": [
+        71.0
+      ],
+      "sensor": [
+        "Satellite"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 363570 of 363570 (100%)"
+    }
+  ],
+  "provenance": null
+}

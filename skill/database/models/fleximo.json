@@ -1,0 +1,187 @@
+{
+  "id": "fleximo",
+  "mlm:name": "FlexiMo",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "FlexiMo is a flexible remote sensing foundation model that enables adaptation to arbitrary spatial resolutions, patch sizes, and channel counts. It features a spatial resolution-aware module using parameter-free alignment embedding and a lightweight channel adaptation module leveraging prior spectral information from sensors. FlexiMo achieves strong generalization and robustness across diverse multimodal, multi-resolution, and multi-scale datasets for tasks such as scene classification, land cover classification, building segmentation, and cloud detection.",
+  "sci:doi": null,
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "ViT-Base",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Masked Autoencoder (MAE) with dynamic channel adaptation and spatial resolution-aware scaling",
+  "masking_strategy": "Masked Image Modeling with spatial and channel adaptation",
+  "pretraining": "Pre-trained on large-scale remote sensing datasets using a dynamic weight generator for patch embeddings and a spatial resolution-aware module for flexible adaptation.",
+  "domain_knowledge": [
+    "Central wavelength embedding",
+    "Spatial resolution-aware scaling",
+    "Parameter-free alignment embedding"
+  ],
+  "backbone_modifications": [
+    "Spatial resolution-aware module (parameter-free alignment embedding)",
+    "Lightweight channel adaptation module (wavelength-guided dynamic weight generator)"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "Sentinel-1",
+    "Aerial",
+    "QuickBird",
+    "WorldView",
+    "IKONOS",
+    "ZY-3",
+    "GaoFen-1",
+    "GaoFen-2"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR",
+    "RGB",
+    "Panchromatic"
+  ],
+  "spectral_alignment": "full",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Sentinel-2, Sentinel-1, Aerial, QuickBird, WorldView, IKONOS, ZY-3, GaoFen-1, GaoFen-2",
+      "bands": [
+        "Variable, depending on sensor (e.g., 12-band MSI, 2-band SAR, 3-band RGB, 4-band MSI, 1-band PAN)"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": null,
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": null,
+  "benchmarks": [
+    {
+      "task": "Scene Classification",
+      "application": "Land use/land cover classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        99.44
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m, 20m, 60m",
+      "split_ratio": "16,200 train / 5,400 val; samples used: 21600 of 27000 (80%)"
+    },
+    {
+      "task": "Scene Classification",
+      "application": "SAR scene classification",
+      "dataset": "EuroSAT-SAR",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        89.96
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "same as EuroSAT; samples used: 21600 of 27000 (80%)"
+    },
+    {
+      "task": "Land Cover Classification",
+      "application": "Semantic segmentation",
+      "dataset": "SegMunich",
+      "metrics": [
+        "OA",
+        "mIoU"
+      ],
+      "metrics_value": [
+        83.4,
+        52.7
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Munich, Germany"
+      ],
+      "image_resolution": "128x128",
+      "spatial_resolution": "10m, 20m",
+      "split_ratio": "39,402 train / 9,846 val; samples used: 49248 of 49248 (100%)"
+    },
+    {
+      "task": "Building Extraction",
+      "application": "High-resolution building segmentation",
+      "dataset": "WHU-Building",
+      "metrics": [
+        "OA",
+        "Precision",
+        "Recall",
+        "mIoU"
+      ],
+      "metrics_value": [
+        98.9,
+        97.2,
+        97.4,
+        94.8
+      ],
+      "sensor": [
+        "Aerial",
+        "QuickBird",
+        "Worldview",
+        "IKONOS",
+        "ZY-3"
+      ],
+      "regions": [
+        "Global cities, New Zealand"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.3m to 2.5m",
+      "split_ratio": "4,736 train / 1,036 val / 2,416 test; samples used: 8393 of 8393 (100%)"
+    },
+    {
+      "task": "Cloud Detection",
+      "application": "Cloud segmentation",
+      "dataset": "GF12MS-WHU-GF1",
+      "metrics": [
+        "OA",
+        "Precision",
+        "Recall",
+        "mIoU"
+      ],
+      "metrics_value": [
+        99.1,
+        97.0,
+        96.5,
+        93.8
+      ],
+      "sensor": [
+        "GaoFen-1"
+      ],
+      "regions": [
+        "China"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "8m (MS), 2m (PAN)",
+      "split_ratio": "6,434 train / 4,085 val; samples used: 10419 of 10419 (100%)"
+    }
+  ],
+  "provenance": null
+}

@@ -1,0 +1,341 @@
+{
+  "id": "prithvi-eo-2-0",
+  "mlm:name": "Prithvi-EO-2.0",
+  "version": "2.0",
+  "release_date": "2025-02-03T00:00:00Z",
+  "updated": "2025-02-03T00:00:00Z",
+  "description": "A multi-temporal geospatial foundation model trained on 4.2M global time series samples from NASA?s Harmonized Landsat and Sentinel-2 data archive at 30m resolution. Incorporates temporal and location embeddings for enhanced performance across diverse EO tasks. Available in 300M and 600M parameter versions.",
+  "sci:doi": "10.48550/arXiv.2412.02732",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/NASA-IMPACT/Prithvi-EO-2.0",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://huggingface.co/ibm-nasa-geospatial/Prithvi-EO-2.0",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-H",
+  "mlm:total_parameters": 600000000,
+  "pretext_training_type": "Masked Autoencoder (MAE)",
+  "masking_strategy": "Random masking of 3D spatiotemporal patches with drop mechanism for geolocation and temporal metadata",
+  "pretraining": "Self-supervised masked autoencoding with 3D patch embeddings and 3D positional encodings, incorporating temporal and location metadata as weighted positional biases. Trained on global HLS time series at 30m resolution.",
+  "domain_knowledge": [
+    "Land use/land cover stratified sampling",
+    "Ecoregion representation",
+    "Temporal sequence sampling",
+    "Cloud/missing data filtering"
+  ],
+  "backbone_modifications": [
+    "3D patch embeddings",
+    "3D positional encodings",
+    "Addition of temporal and location metadata as weighted positional biases",
+    "Random drop of metadata during pretraining"
+  ],
+  "supported_sensors": [
+    "Landsat 8",
+    "Landsat 9",
+    "Sentinel-2A",
+    "Sentinel-2B"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "full",
+  "spatial_resolution": "30m",
+  "temporal_resolution": "2-3 days (HLS)",
+  "mlm:input": [
+    {
+      "name": "Landsat 8, Landsat 9, Sentinel-2A, Sentinel-2B",
+      "bands": [
+        "Blue",
+        "Green",
+        "Red",
+        "NIR",
+        "SWIR1",
+        "SWIR2"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "NASA Harmonized Landsat and Sentinel-2 (HLS)",
+  "regions_coverage": [
+    "Global (excluding persistent quality issues in Greenland and Antarctica)"
+  ],
+  "start_datetime": "2014-01-01T00:00:00Z",
+  "end_datetime": "2023-12-31T23:59:59Z",
+  "num_images": 4200000,
+  "sampling": "Stratified by LULC and ecoregion, upsampling of urban and heterogeneous areas, temporal sequence sampling (4 timestamps, 1-6 months apart)",
+  "processing:level": "Surface reflectance (HLS)",
+  "processing:lineage": "Cloud filtering (max 20% cloudy pixels); Missing value interpolation (max 1% missing pixels); Spatial downsampling to avoid over-representation; Removal of low-quality tiles",
+  "cloud_cover": "Max 20% cloudy pixels per sample; sea/desert regions downsampled to 10%",
+  "missing_data": "Max 1% missing pixels per band; filled by nearest interpolation",
+  "mlm:hyperparameters": {
+    "patch_size": "4x224x224 (time x height x width)",
+    "epochs": 400,
+    "batch_size": 3840,
+    "learning_rate": "cosine scheduler, max 5e-4, linear warmup from 1e-6 for 40 epochs",
+    "augmentations": [
+      "Random crop (4x224x224)",
+      "Random horizontal flip"
+    ],
+    "mask_ratio": 0.75,
+    "image_resolution": "30m"
+  },
+  "benchmarks": [
+    {
+      "task": "Classification",
+      "application": "Land use/land cover, crop type, object detection",
+      "dataset": "GEO-Bench (m-bigearthnet, m-so2sat, m-brick-kiln, m-forestnet, m-eurosat, m-pv4ger)",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        73.0
+      ],
+      "sensor": [
+        "Sentinel-2",
+        "Landsat-8",
+        "Sentinel-1",
+        "RGB"
+      ],
+      "regions": null,
+      "image_resolution": "224x224 (resized)",
+      "spatial_resolution": "0.1m-15m",
+      "split_ratio": null
+    },
+    {
+      "task": "Segmentation",
+      "application": "Land cover, crop, object segmentation",
+      "dataset": "GEO-Bench (m-pv4ger-seg, m-chesapeake-landcover, m-cashew-plantation, m-SA-crop-type, m-nz-cattle, m-NeonTree)",
+      "metrics": [
+        "Mean IoU"
+      ],
+      "metrics_value": [
+        73.0
+      ],
+      "sensor": [
+        "Sentinel-2",
+        "Landsat-8",
+        "RGB",
+        "Hyperspectral",
+        "Elevation"
+      ],
+      "regions": null,
+      "image_resolution": "224x224 (resized)",
+      "spatial_resolution": "0.1m-15m",
+      "split_ratio": null
+    },
+    {
+      "task": "Segmentation",
+      "application": "Flood detection",
+      "dataset": "Sen1Floods11",
+      "metrics": [
+        "mIoU",
+        "mF1",
+        "IoU water"
+      ],
+      "metrics_value": [
+        90.3,
+        97.7,
+        83.1
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global (14 biomes, 6 continents, 11 flood events)"
+      ],
+      "image_resolution": "448x448",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 446 of 446 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Wildfire scar detection",
+      "dataset": "HLS Burn Scars",
+      "metrics": [
+        "mIoU",
+        "mF1",
+        "IoU burn scar"
+      ],
+      "metrics_value": [
+        90.5,
+        98.1,
+        83.2
+      ],
+      "sensor": [
+        "HLS"
+      ],
+      "regions": [
+        "Global (2018-2021)"
+      ],
+      "image_resolution": "448x448",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 805 of 805 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Burn intensity mapping",
+      "dataset": "HLS Burn Intensity",
+      "metrics": [
+        "mIoU",
+        "mF1",
+        "mAcc"
+      ],
+      "metrics_value": [
+        29.4,
+        44.0,
+        47.2
+      ],
+      "sensor": [
+        "HLS"
+      ],
+      "regions": [
+        "Western CONUS"
+      ],
+      "image_resolution": "32x32",
+      "spatial_resolution": null,
+      "split_ratio": "80/20; samples used: 5692 of 5692 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Landslide detection",
+      "dataset": "Landslide4Sense (L4S)",
+      "metrics": [
+        "mIoU",
+        "F1 Score",
+        "Precision",
+        "Recall",
+        "aAcc"
+      ],
+      "metrics_value": [
+        71.3,
+        60.7,
+        57.1,
+        64.7,
+        98.4
+      ],
+      "sensor": [
+        "Sentinel-2",
+        "ALOS PALSAR (DEM, slope)"
+      ],
+      "regions": [
+        "Iburi-Tobu (Hokkaido)",
+        "Kodagu (Karnataka)",
+        "Rasuwa (Bagmati)",
+        "Western Taitung County"
+      ],
+      "image_resolution": "128x128 (upsampled to 224x224)",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 3799 of 3799 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Multi-temporal crop segmentation (US)",
+      "dataset": "US Multi-crop Segmentation",
+      "metrics": [
+        "mIoU",
+        "mAcc"
+      ],
+      "metrics_value": [
+        50.7,
+        68.8
+      ],
+      "sensor": [
+        "HLS"
+      ],
+      "regions": [
+        "US"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 5000 of 5000 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Multi-temporal land cover and crop classification (EU)",
+      "dataset": "Sen4Map",
+      "metrics": [
+        "Weighted F1 (land cover)",
+        "Weighted F1 (crop type)"
+      ],
+      "metrics_value": [
+        76.1,
+        84.6
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "European Union"
+      ],
+      "image_resolution": "64x64 (cropped to 15x15, upscaled to 224x224)",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 335125 of 335125 (100%)"
+    },
+    {
+      "task": "Regression",
+      "application": "Above Ground Biomass Estimation",
+      "dataset": "BioMassters",
+      "metrics": [
+        "Validation RMSE",
+        "Test RMSE"
+      ],
+      "metrics_value": [
+        40.35,
+        54.51
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Finland"
+      ],
+      "image_resolution": "256x256 (cropped to 224x224)",
+      "spatial_resolution": "10m",
+      "split_ratio": "80/20; samples used: 11462 of 11462 (100%)"
+    },
+    {
+      "task": "Regression",
+      "application": "Gross Primary Productivity (GPP) estimation",
+      "dataset": "FLUXNET, AmeriFlux, ICOS (with HLS and MERRA-2)",
+      "metrics": [
+        "R2 (2018)",
+        "R2 (2019)",
+        "R2 (2020)",
+        "R2 (2021)"
+      ],
+      "metrics_value": [
+        0.88,
+        0.8,
+        0.83,
+        0.74
+      ],
+      "sensor": [
+        "HLS",
+        "MERRA-2"
+      ],
+      "regions": [
+        "37 globally distributed flux tower sites"
+      ],
+      "image_resolution": "50x50",
+      "spatial_resolution": "30m",
+      "split_ratio": "Leave-one-year-out cross-validation; samples used: 975 of 975 (100%)"
+    }
+  ],
+  "provenance": null
+}

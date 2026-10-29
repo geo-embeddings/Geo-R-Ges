@@ -1,0 +1,298 @@
+{
+  "id": "satclip",
+  "mlm:name": "SatCLIP",
+  "version": "1.0",
+  "release_date": null,
+  "updated": null,
+  "description": "SatCLIP is a global, general-purpose geographic location encoder trained via contrastive learning to match multispectral Sentinel-2 satellite imagery with their geographic coordinates, producing 256-dimensional location embeddings for downstream geospatial tasks.",
+  "sci:doi": "10.48550/arXiv.2311.17179",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/microsoft/satclip",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://github.com/microsoft/satclip",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "Siren (Sinusoidal Representation Network) with Spherical Harmonics positional encoding",
+  "mlm:total_parameters": 1000000,
+  "pretext_training_type": "Contrastive learning (CLIP objective) between image and location embeddings",
+  "masking_strategy": null,
+  "pretraining": "Contrastive pretraining aligning location encoder outputs (from coordinates) with image encoder outputs (from Sentinel-2 multispectral images) using the CLIP loss. The image encoder is frozen except for the last projection layer.",
+  "domain_knowledge": [
+    "Spherical harmonics positional encoding",
+    "Sinusoidal representation networks",
+    "Uniform global sampling",
+    "Sentinel-2 multispectral imagery"
+  ],
+  "backbone_modifications": [
+    "Spherical harmonics positional encoding for coordinates",
+    "Siren network for location encoder",
+    "Frozen image encoder except last projection layer"
+  ],
+  "supported_sensors": [
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06",
+        "B07",
+        "B08",
+        "B08A",
+        "B09",
+        "B11",
+        "B12"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          12,
+          256,
+          256
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "S2-100K",
+  "regions_coverage": [
+    "Global land mass"
+  ],
+  "start_datetime": "2021-01-01T00:00:00Z",
+  "end_datetime": "2023-05-17T23:59:59Z",
+  "num_images": 100000,
+  "sampling": "Uniform random sampling over global land mass",
+  "processing:level": "Sentinel-2 Level-2A",
+  "processing:lineage": "Cloud Optimized GeoTIFF; resample all bands to 10m/px; reject patches with >10% nodata",
+  "cloud_cover": "<20% cloud cover (ESA preprocessing)",
+  "missing_data": "Reject patches with >10% nodata values",
+  "mlm:hyperparameters": {
+    "patch_size": "256",
+    "epochs": 500,
+    "batch_size": 8000,
+    "learning_rate": "0.0001",
+    "augmentations": [
+      "random crop",
+      "random horizontal flip",
+      "random vertical flip",
+      "Gaussian blur",
+      "coordinate jitter (up to ~1km)"
+    ],
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Regression",
+      "application": "Air temperature prediction",
+      "dataset": "Air Temp. (Hooker et al., 2018)",
+      "metrics": [
+        "R2"
+      ],
+      "metrics_value": [
+        0.91
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "60/20/20; samples used: 1845 of 3076 (60%)"
+    },
+    {
+      "task": "Regression",
+      "application": "Median income prediction",
+      "dataset": "Med. Income (Jia and Benson, 2020)",
+      "metrics": [
+        "R2"
+      ],
+      "metrics_value": [
+        0.47
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Continental USA"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "50/20/30; samples used: 1553 of 3107 (50%)"
+    },
+    {
+      "task": "Regression",
+      "application": "California housing price prediction",
+      "dataset": "Cali. Housing (Pace and Barry, 2003)",
+      "metrics": [
+        "R2"
+      ],
+      "metrics_value": [
+        0.57
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "California, USA"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "50/20/30; samples used: 10320 of 20640 (50%)"
+    },
+    {
+      "task": "Regression",
+      "application": "Elevation prediction",
+      "dataset": "Elevation (Rolf et al., 2021)",
+      "metrics": [
+        "R2"
+      ],
+      "metrics_value": [
+        0.88
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "30/10/60; samples used: 29998 of 99995 (30%)"
+    },
+    {
+      "task": "Regression",
+      "application": "Population density prediction",
+      "dataset": "Population (Rolf et al., 2021)",
+      "metrics": [
+        "R2"
+      ],
+      "metrics_value": [
+        0.82
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "30/10/60; samples used: 22353 of 74512 (30%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Country code classification",
+      "dataset": "Countries (Ours)",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        96.0
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "30/10/60; samples used: 30000 of 100000 (30%)"
+    },
+    {
+      "task": "Classification",
+      "application": "iNaturalist species classification",
+      "dataset": "iNat 2018 (Horn et al., 2018)",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        66.22
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "predefined"
+    },
+    {
+      "task": "Classification",
+      "application": "Biome classification",
+      "dataset": "Biome (Dinerstein et al., 2017)",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        94.41
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "30/10/60; samples used: 30000 of 100000 (30%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Ecoregion classification",
+      "dataset": "Ecoregions (Dinerstein et al., 2017)",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        91.67
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": "30/10/60; samples used: 30000 of 100000 (30%)"
+    }
+  ],
+  "provenance": null
+}

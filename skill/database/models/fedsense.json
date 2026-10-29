@@ -1,0 +1,242 @@
+{
+  "id": "fedsense",
+  "mlm:name": "FedSense",
+  "version": "1.0",
+  "release_date": "2025-03-14T00:00:00Z",
+  "updated": "2025-03-14T00:00:00Z",
+  "description": "FedSense is a privacy-preserved federated self-supervised learning framework for collaborative pre-training of remote sensing foundation models (RSFMs) across multiple institutions without sharing private data. It introduces Federated Mutual-guidance Learning, including Server-to-Clients Guidance (SCG) and Clients-to-Server Guidance (CSG), to address model drift from data heterogeneity and high communication overhead.",
+  "sci:doi": "10.48550/arXiv.2503.11051",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "Swin Transformer Tiny (Swin-T)",
+  "mlm:total_parameters": 28000000,
+  "pretext_training_type": "Self-supervised learning (contrastive learning and masked image modeling) in federated setting",
+  "masking_strategy": "Masked image modeling (SimMIM), contrastive learning (DINO)",
+  "pretraining": "Federated self-supervised pre-training with mutual-guidance learning (SCG and CSG) across 10 clients with heterogeneous remote sensing data and a public dataset on the server",
+  "domain_knowledge": [
+    "Federated learning",
+    "Self-supervised learning",
+    "Remote sensing data heterogeneity",
+    "Communication-efficient distributed training"
+  ],
+  "backbone_modifications": null,
+  "supported_sensors": [
+    "WorldView-2",
+    "WorldView-3",
+    "WorldView-4",
+    "JL-1",
+    "GF-2",
+    "GF-7",
+    "QB-2",
+    "GE-1",
+    "NOAA",
+    "NAIP"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB",
+    "Aerial",
+    "Satellite"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "0.25-25m",
+  "temporal_resolution": null,
+  "mlm:input": null,
+  "mlm:pretrained_source": "Multi-source federated dataset (see Table 7): 10 clients with private remote sensing data (satellite and aerial), plus public WorldView-3/4 data on server",
+  "regions_coverage": [
+    "Global",
+    "USA",
+    "China"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1000000,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 100,
+    "batch_size": null,
+    "learning_rate": "1e-4",
+    "augmentations": [
+      "View augmentations (for contrastive learning)",
+      "Masked modeling (for SimMIM)"
+    ],
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "RESISC-45",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        96.33
+      ],
+      "sensor": [
+        "Multisource (see pretraining dataset)"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": "0.2m-30m",
+      "split_ratio": null
+    },
+    {
+      "task": "Scene classification",
+      "application": "Remote sensing scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        97.54
+      ],
+      "sensor": [
+        "Multisource (see pretraining dataset)"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "600x600",
+      "spatial_resolution": "0.5m-8m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "LoveDA",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        52.74
+      ],
+      "sensor": [
+        "Multisource (see pretraining dataset)"
+      ],
+      "regions": [
+        "Nanjing",
+        "Changzhou",
+        "Wuhan"
+      ],
+      "image_resolution": "1024x1024",
+      "spatial_resolution": "0.3m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Building segmentation",
+      "dataset": "Inria",
+      "metrics": [
+        "IoU",
+        "OA"
+      ],
+      "metrics_value": [
+        81.66,
+        94.28
+      ],
+      "sensor": [
+        "Multisource (see pretraining dataset)"
+      ],
+      "regions": [
+        "USA",
+        "Austria"
+      ],
+      "image_resolution": "1500x1500",
+      "spatial_resolution": "0.3m",
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection",
+      "application": "Oriented object detection",
+      "dataset": "DIOR-R",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        65.51
+      ],
+      "sensor": [
+        "Multisource (see pretraining dataset)"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "800x800",
+      "spatial_resolution": "0.5m-30m",
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection",
+      "application": "Oriented object detection",
+      "dataset": "DOTA-v1.0",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        68.82
+      ],
+      "sensor": [
+        "Multisource (see pretraining dataset)"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "800x800 to 4000x4000",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Building change detection",
+      "dataset": "LEVIR-CD+",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        73.21
+      ],
+      "sensor": [
+        "Multisource (see pretraining dataset)"
+      ],
+      "regions": [
+        "Texas"
+      ],
+      "image_resolution": "1024x1024",
+      "spatial_resolution": "0.5m",
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Semantic change detection",
+      "dataset": "SECOND",
+      "metrics": [
+        "SCS"
+      ],
+      "metrics_value": [
+        35.43
+      ],
+      "sensor": [
+        "Multisource (see pretraining dataset)"
+      ],
+      "regions": [
+        "Hangzhou",
+        "Chengdu",
+        "Shanghai"
+      ],
+      "image_resolution": "512x512",
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

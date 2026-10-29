@@ -1,0 +1,209 @@
+{
+  "id": "ringmo-sense",
+  "mlm:name": "RingMo-Sense",
+  "version": "1.0",
+  "release_date": "2023-09-18T00:00:00Z",
+  "updated": "2023-09-29T00:00:00Z",
+  "description": "RingMo-Sense is a remote sensing foundation model for spatiotemporal prediction via spatiotemporal evolution disentangling. It uses a triple-branch architecture (spatial, temporal, spatiotemporal) with progressive joint training and parameter sharing, pretrained on a large-scale, diverse remote sensing spatiotemporal dataset. It achieves competitive performance on six downstream spatiotemporal tasks.",
+  "sci:doi": null,
+  "license": null,
+  "assets": {
+    "paper": {
+      "href": "https://ieeexplore.ieee.org/document/10268221",
+      "title": "Paper",
+      "type": "text/html",
+      "roles": [
+        "documentation"
+      ]
+    }
+  },
+  "mlm:architecture": "Video Swin Transformer (Base)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Masked autoencoding with multi-branch (spatial, temporal, spatiotemporal) progressive pretraining",
+  "masking_strategy": "Blockwise (spatial), Tubewise (temporal), Framewise (spatiotemporal) masking",
+  "pretraining": "Progressive two-stage pretraining: first spatial and temporal branches, then add spatiotemporal branch, using self-supervised masked reconstruction on a large-scale, diverse RS spatiotemporal dataset.",
+  "domain_knowledge": null,
+  "backbone_modifications": [
+    "Triple-branch structure (spatial, temporal, spatiotemporal)",
+    "Progressive joint training",
+    "Parameter sharing across branches"
+  ],
+  "supported_sensors": [
+    "UAV",
+    "Satellite-based sensors"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "Video",
+    "Time-series images"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "full",
+  "spatial_resolution": "variable (from high-res UAV to lower-res satellite)",
+  "temporal_resolution": "variable (time-series images and videos, e.g., 15-min intervals for CloudCast)",
+  "mlm:input": [
+    {
+      "name": "UAV, Satellite-based sensors",
+      "bands": [
+        "RGB"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "RingMo-Sense RS Spatiotemporal Dataset (collected from multiple sources, UAV and satellite, multi-format, multi-platform, multi-scenario)",
+  "regions_coverage": [
+    "Global (urban, rural, various scenes, both UAV and satellite)"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1025000,
+  "sampling": "Sliding window spatial and temporal cropping; Time range: 2017-2021 (CloudCast: 2017-2018; HuaBei2021: June?August 2021; others not specified)",
+  "processing:level": null,
+  "processing:lineage": "Format unification (mp4, avi, temporal images to avi); Spatial cropping (sliding window 448x448, 50% overlap); Temporal frame skipping and overlap cropping (84 frames, 14 overlap)",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "4x4xC for images, 2x4x4xC for videos",
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": 0.5,
+    "image_resolution": "224x224 (pretraining); original data up to 448x448 cropped"
+  },
+  "benchmarks": [
+    {
+      "task": "Video prediction",
+      "application": "Moving object recognition in UAV videos",
+      "dataset": "MOR-UAV",
+      "metrics": [
+        "SSIM",
+        "MSE",
+        "MAE"
+      ],
+      "metrics_value": [
+        0.6955,
+        1766.97,
+        null
+      ],
+      "sensor": [
+        "UAV"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Cloud forecasting",
+      "application": "Cloud type prediction from satellite time-series",
+      "dataset": "CloudCast (small version)",
+      "metrics": [
+        "SSIM",
+        "PSNR"
+      ],
+      "metrics_value": [
+        0.9657,
+        41.52
+      ],
+      "sensor": [
+        "Satellite"
+      ],
+      "regions": null,
+      "image_resolution": "128x128",
+      "spatial_resolution": "15x15 km2 per pixel",
+      "split_ratio": null
+    },
+    {
+      "task": "Radar echo extrapolation",
+      "application": "Short-term precipitation/radar echo prediction",
+      "dataset": "HuaBei2021",
+      "metrics": [
+        "MSE",
+        "SSIM",
+        "POD",
+        "FAR",
+        "CSI"
+      ],
+      "metrics_value": [
+        52.8029,
+        null,
+        null,
+        null,
+        null
+      ],
+      "sensor": [
+        "Weather radar"
+      ],
+      "regions": [
+        "Northern China"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection in satellite videos",
+      "application": "Aircraft and ship detection in satellite video",
+      "dataset": "AIR-MOT",
+      "metrics": [
+        "AP50"
+      ],
+      "metrics_value": [
+        65.9
+      ],
+      "sensor": [
+        "Satellite (Jilin-1)"
+      ],
+      "regions": [
+        "Multiple cities worldwide"
+      ],
+      "image_resolution": "1024x640 (resized from 1920x1080)",
+      "spatial_resolution": null,
+      "split_ratio": "69 train / 12 test; samples used: 69 of 81"
+    },
+    {
+      "task": "Multiobject tracking in satellite videos",
+      "application": "Tracking aircraft and ships in satellite video",
+      "dataset": "AIR-MOT",
+      "metrics": [
+        "MOTA",
+        "IDF1"
+      ],
+      "metrics_value": [
+        53.2,
+        70.3
+      ],
+      "sensor": [
+        "Satellite (Jilin-1)"
+      ],
+      "regions": [
+        "Multiple cities worldwide"
+      ],
+      "image_resolution": "1024x640",
+      "spatial_resolution": null,
+      "split_ratio": "69 train / 12 test; samples used: 69 of 81"
+    },
+    {
+      "task": "Time-series image segmentation",
+      "application": "Semantic segmentation of UAV time-series images",
+      "dataset": "UA Vid",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        0.782
+      ],
+      "sensor": [
+        "UAV"
+      ],
+      "regions": [
+        "Oblique view town scenes"
+      ],
+      "image_resolution": "480x480 (cropped from 4096x2160 or 3840x2160)",
+      "spatial_resolution": null,
+      "split_ratio": "20 train / 7 val / 15 test; samples used: 20 of 42"
+    }
+  ],
+  "provenance": null
+}

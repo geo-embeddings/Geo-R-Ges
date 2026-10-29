@@ -1,0 +1,126 @@
+{
+  "id": "mosaic",
+  "mlm:name": "MoSAiC",
+  "version": "1.0",
+  "release_date": null,
+  "updated": null,
+  "description": "MoSAiC is a unified framework for multi-label land cover classification from multi-modal Earth observation imagery, jointly optimizing intra- and inter-modality contrastive learning with supervised multi-label objectives. It is designed for Sentinel-1 SAR and Sentinel-2 multispectral data, and achieves state-of-the-art results in low-label and high-class-overlap scenarios.",
+  "sci:doi": "10.48550/arXiv.2507.08683",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "ResNet-34",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Joint self-supervised and supervised contrastive learning",
+  "masking_strategy": null,
+  "pretraining": "Joint optimization of intra- and inter-modality contrastive learning with multi-label supervised contrastive loss, using both self-supervised and supervised objectives.",
+  "domain_knowledge": [
+    "Multi-label land cover classification",
+    "Multi-modal (Sentinel-1 SAR and Sentinel-2 optical) data fusion",
+    "Geospatial alignment"
+  ],
+  "backbone_modifications": [
+    "Separate encoders for each modality",
+    "Feature concatenation for fusion",
+    "Shallow two-layer projection head"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "SAR",
+    "Multispectral"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": "10m",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Sentinel-1, Sentinel-2",
+      "bands": [
+        "B2",
+        "B3",
+        "B4",
+        "B8"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "BigEarthNet V2.0 (reBEN)",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 549488,
+  "sampling": "Stratified random sampling (10% of training data)",
+  "processing:level": "Sentinel-2 L2A",
+  "processing:lineage": "Atmospheric correction (Sen2Cor v2.11)",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": [
+      "random cropping",
+      "random rotation",
+      "Gaussian blur"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "1200x1200 m patch"
+  },
+  "benchmarks": [
+    {
+      "task": "Multi-label classification",
+      "application": "Land cover classification",
+      "dataset": "BigEarthNet V2.0 (reBEN)",
+      "metrics": [
+        "Macro Average Precision",
+        "Macro F1-score",
+        "Micro Average Precision",
+        "Micro F1-score"
+      ],
+      "metrics_value": [
+        64.0,
+        54.46,
+        74.04,
+        70.67
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "1200x1200 m patch",
+      "spatial_resolution": "10m",
+      "split_ratio": "Train: 237871, Val: 122342, Test: 119825; samples used: 23787 of 237871 (10.0%)"
+    },
+    {
+      "task": "Multi-label classification",
+      "application": "Land cover classification",
+      "dataset": "SENT12MS",
+      "metrics": [
+        "Macro Average Precision",
+        "Macro F1-score",
+        "Micro Average Precision",
+        "Micro F1-score"
+      ],
+      "metrics_value": [
+        56.83,
+        54.27,
+        74.52,
+        76.26
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": "Train: 75849, Test: 8110; samples used: 7584 of 75849 (10.0%)"
+    }
+  ],
+  "provenance": null
+}

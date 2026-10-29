@@ -1,0 +1,295 @@
+{
+  "id": "galileo",
+  "mlm:name": "Galileo ViT-Base",
+  "version": "1.0",
+  "release_date": "2025-06-04T00:00:00Z",
+  "updated": "2025-06-04T00:00:00Z",
+  "description": "Galileo is a highly multimodal transformer model for remote sensing, capable of learning global and local features from diverse modalities (optical, SAR, elevation, weather, pseudo-labels, etc.) across space and time. It uses a dual self-supervised learning algorithm with global and local contrastive losses and is pretrained on a globally sampled, highly multimodal dataset. Galileo outperforms state-of-the-art specialist models on a wide range of remote sensing benchmarks.",
+  "sci:doi": "10.48550/arXiv.2502.09356",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/nasaharvest/galileo",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://github.com/nasaharvest/galileo",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "Vision Transformer (ViT-Base)",
+  "mlm:total_parameters": 85000000,
+  "pretext_training_type": "Dual local-global self-supervised masked modeling with contrastive losses",
+  "masking_strategy": "Structured space-time masking for global features; unstructured random masking for local features",
+  "pretraining": "Masked modeling with dual objectives: global (deep targets, structured masking) and local (shallow targets, unstructured masking) using PatchDisc contrastive loss. Pretrained on a globally sampled, highly multimodal dataset covering 9 remote sensing modalities.",
+  "domain_knowledge": [
+    "Semantic and geographic diversity sampling",
+    "Per-modality target depth selection",
+    "Sinusoidal spatial/temporal position embeddings",
+    "Learnable channel and month embeddings"
+  ],
+  "backbone_modifications": [
+    "Custom tokenization for spatial, temporal, and channel group dimensions",
+    "Resizable linear projection weights",
+    "Sinusoidal spatial/temporal, learnable channel, and month embeddings"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2",
+    "SRTM",
+    "VIIRS"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR",
+    "Elevation",
+    "Weather",
+    "Pseudo-labels",
+    "Population",
+    "Nightlights",
+    "Land cover maps",
+    "Location"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "monthly (24 timesteps)",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2",
+      "bands": [
+        "all except B1, B9, B10"
+      ]
+    },
+    {
+      "name": "Sentinel-1",
+      "bands": [
+        "VV",
+        "VH"
+      ]
+    },
+    {
+      "name": "Sentinel-1, Sentinel-2, SRTM, VIIRS",
+      "bands": [
+        "NDVI",
+        "Elevation",
+        "Slope",
+        "Dynamic World",
+        "World Cereal",
+        "ERA5 precipitation",
+        "ERA5 temperature",
+        "TerraClimate (water deficit, soil moisture, evapotranspiration)",
+        "VIIRS nightlights",
+        "LandScan population"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Galileo pretraining dataset (globally sampled, 127155 instances, 9 RS modalities)",
+  "regions_coverage": [
+    "Global"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 127155,
+  "sampling": "k-means clustering on WorldCover classes and lat/lon for semantic and geographic diversity; Time range: 24 monthly timesteps per instance",
+  "processing:level": "All bands resampled to 10m/pixel",
+  "processing:lineage": "Patch size randomization; Spatial/temporal subsetting; bfloat16 precision; EMA target encoder",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "Variable (spatial squares, timesteps, channel groups)",
+    "epochs": 500,
+    "batch_size": 512,
+    "learning_rate": "[1e-4, 3e-4, 1e-3, 2e-3, 3e-3] (swept)",
+    "augmentations": [
+      "Random vertical flip",
+      "Random horizontal flip",
+      "Random 90-degree rotation"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "96x96 pixels at 10m/pixel",
+    "num_layers": 12
+  },
+  "benchmarks": [
+    {
+      "task": "Image classification",
+      "application": "Land cover classification",
+      "dataset": "m-EuroSat",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        93.0
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/val/test: 2000/1000/1000; samples used: 2000 of 2000 (100.0%)"
+    },
+    {
+      "task": "Image classification",
+      "application": "Land cover classification",
+      "dataset": "m-BigEarthNet",
+      "metrics": [
+        "F1 Score"
+      ],
+      "metrics_value": [
+        59.0
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "120x120",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/val/test: 20000/1000/1000; samples used: 20000 of 20000 (100.0%)"
+    },
+    {
+      "task": "Image classification",
+      "application": "Urban climate zone classification",
+      "dataset": "m-So2Sat",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        54.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "32x32",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/val/test: 19992/986/986; samples used: 19992 of 19992 (100.0%)"
+    },
+    {
+      "task": "Image classification",
+      "application": "Brick kiln detection",
+      "dataset": "m-Brick-Kiln",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        90.7
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "South Asia"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/val/test: 15063/999/999; samples used: 15063 of 15063 (100.0%)"
+    },
+    {
+      "task": "Image segmentation",
+      "application": "Marine debris detection",
+      "dataset": "MADOS",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        67.6
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global oceans"
+      ],
+      "image_resolution": "80x80",
+      "spatial_resolution": "10m",
+      "split_ratio": "train/val/test: 50%/25%/25%; samples used: 2804 of 2804 (100.0%)"
+    },
+    {
+      "task": "Image segmentation",
+      "application": "Flood detection",
+      "dataset": "Sen1Floods11",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        79.4
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Image segmentation",
+      "application": "Crop type segmentation",
+      "dataset": "PASTIS",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        39.2
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "France"
+      ],
+      "image_resolution": "64x64",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 2433 of 2433 (100.0%)"
+    },
+    {
+      "task": "Pixel time series classification",
+      "application": "Crop type classification",
+      "dataset": "CropHarvest",
+      "metrics": [
+        "Top-1 Accuracy (result 1 of 3)",
+        "Top-1 Accuracy (result 2 of 3)",
+        "Top-1 Accuracy (result 3 of 3)"
+      ],
+      "metrics_value": [
+        74.8,
+        99.3,
+        84.2
+      ],
+      "sensor": [
+        "Sentinel-2",
+        "Sentinel-1",
+        "SRTM",
+        "VIIRS"
+      ],
+      "regions": [
+        "Togo",
+        "Brazil",
+        "Kenya"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

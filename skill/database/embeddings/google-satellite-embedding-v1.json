@@ -1,0 +1,145 @@
+{
+  "id": "google-satellite-embedding-v1",
+  "title": "Google Satellite Embedding V1 Annual",
+  "version": "1.1",
+  "description": "Annual, global 10 m embedding fields produced by Google and Google DeepMind with AlphaEarth Foundations. Each pixel holds a unit-length 64-dimensional vector summarising a calendar year of multi-source Earth observation (optical, SAR, LiDAR, climate, elevation). Suited to classification, regression and change detection with few labels and no inference.",
+  "updated": "2026-10-28T00:00:00Z",
+  "license": "CC-BY-4.0",
+  "sci:doi": "10.48550/arXiv.2507.22291",
+  "provenance": {
+    "source": "manual extraction",
+    "source_id": null,
+    "source_url": "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL",
+    "references": [
+      "https://developers.google.com/earth-engine/guides/aef_on_gcs_readme",
+      "https://registry.opendata.aws/aef-source/",
+      "https://docs.torchgeo.org/en/latest/api/datasets.html"
+    ],
+    "retrieved": "2026-10-28T00:00:00Z",
+    "review": [
+      "Year coverage differs by host: the Earth Engine catalog lists 2017-2024, the GCS readme 2017-2025, the Source Cooperative mirror 2018-2024 (2017 withheld for a quality issue)."
+    ]
+  },
+  "providers": [
+    {
+      "name": "Google",
+      "roles": [
+        "producer",
+        "licensor",
+        "host"
+      ],
+      "url": "https://earthengine.google.com"
+    },
+    {
+      "name": "Google DeepMind",
+      "roles": [
+        "producer"
+      ],
+      "url": "https://deepmind.google"
+    },
+    {
+      "name": "Source Cooperative",
+      "roles": [
+        "host"
+      ],
+      "url": "https://source.coop/tge-labs/aef"
+    }
+  ],
+  "encoder_model": {
+    "id": "alphaearth",
+    "name": "AlphaEarth Foundations",
+    "checkpoint": null,
+    "href": null
+  },
+  "emb:type": "pixel",
+  "emb:dimensions": [
+    64
+  ],
+  "emb:chip_size": null,
+  "emb:stride": null,
+  "emb:grid_id": null,
+  "emb:temporal_period": "P1Y",
+  "data_type": "int8",
+  "emb:original_data_type": null,
+  "emb:quantization_method": "signed square: float = sign(q) * (q / 127.5)^2, q in [-127, 127], -128 = nodata (COG copies on GCS and Source Cooperative; Earth Engine serves values in [-1, 1])",
+  "source_sensors": [
+    "Sentinel-2",
+    "Landsat-8",
+    "Landsat-9",
+    "Sentinel-1",
+    "ALOS PALSAR-2",
+    "GEDI",
+    "Copernicus DEM GLO-30",
+    "ERA5-Land",
+    "GRACE"
+  ],
+  "processing:level": null,
+  "processing:lineage": "Embeddings from all observations in a calendar year, in local UTM projection; tiles of about 163,840 m (8192 x 8192 px) with 64 bands A00-A63. Dataset version 1.1 (2025-11-17) regenerated 2017 with more Sentinel-1 acquisitions.",
+  "spatial_resolution": "10m",
+  "regions_coverage": [
+    "Global (land and shallow waters, incl. intertidal, reefs, inland and coastal waterways)"
+  ],
+  "bbox": null,
+  "start_datetime": "2017-01-01T00:00:00Z",
+  "end_datetime": null,
+  "temporal_coverage_note": "One layer per calendar year from 2017, extended yearly. Polar coverage limited by orbits; minor swath and data availability artifacts remain.",
+  "num_embeddings": null,
+  "assets": {
+    "earth-engine": {
+      "href": "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL",
+      "title": "Earth Engine catalog page",
+      "type": "text/html",
+      "roles": [
+        "embeddings",
+        "metadata"
+      ]
+    },
+    "gcs": {
+      "href": "gs://alphaearth_foundations/satellite_embedding/v1/annual/",
+      "title": "COGs on Google Cloud Storage (provider pays)",
+      "type": "image/tiff; application=geotiff; profile=cloud-optimized",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    },
+    "source-coop": {
+      "href": "s3://us-west-2.opendata.source.coop/tge-labs/aef/",
+      "title": "COG mirror on Source Cooperative",
+      "type": "image/tiff; application=geotiff; profile=cloud-optimized",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    },
+    "index": {
+      "href": "gs://alphaearth_foundations/satellite_embedding/v1/annual/aef_index.parquet",
+      "title": "Tile index (GeoParquet)",
+      "type": "application/vnd.apache.parquet",
+      "roles": [
+        "metadata"
+      ]
+    },
+    "readme": {
+      "href": "https://developers.google.com/earth-engine/guides/aef_on_gcs_readme",
+      "title": "GCS data readme",
+      "type": "text/html",
+      "roles": [
+        "metadata"
+      ]
+    }
+  },
+  "hosting": [
+    "Google Earth Engine",
+    "Google Cloud Storage",
+    "Source Cooperative",
+    "AWS Open Data"
+  ],
+  "access_requirements": "Earth Engine account for the catalog; COGs open on Source Cooperative S3 (no account) and on GCS (provider pays)",
+  "loaders": [
+    "ee.ImageCollection(\"GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL\")",
+    "torchgeo.datasets.GoogleSatelliteEmbedding",
+    "aef-loader (Python package)"
+  ],
+  "benchmarks": null
+}

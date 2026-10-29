@@ -1,0 +1,97 @@
+{
+  "id": "lgnd-clay-v1-5-sentinel-2",
+  "title": "LGND Clay Embeddings - Sentinel-2",
+  "version": null,
+  "description": "Near-global Clay v1.5 embeddings of Sentinel-2 L2A produced by lgnd.ai: one 1024-dimensional float32 vector per 2560 m Major TOM cell, per scene and aggregated, for June 2024 and June 2025. Hive-partitioned GeoParquet; replaces Clay's earlier partial-coverage Sentinel-2 product.",
+  "updated": "2026-10-28T00:00:00Z",
+  "license": "CC-BY-4.0",
+  "sci:doi": null,
+  "provenance": {
+    "source": "manual extraction",
+    "source_id": null,
+    "source_url": "https://source.coop/clay/lgnd-clay-v1-5-sentinel-2-l2a",
+    "references": [
+      "https://source.coop/clay/clay-v1-5-sentinel2",
+      "https://data.source.coop/clay/lgnd-embeddings/README.md",
+      "https://docs.torchgeo.org/en/latest/api/datasets.html"
+    ],
+    "retrieved": "2026-10-28T00:00:00Z",
+    "review": [
+      "A newer lgnd-embeddings product (monthly, 2017-2026, 1280 m/256 dims and 2560 m/1024 dims) is announced at source.coop/clay/lgnd-embeddings; it may warrant its own record."
+    ]
+  },
+  "providers": [
+    {
+      "name": "lgnd.ai",
+      "roles": [
+        "producer",
+        "processor"
+      ],
+      "url": "https://lgnd.ai"
+    },
+    {
+      "name": "Clay",
+      "roles": [
+        "licensor"
+      ],
+      "url": "https://madewithclay.org"
+    },
+    {
+      "name": "Source Cooperative",
+      "roles": [
+        "host"
+      ],
+      "url": "https://source.coop"
+    }
+  ],
+  "encoder_model": {
+    "id": null,
+    "name": "Clay",
+    "checkpoint": "v1.5",
+    "href": "https://huggingface.co/made-with-clay/Clay"
+  },
+  "emb:type": "chip",
+  "emb:dimensions": [
+    1024
+  ],
+  "emb:chip_size": null,
+  "emb:stride": null,
+  "emb:grid_id": "MAJORTOM",
+  "emb:temporal_period": null,
+  "data_type": "float32",
+  "emb:original_data_type": null,
+  "emb:quantization_method": null,
+  "source_sensors": [
+    "Sentinel-2"
+  ],
+  "processing:level": "L2A",
+  "processing:lineage": "Sentinel-2 L2A COGs from the AWS sentinel-cogs bucket (Earth Search STAC), one embedding per 2560 m Major TOM cell per scene (about 77.9M) and aggregated per month (about 49.7M).",
+  "spatial_resolution": "2.56km",
+  "regions_coverage": [
+    "Global (about 99.7% of land)"
+  ],
+  "bbox": null,
+  "start_datetime": "2024-06-01T00:00:00Z",
+  "end_datetime": null,
+  "temporal_coverage_note": "Two time steps, June 2024 and June 2025; more planned.",
+  "num_embeddings": null,
+  "assets": {
+    "data": {
+      "href": "https://source.coop/clay/lgnd-clay-v1-5-sentinel-2-l2a",
+      "title": "Source Cooperative (GeoParquet)",
+      "type": "text/html",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    }
+  },
+  "hosting": [
+    "Source Cooperative"
+  ],
+  "access_requirements": "open HTTP/S3, no account",
+  "loaders": [
+    "torchgeo.datasets.ClayEmbeddings"
+  ],
+  "benchmarks": null
+}

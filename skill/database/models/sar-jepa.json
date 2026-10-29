@@ -1,0 +1,174 @@
+{
+  "id": "sar-jepa",
+  "mlm:name": "SAR-JEPA",
+  "version": "1.0",
+  "release_date": "2024-09-23T00:00:00Z",
+  "updated": "2024-09-23T00:00:00Z",
+  "description": "SAR-JEPA is a joint-embedding predictive architecture for self-supervised learning in SAR automatic target recognition (ATR), leveraging local masked patches and multi-scale SAR gradient features to address small targets and speckle noise in SAR imagery.",
+  "sci:doi": "10.1016/j.isprsjprs.2024.09.013",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/waterdisappear/SAR-JEPA",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    },
+    "weights": {
+      "href": "https://github.com/waterdisappear/SAR-JEPA",
+      "title": "Model weights",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-Base (ViT-B)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Masked Image Modeling (MIM) with joint-embedding predictive architecture",
+  "masking_strategy": "Local masked patches (LoMaR) with random selection of local squares and mask tokens",
+  "pretraining": "Self-supervised pretraining on ~100,000 SAR magnitude images from four open-source datasets, using local masked patches and multi-scale SAR gradient features as targets.",
+  "domain_knowledge": [
+    "SAR gradient-by-ratio (GR) features",
+    "Multi-scale feature extraction",
+    "Speckle noise suppression"
+  ],
+  "backbone_modifications": [
+    "Relative positional encoding",
+    "Deep decoder (8-layer ViT decoder)"
+  ],
+  "supported_sensors": [
+    "HISEA-1",
+    "Gaofen-3",
+    "Sentinel-1",
+    "Simulated X-band SAR"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "SAR"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable (0.3m to 25m)",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "HISEA-1, Gaofen-3, Sentinel-1, Simulated X-band SAR",
+      "bands": [
+        "C",
+        "X"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "MSAR, SAR-Ship, SARSim, SAMPLE",
+  "regions_coverage": [
+    "airports",
+    "harbors",
+    "nearshore",
+    "islands",
+    "distant seas",
+    "urban areas",
+    "grass",
+    "roads"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 94676,
+  "sampling": "Random sampling of local square windows for masking",
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 200,
+    "batch_size": 300,
+    "learning_rate": "1e-3 (cosine decay)",
+    "augmentations": [
+      "ResizedCrop",
+      "Horizontal Flip",
+      "Contrast adjustment (ColorJitter)"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "variable (0.3m to 25m)"
+  },
+  "benchmarks": [
+    {
+      "task": "Classification",
+      "application": "SAR Automatic Target Recognition (ATR)",
+      "dataset": "MSTAR",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        91.6
+      ],
+      "sensor": [
+        "Simulated SAR (SARSim)",
+        "SAMPLE",
+        "HISEA-1",
+        "Gaofen-3",
+        "Sentinel-1"
+      ],
+      "regions": [
+        "ground",
+        "urban",
+        "grass",
+        "roads"
+      ],
+      "image_resolution": "0.3m",
+      "spatial_resolution": "0.3m",
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Fine-grained ship classification",
+      "dataset": "FUSAR-Ship",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        85.8
+      ],
+      "sensor": [
+        "Gaofen-3"
+      ],
+      "regions": [
+        "sea",
+        "land",
+        "coast",
+        "river",
+        "island"
+      ],
+      "image_resolution": "1.1~1.7m",
+      "spatial_resolution": "1.1~1.7m",
+      "split_ratio": null
+    },
+    {
+      "task": "Classification",
+      "application": "Fine-grained aircraft classification",
+      "dataset": "SAR-ACD",
+      "metrics": [
+        "Accuracy"
+      ],
+      "metrics_value": [
+        75.5
+      ],
+      "sensor": [
+        "Gaofen-3"
+      ],
+      "regions": [
+        "Shanghai Hongqiao Airport",
+        "Beijing Capital Airport",
+        "Taiwan Taoyuan Airport"
+      ],
+      "image_resolution": "1m",
+      "spatial_resolution": "1m",
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

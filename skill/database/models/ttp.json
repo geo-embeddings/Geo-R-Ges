@@ -1,0 +1,91 @@
+{
+  "id": "ttp",
+  "mlm:name": "Time Travelling Pixels",
+  "version": "1.0",
+  "release_date": null,
+  "updated": null,
+  "description": "TTP integrates the latent knowledge of the SAM foundation model into remote sensing image change detection, using low-rank fine-tuning, a time-traveling activation gate for bitemporal feature integration, and a lightweight multi-level decoding head. Achieves state-of-the-art results on LEVIR-CD.",
+  "sci:doi": "10.48550/arXiv.2312.16202",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://kychen.me/TTP",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "SAM (Segment Anything Model) Transformer Encoder",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Transfer learning with low-rank fine-tuning",
+  "masking_strategy": null,
+  "pretraining": "Leverages general segmentation knowledge from the SAM foundation model, with backbone parameters frozen and low-rank trainable parameters introduced for adaptation to remote sensing.",
+  "domain_knowledge": [
+    "Low-rank fine-tuning",
+    "Time-traveling activation gate",
+    "Multi-level decoding head"
+  ],
+  "backbone_modifications": [
+    "Low-rank trainable parameters in multi-head attention layers",
+    "Time-traveling activation gate after global attention layers"
+  ],
+  "supported_sensors": null,
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": null,
+  "mlm:pretrained_source": null,
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "num_layers": 12
+  },
+  "benchmarks": [
+    {
+      "task": "change detection",
+      "application": "remote sensing image change detection",
+      "dataset": "LEVIR-CD",
+      "metrics": [
+        "Precision",
+        "Recall",
+        "F1",
+        "IoU",
+        "OA"
+      ],
+      "metrics_value": [
+        93.0,
+        91.7,
+        92.1,
+        85.6,
+        99.2
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "1024x1024 (raw), 512x512 (input)",
+      "spatial_resolution": null,
+      "split_ratio": "445/64/128 (train/val/test); samples used: 637 of 637 (100%)"
+    }
+  ],
+  "provenance": null
+}

@@ -1,0 +1,338 @@
+{
+  "id": "skysense",
+  "mlm:name": "SkySense",
+  "version": null,
+  "release_date": "2024-03-22T00:00:00Z",
+  "updated": "2024-03-22T00:00:00Z",
+  "description": "SkySense is a large-scale multi-modal remote sensing foundation model (MM-RSFM) with 2.06 billion parameters, pre-trained on 21.5 million temporal sequences from optical and SAR data. It features a factorized multi-modal spatiotemporal encoder, multi-granularity contrastive learning, and geo-context prototype learning for universal Earth Observation imagery interpretation.",
+  "sci:doi": "10.48550/arXiv.2312.10115",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "Swin Transformer (Swin-H) for HSROI, ViT-L for TMsI and TSARI",
+  "mlm:total_parameters": 2060000000,
+  "pretext_training_type": "Multi-Granularity Contrastive Learning, Cross-Modal Alignment, Unsupervised Geo-Context Prototype Learning",
+  "masking_strategy": null,
+  "pretraining": "Self-supervised pretraining with multi-granularity contrastive learning at pixel, object, and image levels, cross-modal alignment, and unsupervised geo-context prototype learning using a teacher-student framework.",
+  "domain_knowledge": [
+    "Geo-Context Prototype Learning",
+    "Multi-Granularity Contrastive Learning",
+    "Cross-Modal Alignment"
+  ],
+  "backbone_modifications": [
+    "Factorized multi-modal spatiotemporal encoder",
+    "Integration of geo-context prototypes"
+  ],
+  "supported_sensors": [
+    "WorldView-3",
+    "WorldView-4",
+    "Sentinel-2",
+    "Sentinel-1"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR",
+    "RGB"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "full",
+  "spatial_resolution": "0.3m (HSROI), 10m (TMsI, TSARI)",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "WorldView-3, WorldView-4, Sentinel-2, Sentinel-1",
+      "bands": [
+        "RGB",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B8",
+        "B8A",
+        "B11",
+        "B12",
+        "VV",
+        "VH"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Multi-modal remote sensing dataset (HSROIs from WorldView-3/4, TMsI from Sentinel-2, TSARI from Sentinel-1)",
+  "regions_coverage": [
+    "Asia",
+    "Europe",
+    "Africa",
+    "North America",
+    "South America",
+    "Oceania",
+    "40 countries/areas"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 21500000,
+  "sampling": "Randomly select 20 images for TMsI sequence, 10 images for TSARI sequence",
+  "processing:level": "Sentinel-2 Level-2A, Sentinel-1 Level-1 IW, GRD",
+  "processing:lineage": "cloudy imagery filtering (Sentinel-2: cloud coverage <1%); standard calibration (Sentinel-1)",
+  "cloud_cover": "Images with cloud coverage >1% filtered out (Sentinel-2)",
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": null,
+    "batch_size": 240,
+    "learning_rate": "0.04 to 0.2 (cosine schedule)",
+    "augmentations": [
+      "multi-crop",
+      "Gaussian blur",
+      "solarization",
+      "random crop",
+      "random flip",
+      "random scaling",
+      "random disturbances on acquisition date"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "HSROI: 2048x2048 px, TMsI/TSARI: 64x64 px",
+    "num_layers": 24
+  },
+  "benchmarks": [
+    {
+      "task": "Semantic segmentation",
+      "application": "Land cover/scene segmentation",
+      "dataset": "Dyna.-Pla.",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        46.5
+      ],
+      "sensor": [
+        "PlanetFusion"
+      ],
+      "regions": null,
+      "image_resolution": "1024x1024",
+      "spatial_resolution": "3m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Instance segmentation",
+      "dataset": "iSAID",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        70.91
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "896x896",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Urban segmentation",
+      "dataset": "Potsdam",
+      "metrics": [
+        "mF1"
+      ],
+      "metrics_value": [
+        93.99
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.05m",
+      "split_ratio": null
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Semantic change segmentation",
+      "dataset": "Dyna.-S2",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        46.2
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection",
+      "application": "Horizontal object detection",
+      "dataset": "DIOR",
+      "metrics": [
+        "mAP50"
+      ],
+      "metrics_value": [
+        78.73
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "800x800",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection",
+      "application": "Oriented object detection",
+      "dataset": "DIOR-R",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        74.27
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "800x800",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Object detection",
+      "application": "Oriented object detection",
+      "dataset": "FAIR1M",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        54.57
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Change detection",
+      "dataset": "LEVIR-CD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        92.58
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Change detection",
+      "dataset": "OSCD",
+      "metrics": [
+        "F1"
+      ],
+      "metrics_value": [
+        60.06
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "96x96",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Semantic change segmentation",
+      "dataset": "Dyna.-S2",
+      "metrics": [
+        "SCS"
+      ],
+      "metrics_value": [
+        18.0
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "256x256",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Scene classification",
+      "application": "Single-label scene classification",
+      "dataset": "AID",
+      "metrics": [
+        "OA (result 1 of 2)",
+        "OA (result 2 of 2)"
+      ],
+      "metrics_value": [
+        97.68,
+        98.6
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: ([10, 20]%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Single-label scene classification",
+      "dataset": "RESISC-45",
+      "metrics": [
+        "OA (result 1 of 2)",
+        "OA (result 2 of 2)"
+      ],
+      "metrics_value": [
+        94.85,
+        96.32
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: ([10, 20]%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Multi-label scene classification",
+      "dataset": "BEN-S2",
+      "metrics": [
+        "mAP (result 1 of 2)",
+        "mAP (result 2 of 2)"
+      ],
+      "metrics_value": [
+        88.67,
+        92.09
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "128x128",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: ([10, 100]%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Temporal scene classification",
+      "dataset": "fMoW-S2",
+      "metrics": [
+        "Top-1 Acc",
+        "Top-5 Acc"
+      ],
+      "metrics_value": [
+        64.38,
+        87.27
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "96x96",
+      "spatial_resolution": null,
+      "split_ratio": "samples used: ([100]%)"
+    }
+  ],
+  "provenance": null
+}

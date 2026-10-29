@@ -1,0 +1,158 @@
+{
+  "id": "bfm",
+  "mlm:name": "ViT-G12x4",
+  "version": "1.0",
+  "release_date": null,
+  "updated": null,
+  "description": "First billion-scale vision transformer foundation model for remote sensing, pretrained with MAE on MillionAID and evaluated on rotated object detection and semantic segmentation tasks.",
+  "sci:doi": "10.48550/arXiv.2304.05215",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "Vision Transformer (ViT-G12x4)",
+  "mlm:total_parameters": 2420000000,
+  "pretext_training_type": "Masked Image Modeling (MAE)",
+  "masking_strategy": "Random masking of 75% patches",
+  "pretraining": "Self-supervised pretraining with MAE on MillionAID dataset, using random masking and reconstruction of masked patches.",
+  "domain_knowledge": null,
+  "backbone_modifications": [
+    "Parallelism in transformer layers (4-way parallel)",
+    "Increased hidden size (2048)",
+    "Increased MLP size (8192)",
+    "Increased number of heads (32)"
+  ],
+  "supported_sensors": [
+    "Google Earth imagery"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "RGB"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "0.5m to 153m",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Google Earth imagery",
+      "bands": [
+        "R",
+        "G",
+        "B"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          3,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "MillionAID",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 1000848,
+  "sampling": "Full dataset used",
+  "processing:level": null,
+  "processing:lineage": "Resize; Crop; Patchify (16x16)",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "16x16",
+    "epochs": 400,
+    "batch_size": 2048,
+    "learning_rate": "0.0001 (base LR, effective LR = batch_size * base LR / 256)",
+    "augmentations": [
+      "RandomResizedCrop",
+      "HorizontalFlip",
+      "VerticalFlip"
+    ],
+    "mask_ratio": 0.75,
+    "num_layers": 12
+  },
+  "benchmarks": [
+    {
+      "task": "Rotated Object Detection",
+      "application": "Aerial object detection",
+      "dataset": "DOTA v2.0",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        58.69
+      ],
+      "sensor": [
+        "Multiple sources (DOTA)"
+      ],
+      "regions": null,
+      "image_resolution": "800x800 to 20000x20000",
+      "spatial_resolution": "variable",
+      "split_ratio": "train: 1830, val: 593, test-dev: 2792; samples used: 11268 of 11268 (100%)"
+    },
+    {
+      "task": "Rotated Object Detection",
+      "application": "Aerial object detection",
+      "dataset": "DIOR-R",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        73.62
+      ],
+      "sensor": [
+        "Multiple sources (DIOR-R)"
+      ],
+      "regions": null,
+      "image_resolution": "800x800",
+      "spatial_resolution": "0.5m to 30m",
+      "split_ratio": "train/val/test: published splits; samples used: 11738 of 11738 (100%)"
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "Potsdam",
+      "metrics": [
+        "mF1",
+        "OA"
+      ],
+      "metrics_value": [
+        92.12,
+        92.58
+      ],
+      "sensor": [
+        "Aerial imagery (ISPRS Potsdam)"
+      ],
+      "regions": null,
+      "image_resolution": "6000x6000",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "train: 24, test: 14; samples used: 38 of 38 (100%)"
+    },
+    {
+      "task": "Semantic Segmentation",
+      "application": "Land cover segmentation",
+      "dataset": "LoveDA",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        54.4
+      ],
+      "sensor": [
+        "Aerial imagery (LoveDA)"
+      ],
+      "regions": null,
+      "image_resolution": "1024x1024",
+      "spatial_resolution": "0.3m",
+      "split_ratio": "train: 2522, val: 1669, test: 1796; samples used: 5987 of 5987 (100%)"
+    }
+  ],
+  "provenance": null
+}

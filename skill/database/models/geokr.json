@@ -1,0 +1,341 @@
+{
+  "id": "geokr",
+  "mlm:name": "GeoKR",
+  "version": null,
+  "release_date": "2021-07-12T00:00:00Z",
+  "updated": "2021-07-12T00:00:00Z",
+  "description": "GeoKR is a geographical knowledge-driven representation learning and network pre-training method for remote sensing images. It leverages global land cover products (GlobeLand30) and geographical location as supervision for representation learning, using a mean-teacher framework to mitigate supervision noise. Pretraining is performed on the Levir-KR dataset (1,431,950 Gaofen satellite images), and the model is evaluated on scene classification, semantic segmentation, object detection, and cloud/snow detection tasks.",
+  "sci:doi": "10.48550/arXiv.2107.05276",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/flyakon/Geographical-Knowledge-driven-Representaion-Learning",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ResNet50, VGG16",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Knowledge-driven representation learning using global land cover products and geographical location as supervision",
+  "masking_strategy": null,
+  "pretraining": "Pretraining is performed by aligning image representations with knowledge representations derived from GlobeLand30 land cover proportions, using a mean-teacher framework with KL loss.",
+  "domain_knowledge": [
+    "Global land cover products (GlobeLand30)",
+    "Geographical location"
+  ],
+  "backbone_modifications": null,
+  "supported_sensors": [
+    "Gaofen-1",
+    "Gaofen-2",
+    "Gaofen-6"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "0.8m, 2m, 16m",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Gaofen-1, Gaofen-2, Gaofen-6",
+      "bands": [
+        "Red",
+        "Green",
+        "Blue"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          256,
+          256
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "Levir-KR",
+  "regions_coverage": [
+    "Global (Gaofen satellite coverage)"
+  ],
+  "start_datetime": "2010-01-01T00:00:00Z",
+  "end_datetime": "2020-12-31T23:59:59Z",
+  "num_images": 1431950,
+  "sampling": "Images cut from scenes with 0.2 overlap; class balancing by duplication",
+  "processing:level": null,
+  "processing:lineage": "Cloud filtering (rc>0.5); Low contrast filtering",
+  "cloud_cover": "Images with cloud proportion >0.5 discarded",
+  "missing_data": "Low contrast images discarded",
+  "mlm:hyperparameters": {
+    "patch_size": "256x256",
+    "epochs": null,
+    "batch_size": 128,
+    "learning_rate": "1e-3, decayed to 90% each epoch",
+    "augmentations": [
+      "Random rotation (0?,90?,180?,270?)",
+      "Random flip up/down",
+      "Random flip left/right",
+      "Color jitter"
+    ],
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Land use/scene classification",
+      "dataset": "UCMerced",
+      "metrics": [
+        "Top-1 accuracy (result 1 of 5)",
+        "Top-1 accuracy (result 2 of 5)",
+        "Top-1 accuracy (result 3 of 5)",
+        "Top-1 accuracy (result 4 of 5)",
+        "Top-1 accuracy (result 5 of 5)"
+      ],
+      "metrics_value": [
+        0.7048,
+        0.847,
+        0.9092,
+        0.9549,
+        0.9695
+      ],
+      "sensor": [
+        "Gaofen-1",
+        "Gaofen-2",
+        "Gaofen-6"
+      ],
+      "regions": [
+        "UCMerced dataset region"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": "3:1 train:test"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Land use/scene classification",
+      "dataset": "RSSCN7",
+      "metrics": [
+        "Top-1 accuracy (result 1 of 5)",
+        "Top-1 accuracy (result 2 of 5)",
+        "Top-1 accuracy (result 3 of 5)",
+        "Top-1 accuracy (result 4 of 5)",
+        "Top-1 accuracy (result 5 of 5)"
+      ],
+      "metrics_value": [
+        0.8448,
+        0.8933,
+        0.8933,
+        0.9152,
+        0.9419
+      ],
+      "sensor": [
+        "Gaofen-1",
+        "Gaofen-2",
+        "Gaofen-6"
+      ],
+      "regions": [
+        "RSSCN7 dataset region"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": "3:1 train:test"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Urban land cover segmentation",
+      "dataset": "Vaihingen",
+      "metrics": [
+        "mIoU (result 1 of 10)",
+        "mIoU (result 2 of 10)",
+        "mIoU (result 3 of 10)",
+        "mIoU (result 4 of 10)",
+        "mIoU (result 5 of 10)",
+        "mIoU (result 6 of 10)",
+        "mIoU (result 7 of 10)",
+        "mIoU (result 8 of 10)",
+        "mIoU (result 9 of 10)",
+        "mIoU (result 10 of 10)"
+      ],
+      "metrics_value": [
+        0.3607,
+        0.4138,
+        0.4155,
+        0.515,
+        0.5665,
+        0.639,
+        0.6397,
+        0.6978,
+        0.7159,
+        0.7268
+      ],
+      "sensor": [
+        "Gaofen-1",
+        "Gaofen-2",
+        "Gaofen-6"
+      ],
+      "regions": [
+        "Vaihingen"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": "3:1:1 train:val:test"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Urban land cover segmentation",
+      "dataset": "Potsdam",
+      "metrics": [
+        "mIoU (result 1 of 10)",
+        "mIoU (result 2 of 10)",
+        "mIoU (result 3 of 10)",
+        "mIoU (result 4 of 10)",
+        "mIoU (result 5 of 10)",
+        "mIoU (result 6 of 10)",
+        "mIoU (result 7 of 10)",
+        "mIoU (result 8 of 10)",
+        "mIoU (result 9 of 10)",
+        "mIoU (result 10 of 10)"
+      ],
+      "metrics_value": [
+        0.404,
+        0.4388,
+        0.4812,
+        0.4955,
+        0.5537,
+        0.645,
+        0.6704,
+        0.6778,
+        0.6959,
+        0.7048
+      ],
+      "sensor": [
+        "Gaofen-1",
+        "Gaofen-2",
+        "Gaofen-6"
+      ],
+      "regions": [
+        "Potsdam"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": "3:1:1 train:val:test"
+    },
+    {
+      "task": "Object detection",
+      "application": "Object detection (airplane, ship, oil-tank)",
+      "dataset": "Levir",
+      "metrics": [
+        "mAP (result 1 of 6)",
+        "mAP (result 2 of 6)",
+        "mAP (result 3 of 6)",
+        "mAP (result 4 of 6)",
+        "mAP (result 5 of 6)",
+        "mAP (result 6 of 6)"
+      ],
+      "metrics_value": [
+        0.0231,
+        0.074,
+        0.3716,
+        0.5969,
+        0.7395,
+        0.7632
+      ],
+      "sensor": [
+        "Gaofen-1",
+        "Gaofen-2",
+        "Gaofen-6"
+      ],
+      "regions": [
+        "Levir dataset region"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": "3:1:1 train:val:test"
+    },
+    {
+      "task": "Cloud detection",
+      "application": "Cloud detection",
+      "dataset": "Levir CS",
+      "metrics": [
+        "mIoU (result 1 of 8)",
+        "mIoU (result 2 of 8)",
+        "mIoU (result 3 of 8)",
+        "mIoU (result 4 of 8)",
+        "mIoU (result 5 of 8)",
+        "mIoU (result 6 of 8)",
+        "mIoU (result 7 of 8)",
+        "mIoU (result 8 of 8)"
+      ],
+      "metrics_value": [
+        0.693,
+        0.6989,
+        0.7099,
+        0.7337,
+        0.7233,
+        0.7332,
+        0.751,
+        0.7507
+      ],
+      "sensor": [
+        "Gaofen-1",
+        "Gaofen-2",
+        "Gaofen-6"
+      ],
+      "regions": [
+        "Levir CS dataset region"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Snow detection",
+      "application": "Snow detection",
+      "dataset": "Levir CS",
+      "metrics": [
+        "mIoU (result 1 of 8)",
+        "mIoU (result 2 of 8)",
+        "mIoU (result 3 of 8)",
+        "mIoU (result 4 of 8)",
+        "mIoU (result 5 of 8)",
+        "mIoU (result 6 of 8)",
+        "mIoU (result 7 of 8)",
+        "mIoU (result 8 of 8)"
+      ],
+      "metrics_value": [
+        0.2532,
+        0.3566,
+        0.3938,
+        0.4526,
+        0.4006,
+        0.4628,
+        0.5055,
+        0.4992
+      ],
+      "sensor": [
+        "Gaofen-1",
+        "Gaofen-2",
+        "Gaofen-6"
+      ],
+      "regions": [
+        "Levir CS dataset region"
+      ],
+      "image_resolution": "256x256",
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

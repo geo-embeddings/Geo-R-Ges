@@ -1,0 +1,91 @@
+{
+  "id": "earth-index-embeddings-2024",
+  "title": "Earth Index Embeddings",
+  "version": "2024",
+  "description": "Global 384-dimensional SoftCon (ViT-S) embeddings of Earth Genome's Sentinel-2 annual mosaic, one vector per 320 m patch, built for the Earth Index search application. Deprecated by its producer in favour of Earth Index Embeddings V7, whose vectors are not comparable.",
+  "updated": "2026-10-28T00:00:00Z",
+  "license": "CC-BY-4.0",
+  "sci:doi": null,
+  "provenance": {
+    "source": "manual extraction",
+    "source_id": null,
+    "source_url": "https://source.coop/earthgenome/earthindexembeddings",
+    "references": [
+      "https://www.earthgenome.org/blog/embeddings-for-all",
+      "https://docs.torchgeo.org/en/latest/api/datasets.html",
+      "https://arxiv.org/abs/2601.13134"
+    ],
+    "retrieved": "2026-10-28T00:00:00Z",
+    "review": [
+      "Deprecated upstream; Earth Index Embeddings V7 not yet located for its own record.",
+      "Earth Genome docs mention about 3.5 billion embeddings; not used as num_embeddings."
+    ]
+  },
+  "providers": [
+    {
+      "name": "Earth Genome",
+      "roles": [
+        "producer",
+        "licensor"
+      ],
+      "url": "https://www.earthgenome.org"
+    },
+    {
+      "name": "Source Cooperative",
+      "roles": [
+        "host"
+      ],
+      "url": "https://source.coop"
+    }
+  ],
+  "encoder_model": {
+    "id": "softcon",
+    "name": "SoftCon",
+    "checkpoint": "ViT-S (DINOv2-initialised)",
+    "href": null
+  },
+  "emb:type": "chip",
+  "emb:dimensions": [
+    384
+  ],
+  "emb:chip_size": null,
+  "emb:stride": null,
+  "emb:grid_id": null,
+  "emb:temporal_period": null,
+  "data_type": "float32",
+  "emb:original_data_type": null,
+  "emb:quantization_method": null,
+  "source_sensors": [
+    "Sentinel-2"
+  ],
+  "processing:level": null,
+  "processing:lineage": "Sentinel-2 temporal mosaic for 2024; GeoParquet files per MGRS tile and date range (e.g. 31TDF_2024-01-01_2025-01-01.parquet) with point geometries.",
+  "spatial_resolution": "320m",
+  "regions_coverage": [
+    "Global (land)"
+  ],
+  "bbox": null,
+  "start_datetime": "2024-01-01T00:00:00Z",
+  "end_datetime": "2024-12-31T23:59:59Z",
+  "temporal_coverage_note": null,
+  "num_embeddings": null,
+  "assets": {
+    "data": {
+      "href": "https://data.source.coop/earthgenome/earthindexembeddings/",
+      "title": "Source Cooperative (GeoParquet)",
+      "type": "application/vnd.apache.parquet",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    }
+  },
+  "hosting": [
+    "Source Cooperative"
+  ],
+  "access_requirements": "open HTTP/S3, no account",
+  "loaders": [
+    "torchgeo.datasets.EarthIndexEmbeddings"
+  ],
+  "benchmarks": null
+}

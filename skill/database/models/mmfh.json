@@ -1,0 +1,188 @@
+{
+  "id": "mmfh",
+  "mlm:name": "Cross-Modal Remote Sensing Foundation Model",
+  "version": null,
+  "release_date": "2023-07-16T00:00:00Z",
+  "updated": "2023-07-16T00:00:00Z",
+  "description": "A self-supervised cross-modal remote sensing foundation model with multi-domain representation and cross-domain fusion, capable of extracting generalizable features from massive multi-modal data for various downstream tasks.",
+  "sci:doi": "10.1109/IGARSS52108.2023.10282433",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "Transformer encoder with IMTA and MMTI units",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Self-supervised learning with patch-based reconstruction loss and contrastive loss",
+  "masking_strategy": "Patch mask-based reconstruction loss",
+  "pretraining": "Self-supervised pretraining on millions of multi-modal remote sensing images from various sensors and platforms, using multi-domain representation and cross-domain fusion.",
+  "domain_knowledge": [
+    "Multi-domain representation",
+    "Cross-domain fusion",
+    "Complex-valued network for SAR",
+    "Hyperbolic network for hyperspectral"
+  ],
+  "backbone_modifications": [
+    "Topologically variable feature clustering",
+    "Multi-spatial feature extraction (MSFE)",
+    "Multi-modal feature hybrid (MMFH)"
+  ],
+  "supported_sensors": [
+    "QuickBird",
+    "Gaofen",
+    "WorldView",
+    "Sentinel",
+    "TerraSAR-X"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "Optical",
+    "Infrared",
+    "SAR",
+    "Multispectral",
+    "Hyperspectral"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": null,
+  "mlm:pretrained_source": "Multi-modal remote sensing images from QuickBird, Gaofen, WorldView, Sentinel, TerraSAR-X, etc.",
+  "regions_coverage": [
+    "Most of the world"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 200,
+    "batch_size": null,
+    "learning_rate": "1e-4 (cosine decay, warmup 10 epochs)",
+    "augmentations": [
+      "Random crop scaling",
+      "Horizontal flipping"
+    ],
+    "mask_ratio": null,
+    "image_resolution": "224x224"
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Optical scene classification",
+      "dataset": "NWPU",
+      "metrics": [
+        "OA (T.R.=10%)",
+        "OA (T.R.=20%)"
+      ],
+      "metrics_value": [
+        93.64,
+        95.69
+      ],
+      "sensor": [
+        "Optical"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Surface segmentation",
+      "application": "SAR surface segmentation",
+      "dataset": "WHU-OPT-SAR",
+      "metrics": [
+        "Kappa",
+        "mUA"
+      ],
+      "metrics_value": [
+        67.6,
+        47.3
+      ],
+      "sensor": [
+        "SAR"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Target detection",
+      "application": "Infrared target detection",
+      "dataset": "SIRST",
+      "metrics": [
+        "OA",
+        "IoU",
+        "P d",
+        "Fa"
+      ],
+      "metrics_value": [
+        78.4,
+        79.1,
+        98.5,
+        1.9
+      ],
+      "sensor": [
+        "Infrared"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Building extraction",
+      "application": "Multi-modal building extraction",
+      "dataset": "UBCv2",
+      "metrics": [
+        "AP50",
+        "mAP",
+        "Precision",
+        "Recall",
+        "F1"
+      ],
+      "metrics_value": [
+        52.9,
+        35.3,
+        72.0,
+        67.9,
+        69.9
+      ],
+      "sensor": [
+        "Optical",
+        "SAR"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Multi-modal change detection",
+      "dataset": "multimodalCD",
+      "metrics": [
+        "Precision",
+        "Recall",
+        "F1"
+      ],
+      "metrics_value": [
+        72.0,
+        67.9,
+        69.9
+      ],
+      "sensor": [
+        "Optical",
+        "SAR"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

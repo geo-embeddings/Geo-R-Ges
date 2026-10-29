@@ -1,0 +1,313 @@
+{
+  "id": "softcon",
+  "mlm:name": "SoftCon",
+  "version": "1.0",
+  "release_date": "2024-10-22T00:00:00Z",
+  "updated": "2024-10-24T00:00:00Z",
+  "description": "SoftCon is a multilabel-guided soft contrastive learning framework for efficient Earth observation (EO) pretraining, leveraging land-cover-generated multilabel supervision and continual pretraining from vision foundation models. It produces multispectral and SAR foundation models that achieve SOTA results in 10 out of 11 downstream tasks.",
+  "sci:doi": "10.1109/TGRS.2024.3466896",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/zhu-xlab/softcon",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ResNet50, ViT-S/14, ViT-B/14",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Self-supervised contrastive learning with multilabel-guided soft contrastive loss",
+  "masking_strategy": "Siamese masking (randomly mask out 20% of input patches for ViT backbones during continual pretraining)",
+  "pretraining": "Pretrained on SSL4EO-S12-ML, a large-scale global multilabel dataset built by matching SSL4EO-S12 Sentinel-1/2 images with Dynamic World land-cover maps. Continual pretraining from vision foundation models (DINO/DINOv2) with simple weight initialization and Siamese masking.",
+  "domain_knowledge": [
+    "Land-cover-generated multilabel supervision",
+    "Cross-domain continual pretraining from vision foundation models"
+  ],
+  "backbone_modifications": [
+    "Separate projectors for contrastive and soft contrastive loss",
+    "Siamese masking for ViT"
+  ],
+  "supported_sensors": [
+    "Sentinel-2",
+    "Sentinel-1"
+  ],
+  "modality_integration_type": "Homogeneous Multimodal",
+  "modalities": [
+    "Multispectral",
+    "SAR"
+  ],
+  "spectral_alignment": "partial",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "10m",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Sentinel-2, Sentinel-1",
+      "bands": [
+        "Sentinel-2 multispectral bands",
+        "Sentinel-1 SAR"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          -1,
+          -1,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "time",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "SSL4EO-S12-ML",
+  "regions_coverage": [
+    "Global"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 780371,
+  "sampling": "If multiple seasons for one scene, randomly choose two for base and momentum encoder",
+  "processing:level": "L1C",
+  "processing:lineage": "normalize 16-bit multispectral and 32-bit SAR images to 8-bit",
+  "cloud_cover": "Images without corresponding segmentation map (due to clouds) are dropped",
+  "missing_data": "Images without corresponding segmentation map are dropped",
+  "mlm:hyperparameters": {
+    "patch_size": "224x224",
+    "epochs": 100,
+    "batch_size": 1024,
+    "learning_rate": "warmed up to 1.5e-4 for 10 epochs, then cosine decay",
+    "augmentations": [
+      "random crop (224x224)",
+      "color jitter",
+      "grayscale",
+      "Gaussian blur",
+      "random flip"
+    ],
+    "mask_ratio": 0.2
+  },
+  "benchmarks": [
+    {
+      "task": "Scene classification",
+      "application": "Land-cover/land-use classification",
+      "dataset": "BigEarthNet",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        84.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 31166 (10.0%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Land-cover/land-use classification",
+      "dataset": "BigEarthNet-SAR",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        81.4
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: (10.0%)"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Land-cover/land-use classification",
+      "dataset": "EuroSAT",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        99.0
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 16200 of 27000"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Land-cover/land-use classification",
+      "dataset": "EuroSAT-SAR",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        98.0
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": null
+    },
+    {
+      "task": "Scene classification",
+      "application": "Land-cover/land-use classification",
+      "dataset": "fMoW-sentinel",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        74.8
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 71287 (10.0%)"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Land-cover segmentation",
+      "dataset": "DFC2020",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        67.2
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "samples used: 5128 of 5128"
+    },
+    {
+      "task": "Change detection",
+      "application": "Binary change detection",
+      "dataset": "OSCD",
+      "metrics": [
+        "Recall",
+        "F1-score"
+      ],
+      "metrics_value": [
+        0.82,
+        0.78
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "14/10 train/test; samples used: 24 of 24"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Local climate zone classification",
+      "dataset": "m-so2sat",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        92.2
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "19992/986/986 train/val/test; samples used: 19992 of 19992"
+    },
+    {
+      "task": "Scene classification",
+      "application": "Brick kiln detection",
+      "dataset": "m-brick-kiln",
+      "metrics": [
+        "Top-1 Accuracy"
+      ],
+      "metrics_value": [
+        98.7
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "15063/999/999 train/val/test; samples used: 15063 of 15063"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Cashew plantation segmentation",
+      "dataset": "m-cashew-plantation",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        89.2
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "1350/400/50 train/val/test; samples used: 1350 of 1350"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Crop type segmentation",
+      "dataset": "m-SA-crop-type",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        87.1
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": null,
+      "image_resolution": "224x224",
+      "spatial_resolution": "10m",
+      "split_ratio": "3000/1000/1000 train/val/test; samples used: 3000 of 3000"
+    }
+  ],
+  "provenance": null
+}

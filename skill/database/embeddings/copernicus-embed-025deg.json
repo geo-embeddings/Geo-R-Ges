@@ -1,0 +1,107 @@
+{
+  "id": "copernicus-embed-025deg",
+  "title": "Copernicus-Embed-025deg",
+  "version": null,
+  "description": "Global 0.25-degree embedding map from Copernicus-FM: per grid cell, the embeddings of all available Copernicus-Pretrain modalities (Sentinel-1/2/3/5P, DEM) are averaged into one 768-dimensional vector. Intended as EO-derived static or dynamic inputs for climate and weather models.",
+  "updated": "2026-10-28T00:00:00Z",
+  "license": "CC-BY-4.0",
+  "sci:doi": "10.48550/arXiv.2503.11849",
+  "provenance": {
+    "source": "manual extraction",
+    "source_id": null,
+    "source_url": "https://huggingface.co/datasets/wangyi111/Copernicus-Embed-025deg",
+    "references": [
+      "https://arxiv.org/abs/2503.11849",
+      "https://github.com/zhu-xlab/Copernicus-FM/tree/main/Copernicus-Embed-025deg",
+      "https://docs.torchgeo.org/en/latest/api/datasets.html"
+    ],
+    "retrieved": "2026-10-28T00:00:00Z",
+    "review": [
+      "Year 2021 and float32 from TorchGeo's table; the Hugging Face viewer shows float64 lists."
+    ]
+  },
+  "providers": [
+    {
+      "name": "Technical University of Munich (Zhu lab)",
+      "roles": [
+        "producer",
+        "licensor"
+      ],
+      "url": "https://github.com/zhu-xlab"
+    },
+    {
+      "name": "Hugging Face",
+      "roles": [
+        "host"
+      ],
+      "url": "https://huggingface.co"
+    }
+  ],
+  "encoder_model": {
+    "id": "copernicus-fm",
+    "name": "Copernicus-FM",
+    "checkpoint": null,
+    "href": null
+  },
+  "emb:type": "chip",
+  "emb:dimensions": [
+    768
+  ],
+  "emb:chip_size": null,
+  "emb:stride": null,
+  "emb:grid_id": null,
+  "emb:temporal_period": "P1Y",
+  "data_type": "float32",
+  "emb:original_data_type": null,
+  "emb:quantization_method": null,
+  "source_sensors": [
+    "Sentinel-1",
+    "Sentinel-2",
+    "Sentinel-3",
+    "Sentinel-5P",
+    "Copernicus DEM"
+  ],
+  "processing:level": null,
+  "processing:lineage": "Per-modality Copernicus-FM embeddings averaged per 0.25-degree cell; 721 x 1440 global map, ocean cells filled with 0.",
+  "spatial_resolution": "0.25°",
+  "regions_coverage": [
+    "Global"
+  ],
+  "bbox": [
+    -180,
+    -90,
+    180,
+    90
+  ],
+  "start_datetime": "2021-01-01T00:00:00Z",
+  "end_datetime": "2021-12-31T23:59:59Z",
+  "temporal_coverage_note": null,
+  "num_embeddings": 1038240,
+  "assets": {
+    "data": {
+      "href": "https://huggingface.co/datasets/wangyi111/Copernicus-Embed-025deg",
+      "title": "Hugging Face dataset (Parquet)",
+      "type": "application/vnd.apache.parquet",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    },
+    "readme": {
+      "href": "https://github.com/zhu-xlab/Copernicus-FM/tree/main/Copernicus-Embed-025deg",
+      "title": "Copernicus-FM repository",
+      "type": "text/html",
+      "roles": [
+        "metadata"
+      ]
+    }
+  },
+  "hosting": [
+    "Hugging Face"
+  ],
+  "access_requirements": "open download from Hugging Face, no account",
+  "loaders": [
+    "torchgeo.datasets.CopernicusEmbed"
+  ],
+  "benchmarks": null
+}

@@ -1,0 +1,106 @@
+{
+  "id": "majortom-core-s2l2a-mmearth",
+  "title": "Major TOM Core-S2L2A-MMEarth",
+  "version": null,
+  "description": "MMEarth (ConvNeXt V2 atto) image-encoder features for the Major TOM Core-S2L2A dataset, kept as a spatial feature map pooled to 320 x 13 x 13 per sample (full map 320 x 133 x 133). Released by ESA Φ-lab and CloudFerro; useful when spatial structure within a cell matters.",
+  "updated": "2026-10-28T00:00:00Z",
+  "license": "CC-BY-SA-4.0",
+  "sci:doi": "10.57967/hf/5240",
+  "provenance": {
+    "source": "manual extraction",
+    "source_id": null,
+    "source_url": "https://huggingface.co/datasets/Major-TOM/Core-S2L2A-MMEarth",
+    "references": [
+      "https://arxiv.org/abs/2412.05600",
+      "https://docs.torchgeo.org/en/latest/api/datasets.html"
+    ],
+    "retrieved": "2026-10-28T00:00:00Z",
+    "review": [
+      "Fragment size not stated; emb:chip_size left null."
+    ]
+  },
+  "providers": [
+    {
+      "name": "ESA Φ-lab",
+      "roles": [
+        "producer",
+        "licensor"
+      ],
+      "url": "https://philab.esa.int"
+    },
+    {
+      "name": "CloudFerro",
+      "roles": [
+        "processor"
+      ],
+      "url": "https://cloudferro.com"
+    },
+    {
+      "name": "Hugging Face",
+      "roles": [
+        "host"
+      ],
+      "url": "https://huggingface.co"
+    }
+  ],
+  "encoder_model": {
+    "id": "mmearth",
+    "name": "MMEarth",
+    "checkpoint": "pt-all_mod_atto_1M_64_uncertainty_56-8",
+    "href": null
+  },
+  "emb:type": "chip",
+  "emb:dimensions": [
+    320,
+    13,
+    13
+  ],
+  "emb:chip_size": null,
+  "emb:stride": null,
+  "emb:grid_id": "MAJORTOM",
+  "emb:temporal_period": null,
+  "data_type": "float32",
+  "emb:original_data_type": null,
+  "emb:quantization_method": null,
+  "source_sensors": [
+    "Sentinel-2"
+  ],
+  "processing:level": "L2A",
+  "processing:lineage": "12-band Sentinel-2 L2A input; feature map pooled from (320, 133, 133) to (320, 13, 13), float32.",
+  "spatial_resolution": null,
+  "regions_coverage": [
+    "Global"
+  ],
+  "bbox": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "temporal_coverage_note": "Major TOM Core snapshots, one acquisition per grid cell; the paper and dataset card give no overall date range (TorchGeo lists 2015-2024, sparse, for the Major TOM embeddings).",
+  "num_embeddings": null,
+  "assets": {
+    "data": {
+      "href": "https://huggingface.co/datasets/Major-TOM/Core-S2L2A-MMEarth",
+      "title": "Hugging Face dataset (GeoParquet)",
+      "type": "application/vnd.apache.parquet",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    },
+    "paper": {
+      "href": "https://arxiv.org/abs/2412.05600",
+      "title": "Global and Dense Embeddings of Earth: Major TOM Floating in the Latent Space",
+      "type": "text/html",
+      "roles": [
+        "metadata"
+      ]
+    }
+  },
+  "hosting": [
+    "Hugging Face"
+  ],
+  "access_requirements": "open download from Hugging Face, no account",
+  "loaders": [
+    "datasets.load_dataset(\"Major-TOM/Core-S2L2A-MMEarth\")"
+  ],
+  "benchmarks": null
+}

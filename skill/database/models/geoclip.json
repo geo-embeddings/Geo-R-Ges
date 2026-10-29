@@ -1,0 +1,203 @@
+{
+  "id": "geoclip",
+  "mlm:name": "GeoCLIP",
+  "version": "v1",
+  "release_date": "2023-11-21T00:00:00Z",
+  "updated": "2023-11-21T00:00:00Z",
+  "description": "GeoCLIP is a CLIP-inspired model for worldwide image geo-localization, aligning image and GPS location features in a shared embedding space using a CLIP-based image encoder and a hierarchical location encoder with random Fourier features.",
+  "sci:doi": "10.48550/arXiv.2309.16020",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://vicentevivan.github.io/GeoCLIP",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "CLIP ViT-L/14",
+  "mlm:total_parameters": 314400770,
+  "pretext_training_type": "Contrastive learning (CLIP-style, SimCLR-style)",
+  "masking_strategy": null,
+  "pretraining": "Contrastive learning aligning image and GPS location features using a frozen CLIP ViT-L/14 backbone for images and a hierarchical MLP-based location encoder with random Fourier features and equal earth projection.",
+  "domain_knowledge": [
+    "Equal Earth Projection",
+    "Random Fourier Features",
+    "Hierarchical representation of GPS"
+  ],
+  "backbone_modifications": [
+    "Two trainable linear layers (h1: 768, h2: 512) added after CLIP backbone"
+  ],
+  "supported_sensors": [
+    "RGB images (Flickr, Google Street View, etc.)"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral (RGB)",
+    "Text (via CLIP text encoder)"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "RGB images (Flickr, Google Street View, etc.)",
+      "bands": [
+        "R",
+        "G",
+        "B"
+      ],
+      "input": {
+        "shape": [
+          -1,
+          3,
+          224,
+          224
+        ],
+        "dim_order": [
+          "batch",
+          "bands",
+          "height",
+          "width"
+        ]
+      }
+    }
+  ],
+  "mlm:pretrained_source": "MediaEval Placing Task 2016 (MP-16)",
+  "regions_coverage": [
+    "Worldwide"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 4720000,
+  "sampling": "Random sampling from MP-16 dataset",
+  "processing:level": null,
+  "processing:lineage": "Equal Earth Projection for GPS; Random Fourier Features positional encoding; Hierarchical representation",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 10,
+    "batch_size": 512,
+    "learning_rate": "3e-5",
+    "augmentations": [
+      "Random crop",
+      "Random flip",
+      "Color jitter",
+      "Gaussian blur",
+      "SimCLR augmentations"
+    ],
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Geo-localization (image-to-GPS retrieval)",
+      "application": "Worldwide image geo-localization",
+      "dataset": "Im2GPS3k",
+      "metrics": [
+        "Accuracy@1km",
+        "Accuracy@25km",
+        "Accuracy@200km",
+        "Accuracy@750km",
+        "Accuracy@2500km"
+      ],
+      "metrics_value": [
+        14.11,
+        34.47,
+        50.65,
+        69.67,
+        83.82
+      ],
+      "sensor": [
+        "RGB"
+      ],
+      "regions": [
+        "Worldwide"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Geo-localization (image-to-GPS retrieval)",
+      "application": "Worldwide image geo-localization",
+      "dataset": "GWS15k",
+      "metrics": [
+        "Accuracy@1km",
+        "Accuracy@25km",
+        "Accuracy@200km",
+        "Accuracy@750km",
+        "Accuracy@2500km"
+      ],
+      "metrics_value": [
+        0.6,
+        3.1,
+        16.9,
+        45.7,
+        74.1
+      ],
+      "sensor": [
+        "RGB"
+      ],
+      "regions": [
+        "Worldwide"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Geo-localization (image-to-GPS retrieval)",
+      "application": "Worldwide image geo-localization",
+      "dataset": "YFCC26k",
+      "metrics": [
+        "Accuracy@1km",
+        "Accuracy@25km",
+        "Accuracy@200km",
+        "Accuracy@750km",
+        "Accuracy@2500km"
+      ],
+      "metrics_value": [
+        11.61,
+        22.19,
+        36.69,
+        57.47,
+        76.02
+      ],
+      "sensor": [
+        "RGB"
+      ],
+      "regions": [
+        "Worldwide"
+      ],
+      "image_resolution": "224x224",
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Image classification",
+      "application": "Geo-aware image classification",
+      "dataset": "NUS-WIDE",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        0.249
+      ],
+      "sensor": [
+        "RGB"
+      ],
+      "regions": [
+        "Worldwide"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

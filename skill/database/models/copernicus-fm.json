@@ -1,0 +1,420 @@
+{
+  "id": "copernicus-fm",
+  "mlm:name": "Copernicus-FM",
+  "version": "v1",
+  "release_date": "2025-03-29T00:00:00Z",
+  "updated": "2025-03-29T00:00:00Z",
+  "description": "Copernicus-FM is a unified Earth observation foundation model capable of processing any spectral or non-spectral sensor modality from all major Copernicus Sentinel missions, using dynamic hypernetworks and flexible metadata encoding. It is pretrained on the Copernicus-Pretrain dataset (18.7M images) and evaluated on the Copernicus-Bench benchmark (15 hierarchical downstream tasks).",
+  "sci:doi": "10.48550/arXiv.2503.11849",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/zhu-xlab/Copernicus-FM",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-Base",
+  "mlm:total_parameters": 86000000,
+  "pretext_training_type": "Masked image modeling (MIM) with auxiliary continual distillation",
+  "masking_strategy": "Random patch masking (MAE-style), masking ratio 0.7",
+  "pretraining": "Pretrained on Copernicus-Pretrain (220K grids with all modalities, 100 epochs) using masked image modeling and continual distillation from DINOv2 (RGB) and SoftCon (S1/S2). Dynamic hypernetworks generate patch embedding weights for spectral and non-spectral modalities. Metadata (location, area, time) is integrated via Fourier encoding.",
+  "domain_knowledge": [
+    "Fourier encoding for spectral/metadata",
+    "Gaussian sampling for spatial diversity",
+    "Metadata integration (location, area, time)",
+    "Language model encoding for variable names"
+  ],
+  "backbone_modifications": [
+    "Dynamic patch embedding via spectral and variable hypernetworks",
+    "Flexible patch size (FlexiViT-inspired)",
+    "Metadata integration via Fourier encoding"
+  ],
+  "supported_sensors": [
+    "Sentinel-1",
+    "Sentinel-2",
+    "Sentinel-3",
+    "Sentinel-5P",
+    "Copernicus DEM"
+  ],
+  "modality_integration_type": "Heterogeneous Multimodal",
+  "modalities": [
+    "SAR",
+    "Multispectral",
+    "Atmospheric variables",
+    "Elevation",
+    "Metadata"
+  ],
+  "spectral_alignment": "full",
+  "temporal_alignment": "partial",
+  "spatial_resolution": "10m–1km",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "S1",
+      "bands": [
+        "VV",
+        "VH"
+      ]
+    },
+    {
+      "name": "S2",
+      "bands": [
+        "13 bands (440–2190nm)"
+      ]
+    },
+    {
+      "name": "S3",
+      "bands": [
+        "21 bands (400–1020nm)"
+      ]
+    },
+    {
+      "name": "S5P",
+      "bands": [
+        "CO",
+        "NO2",
+        "SO2",
+        "O3"
+      ]
+    },
+    {
+      "name": "Sentinel-1, Sentinel-2, Sentinel-3, Sentinel-5P, Copernicus DEM",
+      "bands": [
+        "DEM"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Copernicus-Pretrain (joint 220K grid subset)",
+  "regions_coverage": [
+    "Global land and near-land ocean, including polar regions"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": 15720353,
+  "sampling": "Gaussian sampling around top-10K populated cities (std=50km), uniform for polar regions, fill gaps for missing grids; Time range: Primarily 2021 (Sentinel-1/2/3/5P), DEM static",
+  "processing:level": "S1: GRD, S2: TOA, S3: OLCI, S5P: L2, DEM: GLO-30",
+  "processing:lineage": "Channel-wise normalization (S1/2); Scale factor multiplication (S3); NaN replacement (S5P); DEM normalization",
+  "cloud_cover": "S3: filter tiles with >20% bright pixels; S5P: filter fully NaN tiles; S1/2: not specified",
+  "missing_data": "Remove corrupted/NaN-dominated images; S5P NaNs replaced with zero",
+  "mlm:hyperparameters": {
+    "patch_size": "Varies by modality: S1/2 (16x16), S3 (8x8), S5P (4x4), DEM (64x64)",
+    "epochs": 100,
+    "batch_size": 288,
+    "learning_rate": "1.5e-4 (linear scaling, cosine decay, 10 epoch warmup)",
+    "augmentations": [
+      "Random resized cropping (scale [0.2,1.0])",
+      "Random horizontal flipping"
+    ],
+    "mask_ratio": 0.7,
+    "image_resolution": "S1/2: ~264x264, S3: ~96x96, S5P: ~28x28, DEM: ~960x960",
+    "num_layers": 12
+  },
+  "benchmarks": [
+    {
+      "task": "Segmentation",
+      "application": "Cloud detection",
+      "dataset": "Cloud-S2",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        66.7
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "512x512x13",
+      "spatial_resolution": "10m",
+      "split_ratio": "1699/567/551 (train/val/test); samples used: 2817 of 2817 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Cloud detection",
+      "dataset": "Cloud-S3",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        62.0
+      ],
+      "sensor": [
+        "Sentinel-3"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256x21",
+      "spatial_resolution": "300m",
+      "split_ratio": "1197/399/399 (train/val/test); samples used: 1995 of 1995 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Land use/land cover",
+      "dataset": "EuroSAT-S1",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        87.2
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64x2",
+      "spatial_resolution": "10m",
+      "split_ratio": "16200/5400/5400 (train/val/test); samples used: 27000 of 27000 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Land use/land cover",
+      "dataset": "EuroSAT-S2",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        97.9
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "64x64x13",
+      "spatial_resolution": "10m",
+      "split_ratio": "16200/5400/5400 (train/val/test); samples used: 27000 of 27000 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Multilabel land use/land cover",
+      "dataset": "BigEarthNet-S1",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        77.9
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "120x120x2",
+      "spatial_resolution": "10m",
+      "split_ratio": "11894/6117/5991 (train/val/test); samples used: 23902 of 23902 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Multilabel land use/land cover",
+      "dataset": "BigEarthNet-S2",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        79.0
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "120x120x12",
+      "spatial_resolution": "10m",
+      "split_ratio": "11894/6117/5991 (train/val/test); samples used: 23902 of 23902 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Multilabel land cover",
+      "dataset": "LC100Cls-S3",
+      "metrics": [
+        "mAP"
+      ],
+      "metrics_value": [
+        93.3
+      ],
+      "sensor": [
+        "Sentinel-3"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "96x96x21",
+      "spatial_resolution": "300m",
+      "split_ratio": "5181/1727/1727 (train/val/test); samples used: 8635 of 8635 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Land cover",
+      "dataset": "DFC2020-S1",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        52.4
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256x2",
+      "spatial_resolution": "10m",
+      "split_ratio": "3156/986/986 (train/val/test); samples used: 5128 of 5128 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Land cover",
+      "dataset": "DFC2020-S2",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        64.5
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "256x256x13",
+      "spatial_resolution": "10m",
+      "split_ratio": "3156/986/986 (train/val/test); samples used: 5128 of 5128 (100%)"
+    },
+    {
+      "task": "Segmentation",
+      "application": "Land cover",
+      "dataset": "LC100Seg-S3",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        24.1
+      ],
+      "sensor": [
+        "Sentinel-3"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "96x96x21",
+      "spatial_resolution": "300m",
+      "split_ratio": "5181/1727/1727 (train/val/test); samples used: 8635 of 8635 (100%)"
+    },
+    {
+      "task": "Change detection",
+      "application": "Flood mapping",
+      "dataset": "Flood-S1",
+      "metrics": [
+        "mIoU"
+      ],
+      "metrics_value": [
+        77.7
+      ],
+      "sensor": [
+        "Sentinel-1"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "224x224x2",
+      "spatial_resolution": "10m",
+      "split_ratio": "3000/1000/1000 (train/val/test); samples used: 5000 of 5000 (100%)"
+    },
+    {
+      "task": "Classification",
+      "application": "Local climate zone",
+      "dataset": "LCZ-S2",
+      "metrics": [
+        "OA"
+      ],
+      "metrics_value": [
+        84.4
+      ],
+      "sensor": [
+        "Sentinel-2"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "32x32x10",
+      "spatial_resolution": "10m",
+      "split_ratio": "15000/5000/5000 (train/val/test); samples used: 25000 of 25000 (100%)"
+    },
+    {
+      "task": "Regression",
+      "application": "Biomass estimation",
+      "dataset": "Biomass-S3",
+      "metrics": [
+        "RMSE"
+      ],
+      "metrics_value": [
+        66.3
+      ],
+      "sensor": [
+        "Sentinel-3"
+      ],
+      "regions": [
+        "Global"
+      ],
+      "image_resolution": "96x96x21",
+      "spatial_resolution": "300m",
+      "split_ratio": "3000/1000/1000 (train/val/test); samples used: 5000 of 5000 (100%)"
+    },
+    {
+      "task": "Regression",
+      "application": "Air quality estimation (NO2)",
+      "dataset": "AQ-NO2-S5P",
+      "metrics": [
+        "RMSE"
+      ],
+      "metrics_value": [
+        2.8
+      ],
+      "sensor": [
+        "Sentinel-5P"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "56x56x1",
+      "spatial_resolution": "1km",
+      "split_ratio": "1480/493/494 (train/val/test); samples used: 2467 of 2467 (100%)"
+    },
+    {
+      "task": "Regression",
+      "application": "Air quality estimation (O3)",
+      "dataset": "AQ-O3-S5P",
+      "metrics": [
+        "RMSE"
+      ],
+      "metrics_value": [
+        789.4
+      ],
+      "sensor": [
+        "Sentinel-5P"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "image_resolution": "56x56x1",
+      "spatial_resolution": "1km",
+      "split_ratio": "1480/493/494 (train/val/test); samples used: 2467 of 2467 (100%)"
+    }
+  ],
+  "provenance": null
+}

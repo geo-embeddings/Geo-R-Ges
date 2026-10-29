@@ -1,0 +1,114 @@
+{
+  "id": "aiearth",
+  "mlm:name": "AIE-SEG",
+  "version": null,
+  "release_date": "2022-03-01T00:00:00Z",
+  "updated": null,
+  "description": "AIE-SEG is a large vision segmentation model for remote sensing imagery, deployed on the AI Earth cloud platform. It supports interactive annotation via text, point, or bounding box prompts, enabling batch segmentation and zero-shot extraction of objects across multiple images. The model is trained on tens of millions of remote sensing images with 1.3 billion labels, covering nearly a hundred semantic categories.",
+  "sci:doi": "10.48550/arXiv.2312.16385",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://aiearth.aliyun.com",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "SEEM (Segment Everything Everywhere Model)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Vision-language pretraining with interactive prompts (points, boxes, text)",
+  "masking_strategy": null,
+  "pretraining": "Fine-tuned from SEEM using proprietary remote sensing training data (tens of millions of images, 1.3 billion labels, nearly 100 semantic categories)",
+  "domain_knowledge": [
+    "Remote sensing semantic categories",
+    "Interactive annotation",
+    "Vision-language modeling"
+  ],
+  "backbone_modifications": [
+    "Adapted SEEM for remote sensing imagery",
+    "Supports batch segmentation across multiple images"
+  ],
+  "supported_sensors": [
+    "Landsat-5",
+    "Landsat-7",
+    "Landsat-8",
+    "Landsat-9",
+    "Sentinel-1",
+    "Sentinel-2",
+    "Sentinel-3",
+    "Sentinel-5P",
+    "MODIS"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "variable",
+  "temporal_resolution": "variable",
+  "mlm:input": [
+    {
+      "name": "Landsat-5, Landsat-7, Landsat-8, Landsat-9, Sentinel-1, Sentinel-2, Sentinel-3, Sentinel-5P, MODIS",
+      "bands": [
+        "Red",
+        "Green",
+        "Blue"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Proprietary remote sensing dataset (tens of millions of images, 1.3 billion labels)",
+  "regions_coverage": [
+    "Global",
+    "China"
+  ],
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": null,
+  "benchmarks": [
+    {
+      "task": "Segmentation",
+      "application": "Arbitrary target extraction, land cover classification, binary and multi-class change detection",
+      "dataset": "Proprietary remote sensing dataset (tens of millions of images, 1.3 billion labels)",
+      "metrics": null,
+      "metrics_value": null,
+      "sensor": [
+        "Landsat-5",
+        "Landsat-7",
+        "Landsat-8",
+        "Landsat-9",
+        "Sentinel-1",
+        "Sentinel-2",
+        "Sentinel-3",
+        "Sentinel-5P",
+        "MODIS",
+        "SRTM",
+        "ASTER GDEM",
+        "AW3D30",
+        "Copernicus DEM",
+        "TanDEM-X",
+        "NOAA VIIRS",
+        "DMSP OLS"
+      ],
+      "regions": [
+        "Global",
+        "China"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "variable",
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}

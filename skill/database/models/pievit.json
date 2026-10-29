@@ -1,0 +1,115 @@
+{
+  "id": "pievit",
+  "mlm:name": "PIEViT",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "Pattern Integration and Enhancement Vision Transformer (PIEViT) is a self-supervised learning framework for remote sensing imagery, utilizing a teacher-student architecture with Geospatial Pattern Cohesion (GPC) and Feature Integration Projection (FIP) modules to enhance patch-level and image-level feature representation.",
+  "sci:doi": "10.48550/arXiv.2411.06091",
+  "license": null,
+  "assets": null,
+  "mlm:architecture": "ViT-B/16",
+  "mlm:total_parameters": 88200000,
+  "pretext_training_type": "Self-supervised masked image modeling with teacher-student architecture",
+  "masking_strategy": "Random masking of input patches with mask ratio randomly chosen between 0.1 and 0.5",
+  "pretraining": "Pretrained from scratch on Million-AID for 100 epochs with batch size 256, AdamW optimizer, learning rate warmed up to 1e-4, cosine decay, weight decay 0.04 to 0.4, LayerScale 1e-5, teacher momentum 0.994 to 1, data augmentations including color jittering, Gaussian blur, multi-crop, random MIM.",
+  "domain_knowledge": [
+    "Geospatial Pattern Cohesion (GPC)",
+    "Feature Integration Projection (FIP)"
+  ],
+  "backbone_modifications": [
+    "Adapter for downstream tasks"
+  ],
+  "supported_sensors": null,
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": null,
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "unspecified",
+      "bands": [
+        "R",
+        "G",
+        "B"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "Million-AID",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": "random MIM",
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": null,
+    "epochs": 100,
+    "batch_size": 256,
+    "learning_rate": "warmed up to 1e-4, cosine decay",
+    "augmentations": [
+      "color jittering",
+      "Gaussian blur",
+      "multi-crop"
+    ],
+    "mask_ratio": null
+  },
+  "benchmarks": [
+    {
+      "task": "Object Detection",
+      "application": "Object detection in optical remote sensing images",
+      "dataset": "DIOR",
+      "metrics": [
+        "mAP50"
+      ],
+      "metrics_value": [
+        76.92
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "5862 train / 5863 val / 11738 test"
+    },
+    {
+      "task": "Land Cover Classification",
+      "application": "Land cover classification",
+      "dataset": "Potsdam",
+      "metrics": [
+        "mF1"
+      ],
+      "metrics_value": [
+        92.72
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.05m",
+      "split_ratio": "3456 train / 2016 test; samples used: 3456"
+    },
+    {
+      "task": "Change Detection",
+      "application": "Building change detection",
+      "dataset": "LevirCD",
+      "metrics": [
+        "mF1"
+      ],
+      "metrics_value": [
+        91.94
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": "512x512",
+      "spatial_resolution": "0.5m",
+      "split_ratio": "1189 train / 168 val / 353 test; samples used: 1189"
+    }
+  ],
+  "provenance": null
+}

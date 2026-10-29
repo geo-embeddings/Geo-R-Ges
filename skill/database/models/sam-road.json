@@ -1,0 +1,132 @@
+{
+  "id": "sam-road",
+  "mlm:name": "SAM-Road",
+  "version": "1.0",
+  "release_date": "2024-04-13T00:00:00Z",
+  "updated": "2024-04-13T00:00:00Z",
+  "description": "SAM-Road adapts the Segment Anything Model (SAM) for extracting large-scale, vectorized road network graphs from satellite imagery, combining dense semantic segmentation with a transformer-based graph neural network for topology prediction.",
+  "sci:doi": "10.48550/arXiv.2403.16051",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/htcr/sam_road",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "ViT-B (Vision Transformer - Base)",
+  "mlm:total_parameters": 80000000,
+  "pretext_training_type": "Self-supervised pretraining on segmentation masks (SAM pretraining)",
+  "masking_strategy": "Not specified for SAM-Road; inherits from SAM pretraining",
+  "pretraining": "Fine-tuned from the pre-trained Segment Anything Model (SAM) on satellite imagery for road and intersection mask prediction",
+  "domain_knowledge": [
+    "Non-maximum suppression for vertex extraction",
+    "Graph neural network for topology prediction",
+    "Sliding-window inference for large regions"
+  ],
+  "backbone_modifications": [
+    "Fine-tuning on satellite imagery",
+    "0.1x base learning rate for encoder"
+  ],
+  "supported_sensors": [
+    "Optical RGB satellite imagery"
+  ],
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral (RGB)"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "none",
+  "spatial_resolution": "1 meter/pixel",
+  "temporal_resolution": null,
+  "mlm:input": [
+    {
+      "name": "Optical RGB satellite imagery",
+      "bands": [
+        "R",
+        "G",
+        "B"
+      ]
+    }
+  ],
+  "mlm:pretrained_source": "SA-1B (SAM pretraining dataset)",
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": {
+    "patch_size": "16x16 patches",
+    "epochs": null,
+    "batch_size": null,
+    "learning_rate": null,
+    "augmentations": null,
+    "mask_ratio": null,
+    "num_layers": 12
+  },
+  "benchmarks": [
+    {
+      "task": "Semantic segmentation and graph extraction",
+      "application": "Road network graph extraction from satellite imagery",
+      "dataset": "City-scale",
+      "metrics": [
+        "TOPO Precision",
+        "TOPO Recall",
+        "TOPO F1",
+        "APLS"
+      ],
+      "metrics_value": [
+        90.47,
+        67.69,
+        77.23,
+        68.37
+      ],
+      "sensor": [
+        "Optical RGB satellite imagery"
+      ],
+      "regions": [
+        "20 U.S. cities"
+      ],
+      "image_resolution": "2048x2048 pixels",
+      "spatial_resolution": "1 meter/pixel",
+      "split_ratio": "samples used: 180 of 180 (100%)"
+    },
+    {
+      "task": "Semantic segmentation and graph extraction",
+      "application": "Road network graph extraction from satellite imagery",
+      "dataset": "SpaceNet",
+      "metrics": [
+        "TOPO Precision",
+        "TOPO Recall",
+        "TOPO F1",
+        "APLS"
+      ],
+      "metrics_value": [
+        93.03,
+        70.97,
+        80.52,
+        71.64
+      ],
+      "sensor": [
+        "Optical RGB satellite imagery"
+      ],
+      "regions": [
+        "Shanghai",
+        "Las Vegas",
+        "other global cities"
+      ],
+      "image_resolution": "400x400 pixels",
+      "spatial_resolution": "1 meter/pixel",
+      "split_ratio": "samples used: 2549 of 2549 (100%)"
+    }
+  ],
+  "provenance": null
+}

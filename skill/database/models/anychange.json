@@ -1,0 +1,247 @@
+{
+  "id": "anychange",
+  "mlm:name": "AnyChange",
+  "version": null,
+  "release_date": null,
+  "updated": null,
+  "description": "Segment Any Change (AnyChange) is a zero-shot change detection model for remote sensing, built on the Segment Anything Model (SAM) via a training-free adaptation method called bitemporal latent matching. It enables zero-shot prediction and generalization on unseen change types and data distributions, supporting instance-level and pixel-level change masks in fully automatic, semi-automatic, and interactive modes.",
+  "sci:doi": "10.48550/arXiv.2402.01188",
+  "license": null,
+  "assets": {
+    "mlm:source_code": {
+      "href": "https://github.com/Z-Zheng/pytorch-change-models",
+      "title": "Source code",
+      "type": "text/html",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "mlm:architecture": "SAM (ViT-B, ViT-L, ViT-H)",
+  "mlm:total_parameters": null,
+  "pretext_training_type": "Training-free adaptation (bitemporal latent matching)",
+  "masking_strategy": "Bitemporal latent matching (semantic similarity in latent space)",
+  "pretraining": "Adaptation of pretrained SAM (Segment Anything Model) for change detection via bitemporal latent matching; no additional pretraining on change detection tasks.",
+  "domain_knowledge": [
+    "Bitemporal latent matching",
+    "Point query mechanism",
+    "Semantic similarity in latent space"
+  ],
+  "backbone_modifications": [
+    "No architecture modifications; adaptation via latent matching"
+  ],
+  "supported_sensors": null,
+  "modality_integration_type": "Unimodal",
+  "modalities": [
+    "Multispectral",
+    "RGB"
+  ],
+  "spectral_alignment": "none",
+  "temporal_alignment": "partial",
+  "spatial_resolution": null,
+  "temporal_resolution": null,
+  "mlm:input": null,
+  "mlm:pretrained_source": null,
+  "regions_coverage": null,
+  "start_datetime": null,
+  "end_datetime": null,
+  "num_images": null,
+  "sampling": null,
+  "processing:level": null,
+  "processing:lineage": null,
+  "cloud_cover": null,
+  "missing_data": null,
+  "mlm:hyperparameters": null,
+  "benchmarks": [
+    {
+      "task": "Change detection",
+      "application": "Zero-shot object change proposal",
+      "dataset": "LEVIR-CD",
+      "metrics": [
+        "F1",
+        "Precision",
+        "Recall",
+        "mask AR@1000"
+      ],
+      "metrics_value": [
+        23.4,
+        13.7,
+        83.0,
+        32.6
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Zero-shot object change proposal",
+      "dataset": "S2Looking (binary)",
+      "metrics": [
+        "F1",
+        "Precision",
+        "Recall",
+        "mask AR@1000"
+      ],
+      "metrics_value": [
+        7.4,
+        3.9,
+        94.0,
+        48.3
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Zero-shot object change proposal",
+      "dataset": "xView2 (binary)",
+      "metrics": [
+        "F1",
+        "Precision",
+        "Recall",
+        "mask AR@1000"
+      ],
+      "metrics_value": [
+        13.4,
+        7.6,
+        59.3,
+        27.8
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Zero-shot object change proposal",
+      "dataset": "SECOND (binary)",
+      "metrics": [
+        "F1",
+        "Precision",
+        "Recall",
+        "mask AR@1000"
+      ],
+      "metrics_value": [
+        44.6,
+        30.5,
+        83.2,
+        27.0
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Zero-shot object-centric change detection (point query)",
+      "dataset": "LEVIR-CD",
+      "metrics": [
+        "F1",
+        "Precision",
+        "Recall"
+      ],
+      "metrics_value": [
+        38.6,
+        30.9,
+        51.4
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Zero-shot object-centric change detection (point query)",
+      "dataset": "S2Looking (binary)",
+      "metrics": [
+        "F1",
+        "Precision",
+        "Recall"
+      ],
+      "metrics_value": [
+        21.8,
+        16.9,
+        34.1
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Zero-shot object-centric change detection (point query)",
+      "dataset": "xView2 (binary)",
+      "metrics": [
+        "F1",
+        "Precision",
+        "Recall"
+      ],
+      "metrics_value": [
+        25.1,
+        24.8,
+        25.4
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    },
+    {
+      "task": "Change detection",
+      "application": "Supervised object change detection (pseudo-labels from AnyChange)",
+      "dataset": "S2Looking",
+      "metrics": [
+        "F1",
+        "Precision",
+        "Recall"
+      ],
+      "metrics_value": [
+        40.2,
+        40.4,
+        39.9
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": "samples used: 3500 of 3500"
+    },
+    {
+      "task": "Change detection",
+      "application": "Unsupervised change detection (pseudo-labels from AnyChange)",
+      "dataset": "SECOND",
+      "metrics": [
+        "F1",
+        "Precision",
+        "Recall"
+      ],
+      "metrics_value": [
+        48.2,
+        33.5,
+        86.4
+      ],
+      "sensor": null,
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": null,
+      "split_ratio": null
+    }
+  ],
+  "provenance": null
+}
