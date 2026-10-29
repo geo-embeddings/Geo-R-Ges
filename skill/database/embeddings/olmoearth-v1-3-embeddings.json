@@ -1,0 +1,421 @@
+{
+  "id": "olmoearth-v1-3-embeddings",
+  "title": "OlmoEarth v1.3 Embeddings",
+  "version": "v1.3",
+  "description": "Annual 10 m, 128-dimensional per-pixel embeddings from OlmoEarth-v1.3-Base (Ai2), each summarising one calendar year of Sentinel-1, Sentinel-2 and Landsat 8/9 observations. Trained with Matryoshka embeddings, so the first 64 dimensions are a complete embedding on their own. Covers land and most of the coastal zone from 59.5°S to 83.6°N as a Zarr v3 store with one group per UTM zone; meant as input features for classifiers or regressors fit on labelled points, without running the model.",
+  "updated": "2026-10-29T00:00:00Z",
+  "license": "OlmoEarth Artifact License",
+  "sci:doi": null,
+  "provenance": {
+    "source": "manual extraction",
+    "source_id": null,
+    "source_url": "https://source.coop/olmoearth/olmoearth-v1-3-embeddings",
+    "references": [
+      "https://data.source.coop/olmoearth/olmoearth-v1-3-embeddings/README.md",
+      "https://allenai.org/papers/olmoearth-v1-3",
+      "https://huggingface.co/allenai/OlmoEarth-v1_3-Base",
+      "https://olmoearth.allenai.org/embeddings"
+    ],
+    "retrieved": "2026-10-29T00:00:00Z",
+    "review": [
+      "License: OlmoEarth Artifact License (restricts military, defense-related and extractive-industry use).",
+      "Year coverage: the tech report says global for 2023-2025 and selected countries for 2017-2022; the Source Cooperative README (as of 2026-10-27) says global for 2021-2025 and selected countries for 2017-2020, backfilling. Recorded the README's.",
+      "Benchmarks: the report evaluates embeddings computed by tiling the ViT, not bit-identical to the released Searchlight embeddings; it reports a negligible difference on PASTIS (val mIoU 60.4 vs 59.8).",
+      "encoder_model.id is null: OlmoEarth v1.3 is a new model (tech report) and has no record yet; the 'olmoearth' record describes v1.",
+      "emb:original_data_type left null: the README says values are converted back to float but does not name the pre-quantization type."
+    ]
+  },
+  "providers": [
+    {
+      "name": "Allen Institute for AI (Ai2)",
+      "roles": [
+        "producer",
+        "licensor"
+      ],
+      "url": "https://allenai.org"
+    },
+    {
+      "name": "Source Cooperative",
+      "roles": [
+        "host"
+      ],
+      "url": "https://source.coop"
+    }
+  ],
+  "encoder_model": {
+    "id": null,
+    "name": "OlmoEarth v1.3",
+    "checkpoint": "OlmoEarth-v1_3-Base (ViT-Base encoder, Perceiver pooler and linear student to 128-d)",
+    "href": "https://huggingface.co/allenai/OlmoEarth-v1_3-Base"
+  },
+  "emb:type": "pixel",
+  "emb:dimensions": [
+    128
+  ],
+  "emb:chip_size": null,
+  "emb:stride": null,
+  "emb:grid_id": null,
+  "emb:temporal_period": "P1Y",
+  "data_type": "int8",
+  "emb:original_data_type": null,
+  "emb:quantization_method": "signed square-root (signed_power, power 2): v = sign(q) * (|q| / 127.5)^2; -128 is nodata",
+  "source_sensors": [
+    "Sentinel-1",
+    "Sentinel-2",
+    "Landsat-8",
+    "Landsat-9"
+  ],
+  "processing:level": "Sentinel-1 RTC; Sentinel-2 L2A; Landsat Collection 2 Level-1",
+  "processing:lineage": "Each year is split into twelve 30-day periods ending on 1 January of the following year; for each modality and period, scenes covering a window are composited into one mosaic by first valid pixel, least cloudy first for Sentinel-2 and Landsat, giving 12 timesteps per modality. Computed in 2048 x 2048 pixel windows per UTM zone (EPSG:326NN, southern zones too) with Searchlight inference; scenes behind every embedding are listed in GeoParquet provenance tables.",
+  "spatial_resolution": "10m",
+  "regions_coverage": [
+    "Global (land and most of the coastal zone, 59.5°S to 83.6°N; no Antarctica)"
+  ],
+  "bbox": [
+    -180,
+    -59.5,
+    180,
+    83.6
+  ],
+  "start_datetime": "2017-01-01T00:00:00Z",
+  "end_datetime": null,
+  "temporal_coverage_note": "As of 2026-10-27: global for 2021-2025; 2017-2020 only for selected countries, backfill to global ongoing. The store has one slot per year 2017-2025; a window crossing the antimeridian in zones 1 and 60 is skipped every year.",
+  "num_embeddings": null,
+  "assets": {
+    "zarr": {
+      "href": "s3://olmoearth/olmoearth-v1-3-embeddings/embeddings.zarr",
+      "title": "Embeddings Zarr v3 store (Source Cooperative)",
+      "description": "Anonymous S3 via the endpoint https://data.source.coop; one group per UTM zone (utm01-utm60), array (time, band, y, x) int8.",
+      "type": "application/vnd+zarr",
+      "roles": [
+        "embeddings",
+        "data"
+      ]
+    },
+    "source-coop": {
+      "href": "https://source.coop/olmoearth/olmoearth-v1-3-embeddings",
+      "title": "Source Cooperative dataset page",
+      "type": "text/html",
+      "roles": [
+        "embeddings",
+        "metadata"
+      ]
+    },
+    "provenance-tables": {
+      "href": "https://source.coop/olmoearth/olmoearth-v1-3-embeddings/provenance/README.md",
+      "title": "Provenance GeoParquet tables (scenes behind every embedding)",
+      "type": "text/html",
+      "roles": [
+        "metadata"
+      ]
+    },
+    "tech-report": {
+      "href": "https://allenai.org/papers/olmoearth-v1-3",
+      "title": "OlmoEarth v1.3 Embeddings tech report",
+      "type": "application/pdf",
+      "roles": [
+        "metadata"
+      ]
+    },
+    "explorer": {
+      "href": "https://olmoearth.allenai.org/embeddings",
+      "title": "Embeddings Explorer",
+      "type": "text/html",
+      "roles": [
+        "metadata"
+      ]
+    }
+  },
+  "hosting": [
+    "Source Cooperative"
+  ],
+  "access_requirements": "open, anonymous S3/HTTP through data.source.coop; no account, API key or request signing",
+  "loaders": [
+    "zarr (v3) with obstore.store.S3Store(endpoint='https://data.source.coop', skip_signature=True)",
+    "xarray.open_zarr"
+  ],
+  "benchmarks": [
+    {
+      "task": "Classification",
+      "application": "Cropland mapping",
+      "dataset": "Africa crop mask (AEF evaluation suite)",
+      "metrics": [
+        "Balanced Acc (ridge λ=0, AEF protocol), 128-d",
+        "Balanced Acc (ridge λ=0, AEF protocol), 64-d",
+        "Balanced Acc (kNN-20, AEF protocol), 128-d",
+        "Balanced Acc (kNN-20, AEF protocol), 64-d"
+      ],
+      "metrics_value": [
+        91.9,
+        92.6,
+        91.8,
+        91.6
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "Landsat-8",
+        "Landsat-9"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": "class-balanced training draws at AEF's Table-1 sizes, scored on all remaining points; mean over repeated draws"
+    },
+    {
+      "task": "Classification",
+      "application": "Crop type mapping",
+      "dataset": "Canada crops (coarse) (AEF evaluation suite)",
+      "metrics": [
+        "Balanced Acc (ridge λ=0, AEF protocol), 128-d",
+        "Balanced Acc (ridge λ=0, AEF protocol), 64-d",
+        "Balanced Acc (kNN-20, AEF protocol), 128-d",
+        "Balanced Acc (kNN-20, AEF protocol), 64-d"
+      ],
+      "metrics_value": [
+        73.6,
+        73.3,
+        71.7,
+        70.9
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "Landsat-8",
+        "Landsat-9"
+      ],
+      "regions": [
+        "Canada"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": "class-balanced training draws at AEF's Table-1 sizes, scored on all remaining points; mean over repeated draws"
+    },
+    {
+      "task": "Classification",
+      "application": "Crop type mapping",
+      "dataset": "Canada crops (fine) (AEF evaluation suite)",
+      "metrics": [
+        "Balanced Acc (ridge λ=0, AEF protocol), 128-d",
+        "Balanced Acc (ridge λ=0, AEF protocol), 64-d",
+        "Balanced Acc (kNN-20, AEF protocol), 128-d",
+        "Balanced Acc (kNN-20, AEF protocol), 64-d"
+      ],
+      "metrics_value": [
+        66.2,
+        63.5,
+        64.9,
+        63.9
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "Landsat-8",
+        "Landsat-9"
+      ],
+      "regions": [
+        "Canada"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": "class-balanced training draws at AEF's Table-1 sizes, scored on all remaining points; mean over repeated draws"
+    },
+    {
+      "task": "Classification",
+      "application": "Oil palm mapping",
+      "dataset": "Descals oil palm (AEF evaluation suite)",
+      "metrics": [
+        "Balanced Acc (ridge λ=0, AEF protocol), 128-d",
+        "Balanced Acc (ridge λ=0, AEF protocol), 64-d",
+        "Balanced Acc (kNN-20, AEF protocol), 128-d",
+        "Balanced Acc (kNN-20, AEF protocol), 64-d"
+      ],
+      "metrics_value": [
+        79.1,
+        79.0,
+        73.2,
+        72.8
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "Landsat-8",
+        "Landsat-9"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": "class-balanced training draws at AEF's Table-1 sizes, scored on all remaining points; mean over repeated draws"
+    },
+    {
+      "task": "Classification",
+      "application": "Crop type mapping",
+      "dataset": "Ethiopia crops (AEF evaluation suite)",
+      "metrics": [
+        "Balanced Acc (ridge λ=0, AEF protocol), 128-d",
+        "Balanced Acc (ridge λ=0, AEF protocol), 64-d",
+        "Balanced Acc (kNN-20, AEF protocol), 128-d",
+        "Balanced Acc (kNN-20, AEF protocol), 64-d"
+      ],
+      "metrics_value": [
+        63.6,
+        69.1,
+        67.0,
+        66.2
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "Landsat-8",
+        "Landsat-9"
+      ],
+      "regions": [
+        "Ethiopia"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": "class-balanced training draws at AEF's Table-1 sizes, scored on all remaining points; mean over repeated draws"
+    },
+    {
+      "task": "Classification",
+      "application": "Land cover classification",
+      "dataset": "GLanCE (AEF evaluation suite)",
+      "metrics": [
+        "Balanced Acc (ridge λ=0, AEF protocol), 128-d",
+        "Balanced Acc (ridge λ=0, AEF protocol), 64-d",
+        "Balanced Acc (kNN-20, AEF protocol), 128-d",
+        "Balanced Acc (kNN-20, AEF protocol), 64-d"
+      ],
+      "metrics_value": [
+        70.9,
+        69.5,
+        71.0,
+        70.8
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "Landsat-8",
+        "Landsat-9"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": "class-balanced training draws at AEF's Table-1 sizes, scored on all remaining points; mean over repeated draws"
+    },
+    {
+      "task": "Classification",
+      "application": "Land use classification",
+      "dataset": "LCMAP land use (AEF evaluation suite)",
+      "metrics": [
+        "Balanced Acc (ridge λ=0, AEF protocol), 128-d",
+        "Balanced Acc (ridge λ=0, AEF protocol), 64-d",
+        "Balanced Acc (kNN-20, AEF protocol), 128-d",
+        "Balanced Acc (kNN-20, AEF protocol), 64-d"
+      ],
+      "metrics_value": [
+        88.7,
+        88.1,
+        87.1,
+        87.0
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "Landsat-8",
+        "Landsat-9"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": "class-balanced training draws at AEF's Table-1 sizes, scored on all remaining points; mean over repeated draws"
+    },
+    {
+      "task": "Classification",
+      "application": "Tree species classification",
+      "dataset": "US trees (AEF evaluation suite)",
+      "metrics": [
+        "Balanced Acc (ridge λ=0, AEF protocol), 128-d",
+        "Balanced Acc (ridge λ=0, AEF protocol), 64-d",
+        "Balanced Acc (kNN-20, AEF protocol), 128-d",
+        "Balanced Acc (kNN-20, AEF protocol), 64-d"
+      ],
+      "metrics_value": [
+        23.0,
+        21.2,
+        22.0,
+        21.6
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "Landsat-8",
+        "Landsat-9"
+      ],
+      "regions": [
+        "United States"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": "class-balanced training draws at AEF's Table-1 sizes, scored on all remaining points; mean over repeated draws"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Crop type mapping",
+      "dataset": "PASTIS",
+      "metrics": [
+        "mIoU (linear probe, random split), 128-d",
+        "mIoU (linear probe, random split), 64-d"
+      ],
+      "metrics_value": [
+        58.6,
+        53.4
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "Landsat-8",
+        "Landsat-9"
+      ],
+      "regions": null,
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": "random split"
+    },
+    {
+      "task": "Semantic segmentation",
+      "application": "Crop type mapping",
+      "dataset": "PLANTEUR",
+      "metrics": [
+        "mIoU (linear probe, random split), 128-d",
+        "mIoU (linear probe, random split), 64-d",
+        "mIoU (linear probe, leave-one-island-out), 128-d",
+        "mIoU (linear probe, leave-one-island-out), 64-d"
+      ],
+      "metrics_value": [
+        36.7,
+        35.2,
+        24.9,
+        21.5
+      ],
+      "sensor": [
+        "Sentinel-1",
+        "Sentinel-2",
+        "Landsat-8",
+        "Landsat-9"
+      ],
+      "regions": [
+        "Martinique",
+        "Réunion",
+        "French Guiana",
+        "Guadeloupe",
+        "Mayotte"
+      ],
+      "image_resolution": null,
+      "spatial_resolution": "10m",
+      "split_ratio": "random split; leave-one-island-out"
+    }
+  ]
+}

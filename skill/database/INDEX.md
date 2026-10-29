@@ -70,6 +70,7 @@ for details. `?` = not stated in the record.
 | msgfm | msGFM | encoder | 89M | Multispectral, SAR, RGB, DSM; RGB, Sentinel-2, SAR, DSM | 0.1m - 60m | none | Global, All meteorological seasons, Urban (Vaihingen, Germany), Various satellites and airborne sources | y | n |
 | mtp | MTP | encoder | 305M | Multispectral, RGB; WorldView-2, WorldView-3, Sentinel-2, Google Earth | variable | none | Global (derived from DOTA-V2.0, DIOR, FAIR1M-2.0) | y | n |
 | ofa-net | OFA-Net | encoder | ? | SAR, Multispectral, Hyperspectral, Optical; Sentinel-1, Sentinel-2, Gaofen, NAIP, EnMAP | 1m, 4m, 5x20m, 10m, 30m | none | Global (Sentinel-1, Sentinel-2, NAIP), China (Gaofen), Not specified (EnMAP) | n | n |
+| olmoearth | OlmoEarth | encoder | 300M | Multispectral, SAR, Time series; Sentinel-2, Sentinel-1, Landsat-8 | 10m (all inputs resampled to 10 m/pixel; lower-resolution bandsets tokenised at coarser internal resolution) | full | Global | y | y |
 | omnisat | OmniSat | encoder | 10M | Multispectral, SAR, RGB, Near-infrared, Time series; Sentinel-1, Sentinel-2, SPOT 6-7, VHR aerial imagery | variable (0.2m, 1m, 10m) | partial | Germany | y | n |
 | oreole-fm | OReole | encoder | 3.07B | Multispectral; GeoEye-1, QuickBird-2, WorldView-2, WorldView-3 | 0.3-0.8m | partial | Global | y | n |
 | panopticon | Panopticon | encoder | ? | Multispectral, Hyperspectral, SAR, Thermal; Sentinel-1, Sentinel-2, Landsat 9, WorldView-2, WorldView-3, QuickBird-1, GeoEye-2, EnMAP, Planet SuperDove, MODIS Terra, Intuition-1, GOES-16, Himawari, NAIP | variable (0.3m to 100m) | partial, 2002-2022 | Global | y | n |
@@ -161,5 +162,6 @@ Precomputed embeddings: no inference needed. `encoder` is the model id in
 | majortom-core-s2l2a-mmearth | Major TOM Core-S2L2A-MMEarth | mmearth | chip | 320x13x13 | float32 | Sentinel-2 | ? | snapshot | ? | Global | CC-BY-SA-4.0 | Hugging Face |
 | majortom-core-s2rgb-dinov2 | Major TOM Core-S2RGB-DINOv2 | DINOv2 | chip | 1024 | float32 | Sentinel-2 | 2.24km chips | snapshot | ? | Global | CC-BY-SA-4.0 | Hugging Face |
 | majortom-core-s2rgb-siglip | Major TOM Core-S2RGB-SigLIP | SigLIP | chip | 1152 | float32 | Sentinel-2 | 3.84km chips | snapshot | ? | Global | CC-BY-SA-4.0 | Hugging Face |
+| olmoearth-v1-3-embeddings | OlmoEarth v1.3 Embeddings | OlmoEarth v1.3 | pixel | 128 | int8 | Sentinel-1, Sentinel-2, Landsat-8, Landsat-9 | 10m | P1Y | 2017-ongoing | Global (land and most of the coastal zone, 59.5°S to 83.6°N; no Antarctica) | OlmoEarth Artifact License | Source Cooperative |
 | presto-togo-embeddings | Togo Presto Embeddings | presto | pixel | 128 | uint16 | Sentinel-2, Sentinel-1, ERA5, SRTM | 10m | P1Y | 2019-2020 | Togo | CC-BY-4.0 | Hugging Face, Google Earth Engine |
 | tessera-v1-1 | TESSERA embeddings | tessera | pixel | 128 | int8 (from float32) | Sentinel-2, Sentinel-1 | 10m | P1Y | 2017-ongoing | Global (land) | CC0-1.0 | Source Cooperative, AWS Open Data |
