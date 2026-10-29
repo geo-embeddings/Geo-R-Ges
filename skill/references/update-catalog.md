@@ -75,15 +75,17 @@ paper can still slip through, so check names that look familiar). Then read each
 abstract. **Include**
 papers that release or introduce a general-purpose pretrained model or embedding
 product for remote sensing / EO / geospatial data: self-supervised or supervised
-backbones, vision-language models, generative models, location encoders, and
-precomputed embedding products (the catalog already holds all of these kinds). A
-product goes in `embeddings/`, its encoder in `models/`: a paper that releases both
-(e.g. AlphaEarth and the Google Satellite Embedding) gets one record in each. One
-product record per distinct encoder output; the same data on several hosts is one
-record with several `assets` and `hosting` entries.
+backbones, vision-language encoders that produce image embeddings (CLIP-style),
+location encoders, and precomputed embedding products (the catalog already holds all
+of these kinds). A product goes in `embeddings/`, its encoder in `models/`: a paper
+that releases both (e.g. AlphaEarth and the Google Satellite Embedding) gets one
+record in each. One product record per distinct encoder output; the same data on
+several hosts is one record with several `assets` and `hosting` entries.
 **Exclude**: evaluations or benchmarks of existing models, datasets without a model,
 fine-tuning an existing model for one task, compression/distillation of task-specific
-networks, surveys. A paper that evaluates a catalogued model can still feed an
+networks, surveys, image generators (diffusion and other text/image-to-image models),
+and chat or instruction-tuned multimodal LLMs and LLM agents (GeoChat-style
+assistants that answer in text). A paper that evaluates a catalogued model can still feed an
 update (e.g. a new version or released weights), but not a new record.
 
 ## 3. Update: pick records and what to change
@@ -106,7 +108,9 @@ Worth checking for each record being updated:
 - null fields the paper, appendix or repo actually answers;
 - `sci:doi` still on arXiv while the paper has since been published (journal or
   conference DOI);
-- `assets`: code repo or weights released after the record was written;
+- `assets`: code repo, weights or precomputed embeddings released after the record
+  was written (an announced embedding product that has since shipped gets its
+  `embeddings` asset now);
 - `benchmarks` missing tables from the paper, or values that do not match it;
 - a newer arXiv version with changed numbers (use the latest version's numbers);
 - values that contradict the paper (fix them).

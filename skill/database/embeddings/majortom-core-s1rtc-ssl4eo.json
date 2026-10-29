@@ -44,7 +44,7 @@
     }
   ],
   "encoder_model": {
-    "id": "ssl4eo-s12",
+    "id": null,
     "name": "SSL4EO-S12",
     "checkpoint": "ResNet-50 MoCo (Sentinel-1)",
     "href": null

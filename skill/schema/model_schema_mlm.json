@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "rsfmd-mlm.schema.json",
   "title": "RS-FMD model record (MLM field names)",
-  "description": "One remote sensing foundation model (RSFM) in RS-FMD, as a variant of model_info_schema.json that uses STAC MLM (https://github.com/stac-extensions/mlm, v1.6.0) field names, or STAC core/extension names that MLM recommends, wherever one exists. Fields with no MLM equivalent keep their original names. The pretraining_phases list is flattened to a single pretraining phase. This is a flat record, not a complete STAC Item: it has no geometry/bbox, links, or stac_extensions, and it omits fields MLM requires but RS-FMD does not record (mlm:tasks, mlm:output). Unknown values are null; a field that is present but null means 'not stated in the source'. Fields described as free text hold natural-language summaries rather than controlled values.",
+  "description": "One remote sensing foundation model (RSFM) in RS-FMD (precomputed embedding products have their own records, see embedding_schema_emb.json), using STAC MLM (https://github.com/stac-extensions/mlm, v1.6.0) field names, or STAC core/extension names that MLM recommends, wherever one exists; fields with no MLM equivalent use plain names. Pretraining is described as a single phase. This is a flat record, not a complete STAC Item: it has no geometry/bbox, links, or stac_extensions, and it omits fields MLM requires but RS-FMD does not record (mlm:tasks, mlm:output). Unknown values are null; a field that is present but null means 'not stated in the source'. Use [] only for a list known to be empty (e.g. no image bands for a model whose only input is coordinates), and never write 'N/A' or 'not stated' strings into a field. Fields described as free text hold natural-language summaries rather than controlled values.",
   "type": "object",
   "required": ["id", "mlm:name"],
   "additionalProperties": false,
@@ -10,7 +10,7 @@
     "id": {
       "type": "string",
       "minLength": 1,
-      "description": "Unique, stable identifier for the record, e.g. 'galileo-icml2025'. Primary key."
+      "description": "Unique, stable identifier for the record: lowercase slug of the model name, hyphens only, e.g. 'galileo', 'prithvi-eo-2-0'. Append a disambiguator such as the venue/year only when the slug is already taken by a different model (e.g. 'galileo-icml2025'). Primary key; the record's filename is '<id>.json'."
     },
     "mlm:name": {
       "type": "string",
@@ -25,7 +25,7 @@
       "type": ["string", "null"],
       "format": "date-time",
       "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
-      "description": "Date the model was first publicly released, as an RFC 3339 timestamp (e.g. '2025-07-13T00:00:00Z')."
+      "description": "Date the model was first publicly released, as an RFC 3339 timestamp (e.g. '2025-07-13T00:00:00Z'). "
     },
     "updated": {
       "type": ["string", "null"],
@@ -35,7 +35,7 @@
     },
     "description": {
       "type": ["string", "null"],
-      "description": "A few sentences summarising what the model is, what data it takes, how it was trained, and what it is good at."
+      "description": "A few sentences summarising what the model is, what data it takes, how it was trained, and what it is good at. Precomputed embeddings released as data get their own record (embedding_schema_emb.json); if the paper announces embeddings that are not downloadable yet, say so here."
     },
     "sci:doi": {
       "type": ["string", "null"],
@@ -49,7 +49,7 @@
     },
     "assets": {
       "type": ["object", "null"],
-      "description": "Links to files and resources for the model, keyed by asset name. Use 'mlm:source_code' for the code repository. Add other entries as needed, e.g. Hugging Face weights with roles ['mlm:model', 'mlm:weights'], or a container image with roles ['runtime'].",
+      "description": "Links to files and resources for the model, keyed by asset name. Use 'mlm:source_code' for the code repository. Add other entries as needed, e.g. Hugging Face weights with roles ['mlm:model', 'mlm:weights'], or a container image with roles ['runtime']. Links to precomputed embeddings belong in the embedding product record, not here.",
       "properties": {
         "mlm:source_code": { "$ref": "#/$defs/Asset" }
       },
@@ -63,7 +63,7 @@
       "type": ["integer", "null"],
       "minimum": 1,
       "maximum": 1000000000000,
-      "description": "Total number of model parameters as a raw count (85M -> 85000000; 2B -> 2000000000). Use the primary/largest released variant."
+      "description": "Total number of model parameters as a raw count (85M -> 85000000; 2B -> 2000000000). Use the primary/largest released variant. Count only the encoder that produces embeddings at inference time. For a model behind a catalogued embedding product, count the variant that produced the product."
     },
     "pretext_training_type": {
       "type": ["string", "null"],
@@ -88,20 +88,19 @@
       "description": "Architectural changes relative to the standard backbone, e.g. per-sensor patch embeddings, variable patch size, temporal attention, channel-group tokenisation."
     },
     "supported_sensors": {
-      "$comment": "Kept: STAC `constellation`/`platform` are single strings and cannot hold a list of sensors and data products.",
       "type": ["array", "null"],
       "items": { "type": "string" },
-      "description": "Sensors or data products the model accepts as input, by platform or product name (e.g. 'Sentinel-2', 'Landsat-8', 'NAIP', 'SRTM', 'ERA5'). Include ancillary products if the model ingests them."
+      "description": "Sensors or data products the model accepts as input when computing embeddings, by platform or product name (e.g. 'Sentinel-2', 'Landsat-8', 'NAIP', 'SRTM', 'ERA5'). Include ancillary products if the model ingests them. Data used only as a pretraining target or for supervision (e.g. GEDI or ERA5 reconstructed by the model, or the imagery used to train a location encoder whose input is coordinates) is not an input: describe it in 'pretraining'."
     },
     "modality_integration_type": {
       "type": ["string", "null"],
       "enum": ["Unimodal", "Homogeneous Multimodal", "Heterogeneous Multimodal", "Cross-domain Multimodal", null],
-      "description": "How input modalities are combined. Unimodal: one data type (e.g. RGB only). Homogeneous Multimodal: several sources of the same physical kind of imagery (e.g. multispectral from Sentinel-2 and Landsat, or optical + temporal stacks). Heterogeneous Multimodal: physically different remote sensing data (e.g. optical + SAR + elevation + weather). Cross-domain Multimodal: remote sensing paired with a non-image domain such as text or ground-level photos (vision-language and geolocation models). These definitions are inferred; the code lists the four values without defining them."
+      "description": "How input modalities are combined. Unimodal: one data type (e.g. RGB only). Homogeneous Multimodal: several sources of the same physical kind of imagery (e.g. multispectral from Sentinel-2 and Landsat, or optical + temporal stacks). Heterogeneous Multimodal: physically different remote sensing data (e.g. optical + SAR + elevation + weather). Cross-domain Multimodal: remote sensing paired with a non-image domain such as text or ground-level photos (vision-language and geolocation models)."
     },
     "modalities": {
       "type": ["array", "null"],
       "items": { "type": "string" },
-      "description": "Input data modalities supported, e.g. 'Multispectral', 'Hyperspectral', 'SAR', 'RGB', 'LiDAR', 'Thermal Infrared', 'Elevation', 'Weather', 'Text', 'Time series'."
+      "description": "Input data modalities supported when computing embeddings, e.g. 'Multispectral', 'Hyperspectral', 'SAR', 'RGB', 'LiDAR', 'Thermal Infrared', 'Elevation', 'Weather', 'Text', 'Time series'. Modalities used only as pretraining targets or in a training loss are not inputs."
     },
     "spectral_alignment": {
       "type": ["string", "null"],
@@ -114,7 +113,6 @@
       "description": "Whether the model explicitly represents multi-temporal sequences. full: native variable-length time series with temporal or date encodings. partial: a fixed small number of timesteps, or time handled only via simple stacking or pooling. none: single-date inputs only."
     },
     "spatial_resolution": {
-      "$comment": "Kept: STAC `gsd` is a single number in metres and cannot hold ranges or 'variable'.",
       "type": ["string", "null"],
       "description": "Ground sample distance of the input data, e.g. '10m', '0.3-1m', 'variable'. Free text."
     },
@@ -123,18 +121,15 @@
       "description": "Temporal sampling of the input data, e.g. 'monthly', '5-day revisit', 'single date', 'variable'. Free text."
     },
     "mlm:input": {
-      "$comment": "MLM `mlm:input`. Replaces `bands` (one entry per sensor, with its bands) and the pretraining phase's `image_resolution` (now `input.shape`).",
       "type": ["array", "null"],
       "items": { "$ref": "#/$defs/ModelInput" },
-      "description": "One entry per model input, typically one per sensor or modality (e.g. 'Sentinel-2', 'Sentinel-1'), giving the bands used and the input tensor shape."
+      "description": "One entry per model input, typically one per sensor or modality (e.g. 'Sentinel-2', 'Sentinel-1'), giving the bands used and the input tensor shape. Never combine several sensors into one entry. Non-image inputs (coordinates, categorical land-cover layers, captions) get their own entry. List only inputs used when computing embeddings, not pretraining-only targets."
     },
     "mlm:pretrained_source": {
-      "$comment": "MLM `mlm:pretrained_source`. Was `pretraining_phases[].dataset`.",
       "type": ["string", "null"],
       "description": "Name of the pretraining dataset(s). Free text."
     },
     "regions_coverage": {
-      "$comment": "Was `pretraining_phases[].regions_coverage`. Kept: MLM recommends STAC `geometry`/`bbox`, which need coordinates rather than region names.",
       "type": ["array", "null"],
       "items": { "type": "string" },
       "description": "Geographic coverage of the pretraining data, e.g. 'Global', 'Europe', 'CONUS'."
@@ -143,52 +138,44 @@
       "type": ["string", "null"],
       "format": "date-time",
       "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
-      "description": "Start of the acquisition period of the pretraining data, as an RFC 3339 timestamp (e.g. '2017-01-01T00:00:00Z')."
+      "description": "Start of the acquisition period of the pretraining data, as an RFC 3339 timestamp (e.g. '2017-01-01T00:00:00Z'). If the source gives only an approximate period ('about one year around 2021', 'mostly 2019-2023'), leave start and end null and keep the wording in 'mlm:pretrained_source'. If the period is open-ended ('2017 to present'), set only the start."
     },
     "end_datetime": {
       "type": ["string", "null"],
       "format": "date-time",
       "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$",
-      "description": "End of the acquisition period of the pretraining data, as an RFC 3339 timestamp (e.g. '2023-12-31T23:59:59Z')."
+      "description": "End of the acquisition period of the pretraining data, as an RFC 3339 timestamp (e.g. '2023-12-31T23:59:59Z'). Null for approximate or open-ended periods (see 'start_datetime')."
     },
     "num_images": {
-      "$comment": "Was `pretraining_phases[].num_images`.",
       "type": ["integer", "null"],
       "minimum": 0,
       "description": "Number of pretraining samples (images, image time series, or pixel time series), before augmentation."
     },
     "sampling": {
-      "$comment": "Was `pretraining_phases[].sampling`.",
       "type": ["string", "null"],
       "description": "How pretraining locations or images were selected, e.g. stratified by land cover, random global. Free text."
     },
     "processing:level": {
-      "$comment": "STAC Processing Extension `processing:level`, recommended by MLM best practices. Was `pretraining_phases[].processing_level`.",
       "type": ["string", "null"],
       "description": "Product processing level of the pretraining imagery, e.g. 'L1C', 'L2A', 'GRD'."
     },
     "processing:lineage": {
-      "$comment": "STAC Processing Extension `processing:lineage`, recommended by MLM best practices. Was `pretraining_phases[].processing` (a list of strings); now one free-text string.",
       "type": ["string", "null"],
       "description": "Preprocessing applied to the pretraining data (resampling, normalisation, compositing, reprojection, etc.). Free text."
     },
     "cloud_cover": {
-      "$comment": "Was `pretraining_phases[].cloud_cover`. Kept: STAC `eo:cloud_cover` is a per-scene percentage, not a filtering rule.",
       "type": ["string", "null"],
       "description": "Cloud filtering applied to the pretraining data, e.g. '<10% cloud cover', 'cloud-masked composites'. Free text."
     },
     "missing_data": {
-      "$comment": "Was `pretraining_phases[].missing_data`.",
       "type": ["string", "null"],
       "description": "How missing timesteps, bands, or pixels are handled. Free text."
     },
     "mlm:hyperparameters": {
-      "$comment": "MLM `mlm:hyperparameters`, a free-form object. Holds the pretraining settings that were `pretraining_phases[].token_size`, `epochs`, `batch_size`, `learning_rate`, `augmentations` and `masking_ratio`.",
       "type": ["object", "null"],
       "description": "Pretraining hyperparameters. The properties below are the ones RS-FMD records; other keys are allowed, as in MLM.",
       "properties": {
         "patch_size": {
-          "$comment": "Was `pretraining_phases[].token_size`.",
           "type": ["string", "null"],
           "description": "Patch or token size fed to the model, e.g. '16x16', 'variable 1-8 px'. Free text."
         },
@@ -212,7 +199,6 @@
           "description": "Data augmentations used during pretraining."
         },
         "mask_ratio": {
-          "$comment": "Was `pretraining_phases[].masking_ratio`.",
           "type": ["number", "null"],
           "minimum": 0,
           "maximum": 1,
@@ -374,12 +360,12 @@
         "metrics": {
           "type": ["array", "null"],
           "items": { "type": "string" },
-          "description": "Metric names, parallel to metrics_value (same length and order). Each name should state the evaluation protocol and training-data fraction when the paper reports several, e.g. 'mIoU (linear probe, 100% train)', 'Top-1 Acc (kNN, 1% train)', 'F1 (finetune)'."
+          "description": "Metric names, parallel to metrics_value (same length and order). Each name should state the evaluation protocol and training-data fraction when the paper reports several, e.g. 'mIoU (linear probe, 100% train)', 'Top-1 Acc (kNN, 1% train)', 'F1 (finetune)'. Name the model variant when the paper reports more than one (e.g. 'mIoU (frozen encoder, 100% train), ViT-L'), and mark metrics where lower is better (e.g. 'RMSE (lower is better)')."
         },
         "metrics_value": {
           "type": ["array", "null"],
           "items": { "type": ["number", "null"] },
-          "description": "Numeric score for each entry in metrics, same length and order, in the units the paper reports (usually percent). Use null for a metric the paper names but does not report."
+          "description": "Numeric score for each entry in metrics, same length and order, in the units the paper reports (usually percent). Use null for a metric the paper names but does not report. Take values from tables or text only: skip numbers that appear only in charts, and ablation rows that are not the final model."
         },
         "sensor": {
           "$comment": "MLM: no MLM field. Use STAC common metadata `constellation` / `platform` / `instruments` on the fine-tuned model's Item.",
@@ -391,17 +377,17 @@
           "$comment": "MLM: STAC Item `geometry` / `bbox` of the fine-tuned model's Item.",
           "type": ["array", "null"],
           "items": { "type": "string" },
-          "description": "Geographic regions covered by the benchmark dataset."
+          "description": "Geographic regions covered by the benchmark dataset, as stated in the paper or the dataset's own documentation (not from memory of the dataset)."
         },
         "image_resolution": {
           "$comment": "MLM: `mlm:input[].input.shape` of the fine-tuned model.",
           "type": ["string", "null"],
-          "description": "Input tile size used in evaluation, e.g. '64x64', '128x128 subtiled to 64x64'. Free text."
+          "description": "Input tile size used in evaluation, e.g. '64x64', '128x128 subtiled to 64x64', as stated in the paper or the dataset's own documentation. Free text."
         },
         "spatial_resolution": {
           "$comment": "MLM: STAC common metadata `gsd` (a number in metres).",
           "type": ["string", "null"],
-          "description": "Ground sample distance of the benchmark data, e.g. '10m'. Free text."
+          "description": "Ground sample distance of the benchmark data, e.g. '10m', as stated in the paper or the dataset's own documentation. Free text."
         },
         "split_ratio": {
           "type": ["string", "null"],

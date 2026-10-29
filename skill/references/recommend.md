@@ -75,7 +75,9 @@ For each candidate, check against the constraints, using the record plus
   embedding products need no inference at all. Released weights (`assets.weights`)
   vs code only. For a product: `hosting` and `access_requirements` (e.g. an Earth
   Engine account), `license`, and download size vs `spatial_resolution` (10 m pixel
-  products are large for big areas; chip products are small).
+  products are large for big areas; chip products are small). Precomputed embeddings
+  that a model's paper announces but that have no record in `embeddings/` are not
+  released: treat that model as one the user has to run.
 - **Does the product's shape fit the task?** `emb:type` pixel (per-pixel maps, field
   boundaries) vs chip (scene/patch retrieval, coarse mapping), and the spacing
   between vectors vs the object size. `show` lists the products a model feeds and

@@ -45,7 +45,7 @@
     }
   ],
   "encoder_model": {
-    "id": "ssl4eo-s12",
+    "id": null,
     "name": "SSL4EO-S12",
     "checkpoint": "ResNet-50 DINO (Sentinel-2 L1C)",
     "href": null
