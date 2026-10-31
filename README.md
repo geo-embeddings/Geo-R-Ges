@@ -47,3 +47,10 @@ or `~/.agents/skills/geo-fm-finder` (Codex and other agents reading `.agents/ski
 uv run --with jsonschema python skills/geo-fm-finder/scripts/validate.py  # schemas + cross-record checks
 python skills/geo-fm-finder/scripts/catalog.py write-index  # regenerate database/INDEX.md
 ```
+
+## Acknowledgements
+
+The initial model catalog is based on RS-FMD, the remote sensing foundation model database
+released with [REMSA](https://github.com/be-chen/REMSA) (imported via `scripts/import_remsa.py`):
+
+> B. Chen, T. E. Bök, B. Rasti, V. Markl, B. Demir, "[REMSA: Foundation Model Selection for Remote Sensing via a Constraint-Aware Agent](https://arxiv.org/abs/2511.17442)", arXiv preprint arXiv:2511.17442 (2025).
