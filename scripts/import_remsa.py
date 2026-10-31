@@ -1,7 +1,7 @@
-"""Convert RS-FMD (REMSA) model records into skill/database/models/<id>.json.
+"""Convert RS-FMD (REMSA) model records into skills/geo-fm-finder/database/models/<id>.json.
 
 Reads the vendored copy at sources/remsa/fmd.jsonl (kept outside the shipped skill)
-and writes one record per model following skill/schema/model_schema_mlm.json. Anything converted
+and writes one record per model following skills/geo-fm-finder/schema/model_schema_mlm.json. Anything converted
 on a guess, or that does not fit the schema, is listed in the record's
 provenance.review and in sources/remsa/import_report.md.
 
@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "sources" / "remsa" / "fmd.jsonl"
-OUT = ROOT / "skill" / "database" / "models"
+OUT = ROOT / "skills" / "geo-fm-finder" / "database" / "models"
 REPORT = ROOT / "sources" / "remsa" / "import_report.md"
 
 REMSA_COMMIT = "7de853e5e9cb55bc54956c9c17f0cc4c017a2154"
