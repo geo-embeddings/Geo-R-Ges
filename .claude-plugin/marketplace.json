@@ -1,0 +1,18 @@
+{
+  "name": "geo-r-ges",
+  "owner": {
+    "name": "geo-embeddings"
+  },
+  "metadata": {
+    "description": "Skills for discovering geospatial foundation models and Earth embedding products"
+  },
+  "plugins": [
+    {
+      "name": "geo-fm-finder",
+      "description": "Recommend geospatial foundation models and precomputed Earth embeddings from a curated catalog, and keep the catalog up to date",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/geo-fm-finder"]
+    }
+  ]
+}
